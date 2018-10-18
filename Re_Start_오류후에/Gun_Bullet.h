@@ -14,50 +14,9 @@ public:
 	}
 	bool Render()
 	{
-
-		bool Gun_Bullet::Render()
-		{
-
 			if (m_Collision_number == 0)
 			{
-
-				if (m_pMaskBitmap == NULL)
-				{
-					BitBlt(g_hOffScreenDC,
-						m_posDraw.x, m_posDraw.y,
-						m_rtDraw.right,
-						m_rtDraw.bottom,
-						m_pColorBitmap->m_hMemDC,
-						m_rtDraw.left,
-						m_rtDraw.top, SRCCOPY);
-					return true;
-				}
-
-				else
-				{
-					BitBlt(g_hOffScreenDC,
-						m_posDraw.x, m_posDraw.y,
-						m_rtDraw.right,
-						m_rtDraw.bottom,
-						m_pMaskBitmap->m_hMemDC,
-						m_rtDraw.left,
-						m_rtDraw.top, SRCAND);
-					BitBlt(g_hOffScreenDC,
-						m_posDraw.x, m_posDraw.y,
-						m_rtDraw.right,
-						m_rtDraw.bottom,
-						m_pColorBitmap->m_hMemDC,
-						m_rtDraw.left,
-						m_rtDraw.top, SRCINVERT);//XOR
-					BitBlt(g_hOffScreenDC,
-						m_posDraw.x, m_posDraw.y,
-						m_rtDraw.right,
-						m_rtDraw.bottom,
-						m_pMaskBitmap->m_hMemDC,
-						m_rtDraw.left,
-						m_rtDraw.top, SRCINVERT);
-				}
-
+	
 				// collision rect
 
 				if (m_bDebugRect)
@@ -74,7 +33,7 @@ public:
 				}
 			}
 			return true;
-		}
+	
 
 	}
 public:
@@ -82,8 +41,8 @@ public:
 	bool Bullet_Go;
 
 public:
-	Gun_Bullet();
-	virtual ~Gun_Bullet();
+	Gun_Bullet() {}
+	virtual ~Gun_Bullet() {}
 };
 
 

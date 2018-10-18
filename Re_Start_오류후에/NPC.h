@@ -128,32 +128,6 @@ public:
 	bool    Render()
 	{
 
-
-
-
-		BitBlt(g_hOffScreenDC,
-			m_posDraw.x, m_posDraw.y,
-			m_rtDraw.right,
-			m_rtDraw.bottom,
-			m_pMaskBitmap->m_hMemDC,
-			m_rtDraw.left,
-			m_rtDraw.top, SRCAND);
-		BitBlt(g_hOffScreenDC,
-			m_posDraw.x, m_posDraw.y,
-			m_rtDraw.right,
-			m_rtDraw.bottom,
-			m_pColorBitmap->m_hMemDC,
-			m_rtDraw.left,
-			m_rtDraw.top, SRCINVERT);//XOR
-		BitBlt(g_hOffScreenDC,
-			m_posDraw.x, m_posDraw.y,
-			m_rtDraw.right,
-			m_rtDraw.bottom,
-			m_pMaskBitmap->m_hMemDC,
-			m_rtDraw.left,
-			m_rtDraw.top, SRCINVERT);
-
-
 		// collision rect
 
 		if (m_bDebugRect)
@@ -166,7 +140,6 @@ public:
 				m_rtCollision.top + m_rtDraw.bottom);
 
 			SetROP2(g_hOffScreenDC, prevMode);
-
 		}
 
 		return true;
