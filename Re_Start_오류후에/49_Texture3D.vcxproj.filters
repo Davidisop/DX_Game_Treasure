@@ -107,6 +107,9 @@
     <ClInclude Include="Gun_Bullet.h">
       <Filter>Thing</Filter>
     </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Character</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="sprite.txt">

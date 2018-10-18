@@ -1,26 +1,34 @@
 #pragma once
-#include "Object_Handling.h"
+#include "Character.h"
 
-class THeroObj : public Object_Handling
+class THeroObj : public Character
 {
 public:
 	bool Frame();
-	bool Render();
+
+public:
 	void gravity_pre();
 	void gravity_post();
-	void stand();
 	void excute_collision();
 
 public:
 
-	bool Bullet_Go;
-	int  Gun_step;
+	void stand();
+	void right_walk();
+	void left_walk();
+	void shot();
+	void jump();
+	
+public:
+
+	bool  Bullet_Go;
+	int   Gun_step;
 	float gravity_a;
 	float m_fSpeed_Y;
 	float m_fSpeed_JUMP;
-	bool Jump_Yes_No;
-	int jump_step;
-	bool m_Collision_down_side;
+	bool  Jump_Yes_No;
+	int   jump_step;
+	bool  m_Collision_down_side;
 
 public:
 	THeroObj()
@@ -34,32 +42,18 @@ public:
 		m_Collision_down_side = false;
 
 	}
-	virtual ~THeroObj();
+	virtual ~THeroObj() {}
 };
-
-
-
 
 
 bool THeroObj::Frame()
 {
-	basic();
-	//gravity_pre();
 	stand();
-	//excute_collision();
-
 	if (I_Input.Key('A')) { left_walk(); Face_Direction = 1; }
 	if (I_Input.Key('D')) { right_walk(); Face_Direction = 2; }
-	//if (I_Input.Key(' '))
-	//{	Jump_Yes_No = true;
-	//	m_fSpeed_JUMP = 0;
-	//	m_Collision_number = 0;
-	//}   jump();
 	if (I_Input.Key('G')) { Gun_step = 1; }
 	shot();
-
 	gravity_post();
-
 	return true;
 }
 
@@ -159,13 +153,6 @@ void THeroObj::excute_collision()
 
 
 
-
-
-
-THeroObj::~THeroObj()
-{
-
-}
 
 
 void THeroObj::right_walk()

@@ -1,3 +1,5 @@
+#include "Character.h"
+
 class NPC : public Character
 {
 public:
