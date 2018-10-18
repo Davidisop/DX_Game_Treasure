@@ -1,4 +1,4 @@
-#include "Object_Handling.h"
+#include "THeroObj.h"
 
 enum TSceneState
 {
@@ -29,15 +29,11 @@ public:
 
 
 
-
-
-
-
 class TSceneLobby : public TScene
 {
 public:
 
-	Object_Handling		m_Actor;
+	THeroObj			m_Actor;
 	SimpleVertex		m_VertexList[6];
 
 public:
@@ -69,13 +65,29 @@ bool	TSceneLobby::Frame()
 	static float fAngle = 0.0f;
 
 	if (g_Input.bLeft)
+	{
+		m_Actor.Face_Direction = 1;
+		m_Actor.left_walk();
 		m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
+	}
+		
 	if (g_Input.bRight)
+	{
+		m_Actor.Face_Direction = 2;
+		m_Actor.right_walk();
 		m_Actor.MoveX(g_fSecPerFrame*0.3f);
+	}
+		
 	if (g_Input.bFront)
+	{
 		m_Actor.MoveY(g_fSecPerFrame * 0.3f);
+	}
+		
 	if (g_Input.bBack)
+	{
 		m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
+	}
+		
 
 	for (int iV = 0; iV < 6; iV++)
 	{
@@ -93,10 +105,6 @@ bool	TSceneLobby::Frame()
 		m_VertexList[iV].y += m_Actor.m_vCenter.y;
 	}
 	g_pContext->UpdateSubresource(	m_Actor.PipeLineSetup.m_pVertextBuffer,0, NULL, m_VertexList, 0, 0);
-
-
-
-
 
 
 	return true;

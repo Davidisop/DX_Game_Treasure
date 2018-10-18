@@ -64,18 +64,20 @@ D3DVECTOR  Object_Handling::Gen(float x, float y)
 void  Object_Handling::in_Texture_SetData_factors(float l, float t, float r, float b, float texture_width, float texture_height)
 {
 	m_VertexList[0].u = (l) / texture_width;
-	m_VertexList[0].v = (t) / texture_width;
+	m_VertexList[0].v = (t) / texture_height;
 	m_VertexList[1].u = (l + r) / texture_width;
-	m_VertexList[1].v = (t) / texture_width;
+	m_VertexList[1].v = (t) / texture_height;
 	m_VertexList[2].u = (l) / texture_width;
-	m_VertexList[2].v = (t + b) / texture_width;
+	m_VertexList[2].v = (t + b) / texture_height;
 	m_VertexList[3].u = (l) / texture_width;
-	m_VertexList[3].v = (t + b) / texture_width;
+	m_VertexList[3].v = (t + b) / texture_height;
 	m_VertexList[4].u = (l + r) / texture_width;
-	m_VertexList[4].v = (t) / texture_width;
+	m_VertexList[4].v = (t) / texture_height;
 	m_VertexList[5].u = (l + r) / texture_width;
-	m_VertexList[5].v = (t + b) / texture_width;
+	m_VertexList[5].v = (t + b) / texture_height;
 }
+
+
 
 bool    Object_Handling::Window_SetData_factors(UINT left, UINT top, UINT width, UINT height)
 {

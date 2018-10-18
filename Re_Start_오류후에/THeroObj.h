@@ -47,10 +47,9 @@ public:
 
 void THeroObj::left_walk()
 {
-	m_pos.x += -1 * g_fSecPerFrame*300.0f;
+	
 	static float fAddTime = 0.0f;
 	fAddTime += g_fSecPerFrame;
-	Face_Direction = 1;
 
 
 	if (Jump_Yes_No == false)
@@ -115,10 +114,9 @@ void THeroObj::left_walk()
 
 void THeroObj::right_walk()
 {
-	m_pos.x += 1 * g_fSecPerFrame*300.0f;
+
 	static float fAddTime = 0.0f;
 	fAddTime += g_fSecPerFrame;
-	Face_Direction = 2;
 
 
 	if (Jump_Yes_No == false)
@@ -133,6 +131,10 @@ void THeroObj::right_walk()
 				{
 					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[1][0]);
 					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
+					
+					in_Texture_SetData_factors(70, 164, 438, 378, 641, 542);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/wait.png");
+
 					++walk_step;
 				}break;
 
