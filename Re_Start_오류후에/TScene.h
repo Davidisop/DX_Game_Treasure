@@ -57,7 +57,7 @@ bool	TSceneLobby::Init()
 {
 	m_Actor.m_for_update_Rects.x = g_rtClient.right / 4;	m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 4;
 	m_Actor.in_Texture_SetData_factors(70, 164, 438, 378, 641, 542);
-	m_Actor.Window_SetData_factors(0, 0, m_Actor.m_for_update_Rects.x, m_Actor.m_for_update_Rects.y);
+	m_Actor.Window_SetData_factors(0, 0, m_Actor.m_for_update_Rects.x, m_Actor.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 	m_Actor.Create(g_pd3dDevice,L"HLSL.vsh",L"HLSL.psh",	L"../../data/wait.png");
 	memcpy(m_VertexList, m_Actor.m_VertexList,sizeof(SimpleVertex) * 6);
 	return true;
@@ -93,9 +93,18 @@ bool	TSceneLobby::Frame()
 		m_VertexList[iV].y += m_Actor.m_vCenter.y;
 	}
 	g_pContext->UpdateSubresource(	m_Actor.PipeLineSetup.m_pVertextBuffer,0, NULL, m_VertexList, 0, 0);
+
+
+
+
+
+
 	return true;
 	
 };
+
+
+
 
 bool	TSceneLobby::Render()
 {
