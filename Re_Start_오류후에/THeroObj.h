@@ -1,5 +1,6 @@
 #pragma once
 #include "Character.h"
+#include "sprite.h"
 
 class THeroObj : public Character
 {
@@ -31,6 +32,10 @@ public:
 	bool  m_Collision_down_side;
 
 public:
+
+	sprite * sprite_ptr;
+
+public:
 	THeroObj()
 	{
 		Gun_step = 0;
@@ -40,6 +45,8 @@ public:
 		Jump_Yes_No = false;
 		jump_step = 0;
 		m_Collision_down_side = false;
+
+		sprite_ptr = new sprite;
 
 	}
 	virtual ~THeroObj() {}
@@ -61,40 +68,40 @@ void THeroObj::left_walk()
 			{
 				case 0:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[0][0]);
-					Load(L"../../data/Girl_Left.bmp", L"../../data/Girl_Left_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 0, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					++walk_step;
 				}break;
 				case 1:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[0][1]);
-					Load(L"../../data/Girl_Left.bmp", L"../../data/Girl_Left_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 1, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					++walk_step;
 				}break;
 
 				case 2:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[0][2]);
-					Load(L"../../data/Girl_Left.bmp", L"../../data/Girl_Left_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 2, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					++walk_step;
 				}break;
 				case 3:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[0][3]);
-					Load(L"../../data/Girl_Left.bmp", L"../../data/Girl_Left_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 3, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					++walk_step;
 				}break;
 				case 4:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[0][4]);
-					Load(L"../../data/Girl_Left.bmp", L"../../data/Girl_Left_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 4, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					++walk_step;
 				}break;
 
 				case 5:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[0][5]);
-					Load(L"../../data/Girl_Left.bmp", L"../../data/Girl_Left_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 5, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					walk_step = 0;
 				}break;
 
@@ -129,46 +136,43 @@ void THeroObj::right_walk()
 			{
 				case 0:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[1][0]);
-					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
-					
-					in_Texture_SetData_factors(70, 164, 438, 378, 641, 542);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/wait.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 1, 0, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
 					++walk_step;
 				}break;
 
 				case 1:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[1][1]);
-					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 1, 1, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					++walk_step;
 				}break;
 
 				case 2:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[1][2]);
-					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 1, 2, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					++walk_step;
 				}break;
 				case 3:
 				{
 
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[1][3]);
-					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 1, 3, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					++walk_step;
 				}break;
 				case 4:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[1][4]);
-					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 1, 4, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					++walk_step;
 				}break;
 
 				case 5:
 				{
-					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[1][5]);
-					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 1, 5, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 					walk_step = 0;
 				}break;
 

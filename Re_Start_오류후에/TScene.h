@@ -47,8 +47,6 @@ public:
 	virtual ~TSceneLobby();
 };
 
-
-
 bool	TSceneLobby::Init()
 {
 	m_Actor.m_for_update_Rects.x = g_rtClient.right / 4;	m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 4;
