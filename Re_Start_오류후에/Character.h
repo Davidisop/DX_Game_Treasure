@@ -1,6 +1,6 @@
 #pragma once
 #include "Object_Handling.h"
-
+#include "sprite.h"
 
 class Character : public Object_Handling
 {
@@ -9,7 +9,10 @@ public:
 	int Face_Direction;
 	int walk_step;
 	
+public:
 
+	sprite * sprite_ptr;
+	
 public:
 	void  in_Texture_SetData_sprite_factors(sprite* sprite_ptr_in, int a, int b, float texture_width, float texture_height)
 	{		
@@ -30,8 +33,9 @@ public:
 public:
 	Character()
 	{
-		Face_Direction = 1;
+		Face_Direction = 0;
 		walk_step = 0;
+		sprite_ptr = new sprite;
 	}
 	virtual ~Character() {}
 };

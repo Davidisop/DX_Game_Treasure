@@ -45,7 +45,7 @@ public:
 
 	sprite()
 	{
-		GameDataLoad(L"Sprite.txt");
+		GameDataLoad(L"sprite.txt");
 	}
 
 };

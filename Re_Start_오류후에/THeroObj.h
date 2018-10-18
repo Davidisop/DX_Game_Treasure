@@ -1,6 +1,6 @@
 #pragma once
 #include "Character.h"
-#include "sprite.h"
+
 
 class THeroObj : public Character
 {
@@ -33,7 +33,7 @@ public:
 
 public:
 
-	sprite * sprite_ptr;
+
 
 public:
 	THeroObj()
@@ -45,9 +45,6 @@ public:
 		Jump_Yes_No = false;
 		jump_step = 0;
 		m_Collision_down_side = false;
-
-		sprite_ptr = new sprite;
-
 	}
 	virtual ~THeroObj() {}
 };
@@ -69,39 +66,39 @@ void THeroObj::left_walk()
 				case 0:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 0, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
 					++walk_step;
 				}break;
 				case 1:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 1, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
 					++walk_step;
 				}break;
 
 				case 2:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
 					++walk_step;
 				}break;
 				case 3:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 3, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
 					++walk_step;
 				}break;
 				case 4:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 4, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
 					++walk_step;
 				}break;
 
 				case 5:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 0, 5, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
 					walk_step = 0;
 				}break;
 

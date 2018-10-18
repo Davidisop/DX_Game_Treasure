@@ -50,9 +50,9 @@ public:
 bool	TSceneLobby::Init()
 {
 	m_Actor.m_for_update_Rects.x = g_rtClient.right / 4;	m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 4;
-	m_Actor.in_Texture_SetData_factors(70, 164, 438, 378, 641, 542);
+	m_Actor.in_Texture_SetData_factors(20, 6, 60, 93, 758, 537);
 	m_Actor.Window_SetData_factors(0, 0, m_Actor.m_for_update_Rects.x, m_Actor.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
-	m_Actor.Create(g_pd3dDevice,L"HLSL.vsh",L"HLSL.psh",	L"../../data/wait.png");
+	m_Actor.Create(g_pd3dDevice,L"HLSL.vsh",L"HLSL.psh",	L"../../data/Girl_Right.png");
 	memcpy(m_VertexList, m_Actor.m_VertexList,sizeof(SimpleVertex) * 6);
 	return true;
 };
@@ -66,6 +66,7 @@ bool	TSceneLobby::Frame()
 	{
 		m_Actor.Face_Direction = 1;
 		m_Actor.left_walk();
+		memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 		m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
 	}
 		
@@ -73,6 +74,7 @@ bool	TSceneLobby::Frame()
 	{
 		m_Actor.Face_Direction = 2;
 		m_Actor.right_walk();
+		memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 		m_Actor.MoveX(g_fSecPerFrame*0.3f);
 	}
 		
@@ -114,7 +116,8 @@ bool	TSceneLobby::Frame()
 
 bool	TSceneLobby::Render()
 {
-	m_Actor.Render(g_pContext);
+ 	m_Actor.Render(g_pContext);
+	int a = 5;
 	return true;
 };
 
