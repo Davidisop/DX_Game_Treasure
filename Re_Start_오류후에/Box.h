@@ -1,27 +1,15 @@
 #pragma once
-#include "TObject.h"
+#include "Object_Handling.h"
 
-class Normal_Box : public TObject
+class Box : public Object_Handling
 {
-public:
-	bool Frame
-	{
-
-	basic();
-	return true;
-
-	}
 
 public:
 	int Linger_Stage;
 
 public:
-	Normal_Box()
-	{
-
-		Linger_Stage = 0;
-
-	}
-	~Normal_Box();
+	Box()
+	{		Linger_Stage = 0;	}
+	~Box() {}
 };
 

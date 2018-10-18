@@ -1,14 +1,11 @@
 #pragma once
-#include "TObject.h"
+#include "Object_Handling.h"
 
 
-
-class TBkObj : public TObject
+class Background : public Object_Handling
 {
 public:
-	bool Frame() { return true; }
-public:
-	TBkObj();
-	virtual ~TBkObj();
+	Background() {}
+	virtual ~Background() {}
 };
 
