@@ -19,6 +19,9 @@
     <Filter Include="sprite">
       <UniqueIdentifier>{fd2ed020-bd07-4238-8213-5e77c3e2cfe9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Character">
+      <UniqueIdentifier>{41576327-03c0-4e1d-95c7-31e863f2f650}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
@@ -79,6 +82,12 @@
     </ClInclude>
     <ClInclude Include="sprite.h">
       <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="THeroObj.h">
+      <Filter>Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

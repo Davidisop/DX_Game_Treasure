@@ -159,11 +159,13 @@
     <ClCompile Include="xWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="Object_BaseCamp.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="TDevice.h" />
     <ClInclude Include="TDirectWrite.h" />
     <ClInclude Include="PipeLineSetup.h" />
+    <ClInclude Include="THeroObj.h" />
     <ClInclude Include="TScene.h" />
     <ClInclude Include="TTimer.h" />
     <ClInclude Include="xCore.h" />
