@@ -9,6 +9,7 @@ public:
 	RECT			m_rtDetection;  // (API와 같음) 오브젝트를 더 크게 둘러싼 :  윈도우 사각형  =  감시 사각형 
 	tPoint			m_for_update_Rects;
 	tPoint			m_pos; // (API와 같음) 오브젝트의 중점 : 순수 윈도우 좌표 
+	tPoint			m_pos_past;
 	SimpleVertex	m_VertexList[6];
 
 public:
@@ -172,12 +173,14 @@ void    Object_Handling::GenCenter()
 
 void   Object_Handling::MoveX(float fDis)
 {
+	m_pos_past.x = m_pos.x;
 	for (int iV = 0; iV < 6; iV++) { m_VertexList[iV].x += fDis; }
 	GenCenter();
 }
 
 void   Object_Handling::MoveY(float fDis)
 {
+	m_pos_past.y = m_pos.y;
 	for (int iV = 0; iV < 6; iV++) { m_VertexList[iV].y += fDis; }
 	GenCenter();
 }
