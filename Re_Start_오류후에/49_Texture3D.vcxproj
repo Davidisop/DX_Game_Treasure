@@ -159,6 +159,10 @@
     <ClCompile Include="xWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Background.h" />
+    <ClInclude Include="Box.h" />
+    <ClInclude Include="Box_Alive.h" />
+    <ClInclude Include="Gun_Bullet.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Object_BaseCamp.h" />
     <ClInclude Include="sprite.h" />

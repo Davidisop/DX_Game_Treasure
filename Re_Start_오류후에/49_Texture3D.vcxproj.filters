@@ -22,6 +22,12 @@
     <Filter Include="Character">
       <UniqueIdentifier>{41576327-03c0-4e1d-95c7-31e863f2f650}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object Base">
+      <UniqueIdentifier>{67c2477f-d3f7-43f9-a255-d0449ba2c733}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thing">
+      <UniqueIdentifier>{aef29bd8-9157-4c6b-b1df-757ecf31bd8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
@@ -68,17 +74,8 @@
     <ClInclude Include="xWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PipeLineSetup.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TScene.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Object_BaseCamp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object_Handling.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="sprite.h">
       <Filter>sprite</Filter>
@@ -88,6 +85,27 @@
     </ClInclude>
     <ClInclude Include="THeroObj.h">
       <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Object_BaseCamp.h">
+      <Filter>Object Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Object_Handling.h">
+      <Filter>Object Base</Filter>
+    </ClInclude>
+    <ClInclude Include="PipeLineSetup.h">
+      <Filter>Object Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Thing</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Thing</Filter>
+    </ClInclude>
+    <ClInclude Include="Box_Alive.h">
+      <Filter>Thing</Filter>
+    </ClInclude>
+    <ClInclude Include="Gun_Bullet.h">
+      <Filter>Thing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
