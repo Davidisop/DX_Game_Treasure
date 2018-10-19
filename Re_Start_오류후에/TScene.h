@@ -1,4 +1,5 @@
 #include "THeroObj.h"
+#include "Background.h"
 
 enum TSceneState
 {
@@ -32,8 +33,8 @@ public:
 class TSceneLobby : public TScene
 {
 public:
-
-
+	Background			Lobby_Background;
+	SimpleVertex		m_VertexList[6];
 
 public:
 	virtual bool	Init();
@@ -48,6 +49,12 @@ public:
 
 bool	TSceneLobby::Init()
 {
+
+	Lobby_Background.m_for_update_Rects.x = g_rtClient.right / 4;	Lobby_Background.m_for_update_Rects.y = g_rtClient.bottom / 4;
+	Lobby_Background.in_Texture_SetData_factors(20, 6, 60, 93, 758, 537);
+	Lobby_Background.Window_SetData_factors(0, 0, m_Actor.m_for_update_Rects.x, m_Actor.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+	Lobby_Background.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+	memcpy(m_VertexList, Lobby_Background.m_VertexList, sizeof(SimpleVertex) * 6);
 
 	return true;
 };
@@ -65,6 +72,7 @@ bool	TSceneLobby::Frame()
 
 bool	TSceneLobby::Render()
 {
+	Lobby_Background.Render(g_pContext);
 
 	return true;
 };
