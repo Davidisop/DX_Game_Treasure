@@ -1,5 +1,6 @@
 #include "THeroObj.h"
 #include "Background.h"
+#include "Box.h"
 
 enum TSceneState
 {
@@ -30,11 +31,15 @@ public:
 
 
 
+
 class TSceneLobby : public TScene
 {
 public:
 	Background			Lobby_Background;
 	SimpleVertex		m_VertexList[6];
+
+	Box					UI_BUTTON;
+	SimpleVertex		m_VertexList_2[6];
 
 public:
 	virtual bool	Init();
@@ -59,15 +64,12 @@ bool	TSceneLobby::Init()
 	return true;
 };
 
-
 bool	TSceneLobby::Frame()
 {
 	
 	return true;
 	
 };
-
-
 
 
 bool	TSceneLobby::Render()
