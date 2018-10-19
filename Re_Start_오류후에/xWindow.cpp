@@ -98,6 +98,7 @@ LRESULT xWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void xWindow::MsgEvent(MSG msg)
 {
+
 }
 
 bool xWindow::SetWindow(HINSTANCE hInstance, const TCHAR *pTitleName,

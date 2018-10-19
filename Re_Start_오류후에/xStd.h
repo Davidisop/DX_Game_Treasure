@@ -84,6 +84,11 @@ struct TGameInput
 	BOOL bJump;
 };
 
+
+
+#define I_Input TInput::GetInstance()
+
+
 extern TGameInput g_Input;
 
 

@@ -3,6 +3,10 @@
 TGameInput g_Input;
 bool xInput::Init()
 {
+
+
+
+
 	memset(&m_KeyState, 0, sizeof(BYTE) * KEYSTATECOUNT);
 	memset(&m_MouseState, 0, sizeof(DIMOUSESTATE));
 
@@ -52,6 +56,14 @@ bool xInput::Init()
 }
 bool xInput::Frame()
 {
+
+
+
+
+
+
+
+
 	HRESULT hr = S_OK;
 	if (FAILED(hr = m_pKey->GetDeviceState(KEYSTATECOUNT, &m_KeyState)))
 	{

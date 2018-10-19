@@ -6,6 +6,7 @@ bool xCore::Init()
 	m_Timer.Init();
 	m_Font.Init();
 	m_Input.Init();
+	I_Input.Init();
 
 	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
 	CreateDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
@@ -17,6 +18,8 @@ bool xCore::Frame()
 	m_Timer.Frame();
 	m_Font.Frame();
 	m_Input.Frame();
+
+	I_Input.Frame();
 	return true;
 }
 
@@ -34,6 +37,7 @@ bool xCore::Render()
 	m_Timer.Render();
 	m_Font.Render();
 	m_Input.Render();
+	I_Input.Render();
 	return true;
 }
 bool xCore::Release()
@@ -42,6 +46,8 @@ bool xCore::Release()
 	m_Timer.Release();
 	m_Font.Release();
 	m_Input.Release();
+
+	I_Input.Release();
 	return true;
 }
 
