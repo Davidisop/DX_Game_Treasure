@@ -61,11 +61,48 @@ bool	TSceneLobby::Init()
 	Lobby_Background.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Treasure_Island.bmp");
 	memcpy(m_VertexList, Lobby_Background.m_VertexList, sizeof(SimpleVertex) * 6);
 
+
+
+	UI_BUTTON.m_for_update_Rects.x = g_rtClient.right/4;	UI_BUTTON.m_for_update_Rects.y = g_rtClient.bottom/8;
+	UI_BUTTON.in_Texture_SetData_factors(0, 0, 334, 82, 334, 82);
+	UI_BUTTON.Window_SetData_factors(340, 240, UI_BUTTON.m_for_update_Rects.x, UI_BUTTON.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+	UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_dis.bmp");
+	memcpy(m_VertexList_2, UI_BUTTON.m_VertexList, sizeof(SimpleVertex) * 6);
+
 	return true;
 };
 
 bool	TSceneLobby::Frame()
 {
+
+	//if (I_Input.Key('0') == KEY_PUSH)
+	//{
+	//	UI_BUTTON.m_bDebugRect = !UI_BUTTON.m_bDebugRect;
+	//}
+
+
+	//if (TCollision::RectInPt(UI_BUTTON.m_rtCollision, I_Input.m_MousePos))
+	//{
+	//	UI_BUTTON.m_bDead = false;
+	//	//TSound::Get()->PlayEffect(6);
+	//}
+
+
+	//if (!UI_BUTTON.m_bDead)
+	//{
+	//	UI_BUTTON.Set(g_rtClient.right / 2,
+	//		g_rtClient.bottom / 2 + 200, 0, 0, 334, 82);
+	//	UI_BUTTON.Load(L"../../data/main_start_pus.bmp");
+
+	//	if (I_Input.Key(VK_LBUTTON) && TCollision::RectInPt(UI_BUTTON.m_rtCollision, I_Input.m_MousePos))
+	//	{
+	//		UI_BUTTON.Set(g_rtClient.right / 2,
+	//			g_rtClient.bottom / 2 + 200, 0, 0, 334, 82);
+	//		UI_BUTTON.Load(L"../../data/main_start_sel.bmp");
+
+	//		m_bNextSceneStart = true;
+	//	}
+	//}
 	
 	return true;
 	
@@ -75,13 +112,12 @@ bool	TSceneLobby::Frame()
 bool	TSceneLobby::Render()
 {
 	Lobby_Background.Render(g_pContext);
-
+	UI_BUTTON.Render(g_pContext);
 	return true;
 };
 
 bool	TSceneLobby::Release()
 {
-
 	return true;
 };
 TSceneLobby::TSceneLobby()
