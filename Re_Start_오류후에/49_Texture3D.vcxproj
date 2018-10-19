@@ -159,6 +159,8 @@
     <ClCompile Include="xWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Background.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Object_BaseCamp.h" />
     <ClInclude Include="sprite.h" />

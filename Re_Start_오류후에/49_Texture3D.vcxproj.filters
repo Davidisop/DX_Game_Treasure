@@ -95,6 +95,12 @@
     <ClInclude Include="Character.h">
       <Filter>Character</Filter>
     </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Thing</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Thing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="sprite.txt">

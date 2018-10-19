@@ -33,7 +33,7 @@ public:
 public:
 	Character()
 	{
-		Face_Direction = 0;
+		Face_Direction = 2;
 		walk_step = 0;
 		sprite_ptr = new sprite;
 	}

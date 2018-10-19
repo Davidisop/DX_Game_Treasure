@@ -378,7 +378,7 @@ void THeroObj::right_walk()
 						in_Texture_SetData_sprite_factors(sprite_ptr, 2, 2, 758, 535);
 						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
 
-						Gun_step = 0;
+						Gun_step=0;
 					}break;
 
 				}
