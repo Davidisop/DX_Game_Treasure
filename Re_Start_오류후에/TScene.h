@@ -1,6 +1,7 @@
 #include "THeroObj.h"
 #include "Background.h"
 #include "Box.h"
+#include "TCollision.h"
 
 enum TSceneState
 {
@@ -72,40 +73,26 @@ bool	TSceneLobby::Init()
 	return true;
 };
 
+
 bool	TSceneLobby::Frame()
 {
+	if (TCollision::RectInPt(UI_BUTTON.m_rtCollision, I_Input.m_MousePos))
+	{
+		xInput::GetInstance().m_MouseState;
 
-	//if (I_Input.Key('0') == KEY_PUSH)
-	//{
-	//	UI_BUTTON.m_bDebugRect = !UI_BUTTON.m_bDebugRect;
-	//}
+		UI_BUTTON.m_bDead = true;		//TSound::Get()->PlayEffect(6);
+	}
+	if (UI_BUTTON.m_bDead)
+	{
+		UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_pus.bmp");
+		if (I_Input.Key(VK_LBUTTON) && TCollision::RectInPt(UI_BUTTON.m_rtCollision, I_Input.m_MousePos))
+		{
+			UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_sel.bmp");
+			m_bNextSceneStart = true;
+		}
+	}
 
-
-	//if (TCollision::RectInPt(UI_BUTTON.m_rtCollision, I_Input.m_MousePos))
-	//{
-	//	UI_BUTTON.m_bDead = false;
-	//	//TSound::Get()->PlayEffect(6);
-	//}
-
-
-	//if (!UI_BUTTON.m_bDead)
-	//{
-	//	UI_BUTTON.Set(g_rtClient.right / 2,
-	//		g_rtClient.bottom / 2 + 200, 0, 0, 334, 82);
-	//	UI_BUTTON.Load(L"../../data/main_start_pus.bmp");
-
-	//	if (I_Input.Key(VK_LBUTTON) && TCollision::RectInPt(UI_BUTTON.m_rtCollision, I_Input.m_MousePos))
-	//	{
-	//		UI_BUTTON.Set(g_rtClient.right / 2,
-	//			g_rtClient.bottom / 2 + 200, 0, 0, 334, 82);
-	//		UI_BUTTON.Load(L"../../data/main_start_sel.bmp");
-
-	//		m_bNextSceneStart = true;
-	//	}
-	//}
-	
 	return true;
-	
 };
 
 

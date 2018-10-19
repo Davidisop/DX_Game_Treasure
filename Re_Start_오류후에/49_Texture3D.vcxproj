@@ -151,8 +151,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="TCollision.cpp" />
     <ClCompile Include="TDevice.cpp" />
     <ClCompile Include="TDirectWrite.cpp" />
+    <ClCompile Include="TInput.cpp" />
     <ClCompile Include="TTimer.cpp" />
     <ClCompile Include="xCore.cpp" />
     <ClCompile Include="xInput.cpp" />
@@ -164,10 +166,12 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Object_BaseCamp.h" />
     <ClInclude Include="sprite.h" />
+    <ClInclude Include="TCollision.h" />
     <ClInclude Include="TDevice.h" />
     <ClInclude Include="TDirectWrite.h" />
     <ClInclude Include="PipeLineSetup.h" />
     <ClInclude Include="THeroObj.h" />
+    <ClInclude Include="TInput.h" />
     <ClInclude Include="TScene.h" />
     <ClInclude Include="TTimer.h" />
     <ClInclude Include="xCore.h" />
