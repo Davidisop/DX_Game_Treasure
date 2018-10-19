@@ -17,8 +17,8 @@ public:
 //	void stand();
 	void right_walk();
 	void left_walk();
-	/*void shot();
-	void jump();*/
+	void shot();
+	//void jump();
 	
 public:
 
@@ -135,7 +135,6 @@ void THeroObj::right_walk()
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 1, 0, 758, 535);
 					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
-
 					++walk_step;
 				}break;
 
@@ -293,96 +292,100 @@ void THeroObj::right_walk()
 //
 
 
-//
-//void THeroObj::shot()
-//{
-//	static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-//	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-//	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
-//
-//
-//	if (Gun_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		Gun_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-//
-//	if (Gun_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		Gun_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-//
-//	if (Jump_Yes_No == false)
-//	{
-//
-//		if (Face_Direction == 2)
-//
-//		{
-//
-//			switch (Gun_step)
-//			{
-//				case 1:
-//				{
-//					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[3][0]);
-//					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
-//					m_pos.x -= 1;
-//					++Gun_step;
-//				}break;
-//
-//				case 2:
-//				{
-//					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[3][1]);
-//					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
-//					m_pos.x -= 1;
-//					++Gun_step;
-//
-//				}break;
-//
-//				case 3:
-//				{
-//					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[3][2]);
-//					Load(L"../../data/Girl_Right.bmp", L"../../data/Girl_Right_B.bmp");
-//					m_pos.x -= 1;
-//					Gun_step = 0;
-//				}break;
-//
-//			}
-//		}
-//
-//		else if (Face_Direction == 1)
-//		{
-//
-//
-//			switch (Gun_step)
-//			{
-//				case 1:
-//				{
-//					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[2][0]);
-//					Load(L"../../data/Girl_Left.bmp", L"../../data/Girl_Left_B.bmp");
-//					m_pos.x += 1;
-//					++Gun_step;
-//				}break;
-//
-//				case 2:
-//				{
-//					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[2][1]);
-//					Load(L"../../data/Girl_Left.bmp", L"../../data/Girl_Left_B.bmp");
-//					m_pos.x += 1;
-//					++Gun_step;
-//				}break;
-//
-//				case 3:
-//				{
-//					Set(m_pos.x, m_pos.y, sprite_ptr->Sprite_Sturcture[2][2]);
-//					Load(L"../../data/Girl_Left.bmp", L"../../data/Girl_Left_B.bmp");
-//					m_pos.x += 1;
-//					Gun_step = 0;
-//				}break;
-//
-//			}
-//
-//		}
-//	}
-//}
+
+	void THeroObj::shot()
+	{
+		static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
+		static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
+		DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
+
+
+		if (Gun_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+		{
+			Gun_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+		}
+
+		if (Gun_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+		{
+			Gun_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+		}
+
+		if (Jump_Yes_No == false)
+		{
+
+			if (Face_Direction == 2)
+
+			{
+
+				switch (Gun_step)
+				{
+					case 1:
+					{
+						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 0, 758, 535);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+
+			
+						++Gun_step;
+					}break;
+
+					case 2:
+					{
+						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 1, 758, 535);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+
+				
+						++Gun_step;
+
+					}break;
+
+					case 3:
+					{
+						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+
+				
+						Gun_step = 0;
+					}break;
+
+				}
+			}
+
+			else if (Face_Direction == 1)
+			{
+
+
+				switch (Gun_step)
+				{
+					case 1:
+					{
+						in_Texture_SetData_sprite_factors(sprite_ptr, 2, 0, 758, 535);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
+
+			
+						++Gun_step;
+					}break;
+
+					case 2:
+					{
+						in_Texture_SetData_sprite_factors(sprite_ptr, 2, 1, 758, 535);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
+
+						++Gun_step;
+					}break;
+
+					case 3:
+					{
+						in_Texture_SetData_sprite_factors(sprite_ptr, 2, 2, 758, 535);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
+
+						Gun_step = 0;
+					}break;
+
+				}
+
+			}
+		}
+	}
 //
 //
 //void THeroObj::jump()

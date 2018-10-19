@@ -87,6 +87,23 @@ bool	TSceneLobby::Frame()
 	{
 		m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
 	}
+
+
+	if (g_Input.bAttack)
+	{
+		m_Actor.shot();
+		memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		if (m_Actor.Face_Direction == 1)
+		{
+			m_Actor.MoveX(g_fSecPerFrame*0.3f);
+		}
+		else if (m_Actor.Face_Direction == 2)
+		{
+			m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
+		}
+	}
+
 		
 
 	for (int iV = 0; iV < 6; iV++)
