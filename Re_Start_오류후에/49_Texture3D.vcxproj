@@ -157,7 +157,6 @@
     <ClCompile Include="TInput.cpp" />
     <ClCompile Include="TTimer.cpp" />
     <ClCompile Include="xCore.cpp" />
-    <ClCompile Include="xInput.cpp" />
     <ClCompile Include="xWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,7 +174,6 @@
     <ClInclude Include="TScene.h" />
     <ClInclude Include="TTimer.h" />
     <ClInclude Include="xCore.h" />
-    <ClInclude Include="xInput.h" />
     <ClInclude Include="xStd.h" />
     <ClInclude Include="xWindow.h" />
     <ClInclude Include="Object_Handling.h" />

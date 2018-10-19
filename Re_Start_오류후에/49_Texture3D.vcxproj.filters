@@ -45,9 +45,6 @@
     <ClCompile Include="xCore.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="xInput.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="xWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -69,9 +66,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="xCore.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="xInput.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="xStd.h">

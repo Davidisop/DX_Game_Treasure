@@ -76,16 +76,18 @@ bool	TSceneLobby::Init()
 
 bool	TSceneLobby::Frame()
 {
-	if (TCollision::RectInPt(UI_BUTTON.m_rtCollision, I_Input.m_MousePos))
-	{
-		xInput::GetInstance().m_MouseState;
 
-		UI_BUTTON.m_bDead = true;		//TSound::Get()->PlayEffect(6);
+	if (340 <I_Input.m_MousePos.x && I_Input.m_MousePos.x<450 && 240<I_Input.m_MousePos.y && I_Input.m_MousePos.y<300)
+	{
+		UI_BUTTON.m_bDead = true;
 	}
+
+
 	if (UI_BUTTON.m_bDead)
 	{
 		UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_pus.bmp");
-		if (I_Input.Key(VK_LBUTTON) && TCollision::RectInPt(UI_BUTTON.m_rtCollision, I_Input.m_MousePos))
+		
+		if (I_Input.Key(VK_LBUTTON) && 340 <I_Input.m_MousePos.x && I_Input.m_MousePos.x<450 && 240<I_Input.m_MousePos.y && I_Input.m_MousePos.y<300)
 		{
 			UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_sel.bmp");
 			m_bNextSceneStart = true;
@@ -175,7 +177,7 @@ bool	TSceneGame::Frame()
 {
 	static float fAngle = 0.0f;
 
-	if (g_Input.bLeft)
+	if (I_Input.Key('A') )
 	{
 		m_Actor.Face_Direction = 1;
 		m_Actor.left_walk();
@@ -183,7 +185,7 @@ bool	TSceneGame::Frame()
 		m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
 	}
 
-	if (g_Input.bRight)
+	if (I_Input.Key('D'))
 	{
 		m_Actor.Face_Direction = 2;
 		m_Actor.right_walk();
@@ -191,18 +193,18 @@ bool	TSceneGame::Frame()
 		m_Actor.MoveX(g_fSecPerFrame*0.3f);
 	}
 
-	if (g_Input.bFront)
+	if (I_Input.Key('W'))
 	{
 		m_Actor.MoveY(g_fSecPerFrame * 0.3f);
 	}
 
-	if (g_Input.bBack)
+	if (I_Input.Key('S') )
 	{
 		m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
 	}
 
 
-	if (g_Input.bAttack)
+	if (I_Input.Key('G'))
 	{
 		m_Actor.Gun_step = 1;
 

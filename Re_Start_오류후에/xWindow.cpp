@@ -1,6 +1,6 @@
 #include "xWindow.h"
 
-xWindow * g_pWindow = 0;
+xWindow * g_pWindow = NULL;
 HWND g_hWnd = NULL;
 HINSTANCE g_hInstance = NULL;
 RECT g_rtClient;
@@ -98,7 +98,7 @@ LRESULT xWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void xWindow::MsgEvent(MSG msg)
 {
-
+	I_Input.MsgEvent(msg);
 }
 
 bool xWindow::SetWindow(HINSTANCE hInstance, const TCHAR *pTitleName,

@@ -48,6 +48,7 @@ typedef std::basic_string <TCHAR>	T_STR;	//프로젝트속성이 멀티바이트이면 멀티바�
 #define GAMERUN(s, w, h) int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int nCmdShow) { Sample win; win.SetWindow(hInst, L#s, w, h); win.Run(); }
 
 
+
 extern HWND			g_hWnd;
 extern HINSTANCE	g_hInstance;
 extern float		g_fSecPerFrame;
@@ -74,29 +75,10 @@ typedef std::vector<RECT>  Picture_RECT;
 typedef std::vector<Picture_RECT> Select_Animation_Vector;
 extern HDC g_hOffScreenDC;
 
-struct TGameInput
-{
-	BOOL bFront;
-	BOOL bBack;
-	BOOL bLeft;
-	BOOL bRight;
-	BOOL bAttack;
-	BOOL bJump;
-};
 
 
 
-#define I_Input TInput::GetInstance()
 
-
-extern TGameInput g_Input;
-
-
-//추가 포함 디렉토리에 해당파일을 또 추가하면
-//../../include; 경로를 추가해서 또 include하면
-//컴파일러 오류 C2953
-//'TSingleton': 클래스 템플릿이 이미 정의되었습니다. 에러 발생.
-// 라이브러리는 추가포함 디렉토리를 추가하지 않는다.
 template<class T> class TSingleton
 {
 public:
@@ -106,6 +88,8 @@ public:
 		return theSingleInstance;
 	}
 };
+
+
 
 #ifndef V_RETURN
 #define V_RETURN(x) { hr = (x); if( FAILED(hr) ) {return hr;} }

@@ -2,7 +2,7 @@
 #include "xWindow.h"
 #include "TDirectWrite.h"
 #include "TTimer.h"
-#include "xInput.h"
+
 
 struct TOutput									//모니터의 정보와 갯수를 알수있다.
 {
@@ -22,7 +22,7 @@ class xCore : public xWindow
 public:
 	TTimer			m_Timer;
 	TDirectWrite	m_Font;
-	xInput			m_Input;
+	
 public:
 	bool GamePreInit();
 

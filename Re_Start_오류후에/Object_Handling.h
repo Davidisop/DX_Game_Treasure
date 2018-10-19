@@ -28,7 +28,7 @@ public:
 	void   MoveX(float fDis);
 	void   MoveY(float fDis);
 	void   in_Texture_SetData_factors(float l, float t, float r, float b, float texture_width, float texture_height);
-	bool   Window_SetData_factors(UINT left, UINT top, UINT width, UINT height);
+	bool   Window_SetData_factors(float left, float top, float width, float height);
 	bool   SetData_RECT(RECT rt);
 	void   SetVertexData();
 	void   GenCenter();
@@ -39,7 +39,7 @@ public:
 
 	Object_Handling()
 	{
-		m_bDead = true;
+		m_bDead = false;
 		m_bDebugRect = false;
 		m_bDetectRect = false;
 		m_Collision_number = 0;
@@ -79,7 +79,7 @@ void  Object_Handling::in_Texture_SetData_factors(float l, float t, float r, flo
 
 
 
-bool    Object_Handling::Window_SetData_factors(UINT left, UINT top, UINT width, UINT height)
+bool    Object_Handling::Window_SetData_factors(float left, float top, float width, float height)
 {
 	//1)초기데이터 세팅
 
