@@ -111,8 +111,10 @@ bool	TSceneLobby::Frame()
 
 bool	TSceneLobby::Render()
 {
+
 	Lobby_Background.Render(g_pContext);
 	UI_BUTTON.Render(g_pContext);
+
 	return true;
 };
 

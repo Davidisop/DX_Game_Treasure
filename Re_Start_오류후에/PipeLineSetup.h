@@ -66,6 +66,7 @@ public:
 	{
 		PreRender(pContext);
 		PostRender(pContext);
+
 		return true;
 	}
 	bool PostRender(ID3D11DeviceContext* pContext)

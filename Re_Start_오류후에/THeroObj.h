@@ -31,8 +31,6 @@ public:
 	int   jump_step;
 	bool  m_Collision_down_side;
 
-public:
-
 
 
 public:
