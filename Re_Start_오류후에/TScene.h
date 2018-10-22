@@ -2,6 +2,7 @@
 #include "Background.h"
 #include "Box.h"
 #include "TCollision.h"
+#include "Boy_NPC.h"
 
 enum TSceneState
 {
@@ -149,6 +150,7 @@ class TSceneGame : public TScene
 public:
 	Background			Game_Background;
 	THeroObj			m_Actor;	SimpleVertex		m_VertexList[6];
+	Boy_NPC				m_Boy_NPC;	SimpleVertex		m_VertexList_2[6];
 
 	Box					UI_Bullet_1;
 	Box					UI_Bullet_2;
@@ -220,6 +222,12 @@ bool	TSceneGame::Init()
 	UI_Bullet_8.Window_SetData_factors(800, 180, UI_Bullet_8.m_for_update_Rects.x, UI_Bullet_8.m_for_update_Rects.y);
 	UI_Bullet_8.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
+
+	m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;	m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 9;
+	m_Boy_NPC.in_Texture_SetData_factors(91, 2, 57, 92, 753, 532); 
+	m_Boy_NPC.Window_SetData_factors(600, 350, m_Boy_NPC.m_for_update_Rects.x, m_Boy_NPC.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+	m_Boy_NPC.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/AD_Boy.png");
+	memcpy(m_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
 
 
 	m_Actor.m_for_update_Rects.x = g_rtClient.right / 9;	m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 9;
@@ -305,7 +313,6 @@ bool	TSceneGame::Render()
 {
 	Game_Background.Render(g_pContext);
 
-
 	UI_Bullet_1.Render(g_pContext);
 	UI_Bullet_2.Render(g_pContext);
 	UI_Bullet_3.Render(g_pContext);
@@ -315,6 +322,7 @@ bool	TSceneGame::Render()
 	UI_Bullet_7.Render(g_pContext);
 	UI_Bullet_8.Render(g_pContext);
 
+	m_Boy_NPC.Render(g_pContext);
 	m_Actor.Render(g_pContext);
 
 

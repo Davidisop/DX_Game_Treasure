@@ -163,6 +163,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="BOY_NPC.h" />
     <ClInclude Include="Object_BaseCamp.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="TCollision.h" />

@@ -107,6 +107,9 @@
     <ClInclude Include="TInput.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="BOY_NPC.h">
+      <Filter>Character</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="sprite.txt">
