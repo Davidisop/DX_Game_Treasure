@@ -200,6 +200,27 @@ bool	TSceneGame::Init()
 	UI_Bullet_4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
 
+	UI_Bullet_5.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	UI_Bullet_5.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_5.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_5.Window_SetData_factors(800, 30, UI_Bullet_5.m_for_update_Rects.x, UI_Bullet_5.m_for_update_Rects.y);
+	UI_Bullet_5.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	UI_Bullet_6.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	UI_Bullet_6.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_6.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_6.Window_SetData_factors(800, 80, UI_Bullet_6.m_for_update_Rects.x, UI_Bullet_6.m_for_update_Rects.y);
+	UI_Bullet_6.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	UI_Bullet_7.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	UI_Bullet_7.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_7.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_7.Window_SetData_factors(800, 130, UI_Bullet_7.m_for_update_Rects.x, UI_Bullet_7.m_for_update_Rects.y);
+	UI_Bullet_7.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	UI_Bullet_8.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	UI_Bullet_8.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_8.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_8.Window_SetData_factors(800, 180, UI_Bullet_8.m_for_update_Rects.x, UI_Bullet_8.m_for_update_Rects.y);
+	UI_Bullet_8.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+
 
 	m_Actor.m_for_update_Rects.x = g_rtClient.right / 9;	m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 9;
 	m_Actor.in_Texture_SetData_factors(20, 6, 60, 93, 758, 537);
@@ -289,6 +310,10 @@ bool	TSceneGame::Render()
 	UI_Bullet_2.Render(g_pContext);
 	UI_Bullet_3.Render(g_pContext);
 	UI_Bullet_4.Render(g_pContext);
+	UI_Bullet_5.Render(g_pContext);
+	UI_Bullet_6.Render(g_pContext);
+	UI_Bullet_7.Render(g_pContext);
+	UI_Bullet_8.Render(g_pContext);
 
 	m_Actor.Render(g_pContext);
 
