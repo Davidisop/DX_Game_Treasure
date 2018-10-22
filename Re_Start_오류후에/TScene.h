@@ -283,6 +283,7 @@ bool	TSceneGame::Frame()
 		}
 	}
 
+
 	m_Actor.shot();
 	memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -304,6 +305,34 @@ bool	TSceneGame::Frame()
 	}
 	g_pContext->UpdateSubresource(m_Actor.PipeLineSetup.m_pVertextBuffer, 0, NULL, m_VertexList, 0, 0);
 
+
+
+	///////////////////////////////////////////////////////////////////////////////////////
+
+	if (I_Input.Key(VK_LBUTTON))
+	{
+		m_Boy_NPC.m_bDead = true;
+		m_Boy_NPC.m_Collision_number = 1;
+	}
+
+
+	m_Boy_NPC.frame();
+
+	for (int iV = 0; iV < 6; iV++)
+	{
+		D3DVECTOR vertex;
+		vertex.x = m_Boy_NPC.m_VertexList[iV].x;
+		vertex.y = m_Boy_NPC.m_VertexList[iV].y;
+		vertex.x -= m_Boy_NPC.m_vCenter.x;
+		vertex.y -= m_Boy_NPC.m_vCenter.y;
+		float S = sinf(fAngle);
+		float C = cosf(fAngle);
+		m_VertexList_2[iV].x = vertex.x * C + vertex.y * S;
+		m_VertexList_2[iV].y = vertex.x * -S + vertex.y * C;
+		m_VertexList_2[iV].x += m_Boy_NPC.m_vCenter.x;
+		m_VertexList_2[iV].y += m_Boy_NPC.m_vCenter.y;
+	}
+	g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, m_VertexList_2, 0, 0);
 
 
 	return true;
