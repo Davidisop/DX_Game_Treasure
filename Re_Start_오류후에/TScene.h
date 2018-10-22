@@ -162,6 +162,16 @@ public:
 	Box					UI_Bullet_7;
 	Box					UI_Bullet_8;
 
+	Gun_Bullet			Bullet_F1;
+	Gun_Bullet			Bullet_F2;
+	Gun_Bullet			Bullet_F3;
+	Gun_Bullet			Bullet_F4;
+	Gun_Bullet			Bullet_C1;
+	Gun_Bullet			Bullet_C2;
+	Gun_Bullet			Bullet_C3;
+	Gun_Bullet			Bullet_C4;
+
+
 public:
 	virtual bool	Init();
 	bool	Frame();
@@ -222,6 +232,53 @@ bool	TSceneGame::Init()
 	UI_Bullet_8.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_8.m_for_update_Rects.y = g_rtClient.bottom / 10;
 	UI_Bullet_8.Window_SetData_factors(800, 180, UI_Bullet_8.m_for_update_Rects.x, UI_Bullet_8.m_for_update_Rects.y);
 	UI_Bullet_8.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+
+
+
+	Bullet_F1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	Bullet_F1.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_F1.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_F1.Window_SetData_factors(10, 30, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
+	Bullet_F1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	Bullet_F2.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	Bullet_F2.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_F2.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_F2.Window_SetData_factors(10, 80, Bullet_F2.m_for_update_Rects.x, Bullet_F2.m_for_update_Rects.y);
+	Bullet_F2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	Bullet_F3.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	Bullet_F3.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_F3.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_F3.Window_SetData_factors(10, 130, Bullet_F3.m_for_update_Rects.x, Bullet_F3.m_for_update_Rects.y);
+	Bullet_F3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	Bullet_F4.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	Bullet_F4.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_F4.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_F4.Window_SetData_factors(10, 180, Bullet_F4.m_for_update_Rects.x, Bullet_F4.m_for_update_Rects.y);
+	Bullet_F4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+
+	Bullet_C1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	Bullet_C1.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_C1.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C1.Window_SetData_factors(800, 30, UI_Bullet_5.m_for_update_Rects.x, Bullet_C1.m_for_update_Rects.y);
+	Bullet_C1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	Bullet_C2.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	Bullet_C2.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_C2.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C2.Window_SetData_factors(800, 80, Bullet_C2.m_for_update_Rects.x, Bullet_C2.m_for_update_Rects.y);
+	Bullet_C2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	Bullet_C3.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	Bullet_C3.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_C3.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C3.Window_SetData_factors(800, 130, Bullet_C3.m_for_update_Rects.x, Bullet_C3.m_for_update_Rects.y);
+	Bullet_C3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	Bullet_C4.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	Bullet_C4.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_C4.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C4.Window_SetData_factors(800, 180, Bullet_C4.m_for_update_Rects.x, Bullet_C4.m_for_update_Rects.y);
+	Bullet_C4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+
+
 
 
 	m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;	m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 9;
