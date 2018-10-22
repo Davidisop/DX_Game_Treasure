@@ -3,6 +3,7 @@
 #include "Box.h"
 #include "TCollision.h"
 #include "Boy_NPC.h"
+#include "Gun_Bullet.h"
 
 enum TSceneState
 {
