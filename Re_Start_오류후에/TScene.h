@@ -37,11 +37,10 @@ class TSceneLobby : public TScene
 {
 public:
 	Background			Lobby_Background;
-	SimpleVertex		m_VertexList[6];
+	
 
 	Box					UI_BUTTON;
-	SimpleVertex		m_VertexList_2[6];
-
+	
 public:
 	virtual bool	Init();
 	bool	Frame();
@@ -56,11 +55,12 @@ public:
 bool	TSceneLobby::Init()
 {
 
-	Lobby_Background.m_for_update_Rects.x = g_rtClient.right ;	Lobby_Background.m_for_update_Rects.y = g_rtClient.bottom ;
+
 	Lobby_Background.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
-	Lobby_Background.Window_SetData_factors(0, 0, Lobby_Background.m_for_update_Rects.x, Lobby_Background.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+	Lobby_Background.m_for_update_Rects.x = g_rtClient.right;	Lobby_Background.m_for_update_Rects.y = g_rtClient.bottom;
+	Lobby_Background.Window_SetData_factors(0, 0, Lobby_Background.m_for_update_Rects.x, Lobby_Background.m_for_update_Rects.y); 
 	Lobby_Background.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Treasure_Island.bmp");
-	memcpy(m_VertexList, Lobby_Background.m_VertexList, sizeof(SimpleVertex) * 6);
+	
 
 
 
@@ -68,7 +68,7 @@ bool	TSceneLobby::Init()
 	UI_BUTTON.in_Texture_SetData_factors(0, 0, 334, 82, 334, 82);
 	UI_BUTTON.Window_SetData_factors(340, 240, UI_BUTTON.m_for_update_Rects.x, UI_BUTTON.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 	UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_dis.bmp");
-	memcpy(m_VertexList_2, UI_BUTTON.m_VertexList, sizeof(SimpleVertex) * 6);
+	
 
 	return true;
 };
@@ -77,7 +77,7 @@ bool	TSceneLobby::Init()
 bool	TSceneLobby::Frame()
 {
 
-	if (340 <I_Input.m_MousePos.x && I_Input.m_MousePos.x<450 && 240<I_Input.m_MousePos.y && I_Input.m_MousePos.y<300)
+	if (340 <I_Input.m_MousePos.x && I_Input.m_MousePos.x<470 && 240<I_Input.m_MousePos.y && I_Input.m_MousePos.y<300)
 	{
 		UI_BUTTON.m_bDead = true;
 	}
@@ -87,7 +87,7 @@ bool	TSceneLobby::Frame()
 	{
 		UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_pus.bmp");
 		
-		if (I_Input.Key(VK_LBUTTON) && 340 <I_Input.m_MousePos.x && I_Input.m_MousePos.x<450 && 240<I_Input.m_MousePos.y && I_Input.m_MousePos.y<300)
+		if (I_Input.Key(VK_LBUTTON) && 340 <I_Input.m_MousePos.x && I_Input.m_MousePos.x<470 && 240<I_Input.m_MousePos.y && I_Input.m_MousePos.y<300)
 		{
 			UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_sel.bmp");
 			m_bNextSceneStart = true;
@@ -147,8 +147,9 @@ TSceneLobby::~TSceneLobby()
 class TSceneGame : public TScene
 {
 public:
-	THeroObj			m_Actor;
-	SimpleVertex		m_VertexList[6];
+	Background			Game_Background;
+	THeroObj			m_Actor;	SimpleVertex		m_VertexList[6];
+
 
 public:
 	virtual bool	Init();
@@ -165,9 +166,15 @@ public:
 
 bool	TSceneGame::Init()
 {
-	m_Actor.m_for_update_Rects.x = g_rtClient.right / 4;	m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 4;
+	Game_Background.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
+	Game_Background.m_for_update_Rects.x = g_rtClient.right;	Game_Background.m_for_update_Rects.y = g_rtClient.bottom;
+	Game_Background.Window_SetData_factors(0, 0, Game_Background.m_for_update_Rects.x, Game_Background.m_for_update_Rects.y);
+	Game_Background.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/background.bmp");
+
+
+	m_Actor.m_for_update_Rects.x = g_rtClient.right / 9;	m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 9;
 	m_Actor.in_Texture_SetData_factors(20, 6, 60, 93, 758, 537);
-	m_Actor.Window_SetData_factors(0, 0, m_Actor.m_for_update_Rects.x, m_Actor.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+	m_Actor.Window_SetData_factors(0, 350, m_Actor.m_for_update_Rects.x, m_Actor.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 	m_Actor.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 	memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 	return true;
@@ -246,6 +253,7 @@ bool	TSceneGame::Frame()
 
 bool	TSceneGame::Render()
 {
+	Game_Background.Render(g_pContext);
 	m_Actor.Render(g_pContext);
 
 
