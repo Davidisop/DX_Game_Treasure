@@ -150,6 +150,14 @@ public:
 	Background			Game_Background;
 	THeroObj			m_Actor;	SimpleVertex		m_VertexList[6];
 
+	Box					UI_Bullet_1;
+	Box					UI_Bullet_2;
+	Box					UI_Bullet_3;
+	Box					UI_Bullet_4;
+	Box					UI_Bullet_5;
+	Box					UI_Bullet_6;
+	Box					UI_Bullet_7;
+	Box					UI_Bullet_8;
 
 public:
 	virtual bool	Init();
@@ -170,6 +178,27 @@ bool	TSceneGame::Init()
 	Game_Background.m_for_update_Rects.x = g_rtClient.right;	Game_Background.m_for_update_Rects.y = g_rtClient.bottom;
 	Game_Background.Window_SetData_factors(0, 0, Game_Background.m_for_update_Rects.x, Game_Background.m_for_update_Rects.y);
 	Game_Background.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/background.bmp");
+
+	UI_Bullet_1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	UI_Bullet_1.m_for_update_Rects.x = g_rtClient.right/10;	UI_Bullet_1.m_for_update_Rects.y = g_rtClient.bottom/10;
+	UI_Bullet_1.Window_SetData_factors(10, 30, UI_Bullet_1.m_for_update_Rects.x, UI_Bullet_1.m_for_update_Rects.y);
+	UI_Bullet_1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	UI_Bullet_2.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	UI_Bullet_2.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_2.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_2.Window_SetData_factors(10, 80, UI_Bullet_2.m_for_update_Rects.x, UI_Bullet_2.m_for_update_Rects.y);
+	UI_Bullet_2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	UI_Bullet_3.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	UI_Bullet_3.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_3.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_3.Window_SetData_factors(10, 130, UI_Bullet_3.m_for_update_Rects.x, UI_Bullet_3.m_for_update_Rects.y);
+	UI_Bullet_3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
+	UI_Bullet_4.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
+	UI_Bullet_4.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_4.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_4.Window_SetData_factors(10, 180, UI_Bullet_4.m_for_update_Rects.x, UI_Bullet_4.m_for_update_Rects.y);
+	UI_Bullet_4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+
 
 
 	m_Actor.m_for_update_Rects.x = g_rtClient.right / 9;	m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 9;
@@ -254,6 +283,13 @@ bool	TSceneGame::Frame()
 bool	TSceneGame::Render()
 {
 	Game_Background.Render(g_pContext);
+
+
+	UI_Bullet_1.Render(g_pContext);
+	UI_Bullet_2.Render(g_pContext);
+	UI_Bullet_3.Render(g_pContext);
+	UI_Bullet_4.Render(g_pContext);
+
 	m_Actor.Render(g_pContext);
 
 
