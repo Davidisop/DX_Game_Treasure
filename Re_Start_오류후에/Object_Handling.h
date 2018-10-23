@@ -157,6 +157,7 @@ void    Object_Handling::GenCenter()
 {
 	m_vCenter.x = 0.0f;    //x,y,z
 	m_vCenter.y = 0.0f;
+
 	for (int iV = 0; iV < 6; iV++)
 	{
 		D3DVECTOR vertex;

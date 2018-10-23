@@ -149,9 +149,9 @@ TSceneLobby::~TSceneLobby()
 class TSceneGame : public TScene
 {
 public:
-	Background            Game_Background;
-	THeroObj            m_Actor;    SimpleVertex        m_VertexList[6];
-	Boy_NPC                m_Boy_NPC;    SimpleVertex        m_VertexList_2[6];
+	Background				Game_Background;
+	THeroObj				m_Actor;    SimpleVertex          N_VertexList[6];
+	Boy_NPC					m_Boy_NPC;    SimpleVertex        N_VertexList_2[6];
 
 	Box                    UI_Bullet_1;
 	Box                    UI_Bullet_2;
@@ -162,14 +162,14 @@ public:
 	Box                    UI_Bullet_7;
 	Box                    UI_Bullet_8;
 
-	Gun_Bullet            Bullet_F1; SimpleVertex        m_VertexList_F1[6];
-	Gun_Bullet            Bullet_F2; SimpleVertex        m_VertexList_F2[6];
-	Gun_Bullet            Bullet_F3; SimpleVertex        m_VertexList_F3[6];
-	Gun_Bullet            Bullet_F4; SimpleVertex        m_VertexList_F4[6];
-	Gun_Bullet            Bullet_C1; SimpleVertex        m_VertexList_C1[6];
-	Gun_Bullet            Bullet_C2; SimpleVertex        m_VertexList_C2[6];
-	Gun_Bullet            Bullet_C3; SimpleVertex        m_VertexList_C3[6];
-	Gun_Bullet            Bullet_C4; SimpleVertex        m_VertexList_C4[6];
+	Gun_Bullet            Bullet_F1; SimpleVertex        N_VertexList_F1[6];
+	Gun_Bullet            Bullet_F2; SimpleVertex        N_VertexList_F2[6];
+	Gun_Bullet            Bullet_F3; SimpleVertex        N_VertexList_F3[6];
+	Gun_Bullet            Bullet_F4; SimpleVertex        N_VertexList_F4[6];
+	Gun_Bullet            Bullet_C1; SimpleVertex        N_VertexList_C1[6];
+	Gun_Bullet            Bullet_C2; SimpleVertex        N_VertexList_C2[6];
+	Gun_Bullet            Bullet_C3; SimpleVertex        N_VertexList_C3[6];
+	Gun_Bullet            Bullet_C4; SimpleVertex        N_VertexList_C4[6];
 
 
 public:
@@ -185,7 +185,7 @@ public:
 
 
 
-bool    TSceneGame::Init()
+bool   TSceneGame::Init()
 {
 	Game_Background.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
 	Game_Background.m_for_update_Rects.x = g_rtClient.right;    Game_Background.m_for_update_Rects.y = g_rtClient.bottom;
@@ -304,7 +304,7 @@ bool    TSceneGame::Frame()
 	{
 		m_Actor.Face_Direction = 1;
 		m_Actor.left_walk();
-		memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+		memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 		m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
 	}
 
@@ -312,7 +312,7 @@ bool    TSceneGame::Frame()
 	{
 		m_Actor.Face_Direction = 2;
 		m_Actor.right_walk();
-		memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+		memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 		m_Actor.MoveX(g_fSecPerFrame*0.3f);
 	}
 
@@ -334,7 +334,7 @@ bool    TSceneGame::Frame()
 		if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
 		else if (m_Actor.Face_Direction == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
 	}
-	m_Actor.shot();     memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+	m_Actor.shot();     memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 
 
 	for (int iV = 0; iV < 6; iV++)
@@ -347,12 +347,12 @@ bool    TSceneGame::Frame()
 		vertex.y -= m_Actor.m_vCenter.y;
 		float S = sinf(fAngle);
 		float C = cosf(fAngle);
-		m_VertexList[iV].x = vertex.x * C + vertex.y * S;
-		m_VertexList[iV].y = vertex.x * -S + vertex.y * C;
-		m_VertexList[iV].x += m_Actor.m_vCenter.x;
-		m_VertexList[iV].y += m_Actor.m_vCenter.y;
+		N_VertexList[iV].x = vertex.x * C + vertex.y * S;
+		N_VertexList[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList[iV].x += m_Actor.m_vCenter.x;
+		N_VertexList[iV].y += m_Actor.m_vCenter.y;
 	}
-	g_pContext->UpdateSubresource(m_Actor.PipeLineSetup.m_pVertextBuffer, 0, NULL, m_VertexList, 0, 0);
+	g_pContext->UpdateSubresource(m_Actor.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList, 0, 0);
 
 
 
@@ -374,7 +374,7 @@ bool    TSceneGame::Frame()
 		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 	}
 
-	memcpy(m_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
+	memcpy(N_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
 
 	for (int iV = 0; iV < 6; iV++)
 	{
@@ -385,12 +385,12 @@ bool    TSceneGame::Frame()
 		vertex.y -= m_Boy_NPC.m_vCenter.y;
 		float S = sinf(fAngle);
 		float C = cosf(fAngle);
-		m_VertexList_2[iV].x = vertex.x * C + vertex.y * S;
-		m_VertexList_2[iV].y = vertex.x * -S + vertex.y * C;
-		m_VertexList_2[iV].x += m_Boy_NPC.m_vCenter.x;
-		m_VertexList_2[iV].y += m_Boy_NPC.m_vCenter.y;
+		N_VertexList_2[iV].x = vertex.x * C + vertex.y * S;
+		N_VertexList_2[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList_2[iV].x += m_Boy_NPC.m_vCenter.x;
+		N_VertexList_2[iV].y += m_Boy_NPC.m_vCenter.y;
 	}
-	g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, m_VertexList_2, 0, 0);
+	g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_2, 0, 0);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -450,166 +450,11 @@ bool    TSceneGame::Frame()
 		}
 
 
-
-		if (Bullet_2.Bullet_Go == true && m_Hero.Face_Direction == 1)
-
-		{
-
-			Bullet_2.Bullet_Go = false;
-
-			TSound::Get()->PlayEffect(2);
-
-
-			Bullet_2.m_pos.x = m_Hero.m_pos.x - 30; Bullet_2.m_pos.y = m_Hero.m_pos.y - 5;
-
-			Bullet_2.Set(Bullet_2.m_pos.x, Bullet_2.m_pos.y, 2, 144, 40, 39);
-
-			Bullet_2.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-
-			Bullet_2.m_pos_past.x = Bullet_2.m_pos.x;
-
-			Bullet_2.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
-
-		}
-
-
-		if (Bullet_2.Bullet_Go == true && m_Hero.Face_Direction == 2)
-
-		{
-
-			Bullet_2.Bullet_Go = false;
-
-
-			TSound::Get()->PlayEffect(2);
-
-
-			Bullet_2.m_pos.x = m_Hero.m_pos.x + 30; Bullet_2.m_pos.y = m_Hero.m_pos.y - 5;
-
-			Bullet_2.Set(Bullet_2.m_pos.x, Bullet_2.m_pos.y, 2, 144, 40, 39);
-
-			Bullet_2.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-
-			Bullet_2.m_pos_past.x = Bullet_2.m_pos.x;
-
-			Bullet_2.m_pos.x += 1 * g_fSecPerFrame*500.0f;
-
-		}
-
-
-
-		if (Bullet_2.m_pos_past.x < Bullet_2.m_pos.x)
-
-		{
-
-			Bullet_2.Set(Bullet_2.m_pos.x, Bullet_2.m_pos.y, 2, 144, 40, 39);
-
-			Bullet_2.m_pos.x += 1 * g_fSecPerFrame*500.0f;
-
-			Bullet_2.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-
-
-		}
-
-
-		if (Bullet_2.m_pos_past.x > Bullet_2.m_pos.x)
-
-		{
-
-			Bullet_2.Set(Bullet_2.m_pos.x, Bullet_2.m_pos.y, 2, 144, 40, 39);
-
-			Bullet_2.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
-
-			Bullet_2.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-
-		}
-
-
-
-
-
-
-		if (Bullet_3.Bullet_Go == true && m_Hero.Face_Direction == 1)
-
-		{
-
-			Bullet_3.Bullet_Go = false;
-
-			TSound::Get()->PlayEffect(1);
-
-
-			Bullet_3.m_pos.x = m_Hero.m_pos.x - 30; Bullet_3.m_pos.y = m_Hero.m_pos.y - 5;
-
-			Bullet_3.Set(Bullet_3.m_pos.x, Bullet_3.m_pos.y, 192, 142, 31, 41);
-
-			Bullet_3.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-
-			Bullet_3.m_pos_past.x = Bullet_3.m_pos.x;
-
-			Bullet_3.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
-
-		}
-
-
-		if (Bullet_3.Bullet_Go == true && m_Hero.Face_Direction == 2)
-
-		{
-
-			Bullet_3.Bullet_Go = false;
-
-			TSound::Get()->PlayEffect(1);
-
-
-
-
-
-			Bullet_3.m_pos.x = m_Hero.m_pos.x + 30; Bullet_3.m_pos.y = m_Hero.m_pos.y - 5;
-
-			Bullet_3.Set(Bullet_3.m_pos.x, Bullet_3.m_pos.y, 192, 142, 31, 41);
-
-			Bullet_3.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-
-			Bullet_3.m_pos_past.x = Bullet_3.m_pos.x;
-
-			Bullet_3.m_pos.x += 1 * g_fSecPerFrame*500.0f;
-
-		}
-
-
-
-		if (Bullet_3.m_pos_past.x < Bullet_3.m_pos.x)
-
-		{
-
-			Bullet_3.Set(Bullet_3.m_pos.x, Bullet_3.m_pos.y, 192, 142, 31, 41);
-
-			Bullet_3.m_pos.x += 1 * g_fSecPerFrame*500.0f;
-
-			Bullet_3.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-
-
-		}
-
-
-		if (Bullet_3.m_pos_past.x > Bullet_3.m_pos.x)
-
-		{
-
-			Bullet_3.Set(Bullet_3.m_pos.x, Bullet_3.m_pos.y, 192, 142, 31, 41);
-
-			Bullet_3.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
-
-			Bullet_3.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-
-		}
-
-
-
-
-
 		return true;
 	}
+}
 
-	bool    TSceneGame::Render()
+	bool   TSceneGame::Render()
 	{
 		Game_Background.Render(g_pContext);
 
@@ -624,8 +469,6 @@ bool    TSceneGame::Frame()
 
 		m_Boy_NPC.Render(g_pContext);
 		m_Actor.Render(g_pContext);
-
-
 		return true;
 	}
 
