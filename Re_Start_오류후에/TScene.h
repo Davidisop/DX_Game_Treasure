@@ -149,34 +149,34 @@ TSceneLobby::~TSceneLobby()
 class TSceneGame : public TScene
 {
 public:
-	Background			Game_Background;
-	THeroObj			m_Actor;	SimpleVertex		m_VertexList[6];
-	Boy_NPC				m_Boy_NPC;	SimpleVertex		m_VertexList_2[6];
+	Background            Game_Background;
+	THeroObj            m_Actor;    SimpleVertex        m_VertexList[6];
+	Boy_NPC                m_Boy_NPC;    SimpleVertex        m_VertexList_2[6];
 
-	Box					UI_Bullet_1;
-	Box					UI_Bullet_2;
-	Box					UI_Bullet_3;
-	Box					UI_Bullet_4;
-	Box					UI_Bullet_5;
-	Box					UI_Bullet_6;
-	Box					UI_Bullet_7;
-	Box					UI_Bullet_8;
+	Box                    UI_Bullet_1;
+	Box                    UI_Bullet_2;
+	Box                    UI_Bullet_3;
+	Box                    UI_Bullet_4;
+	Box                    UI_Bullet_5;
+	Box                    UI_Bullet_6;
+	Box                    UI_Bullet_7;
+	Box                    UI_Bullet_8;
 
-	Gun_Bullet			Bullet_F1;
-	Gun_Bullet			Bullet_F2;
-	Gun_Bullet			Bullet_F3;
-	Gun_Bullet			Bullet_F4;
-	Gun_Bullet			Bullet_C1;
-	Gun_Bullet			Bullet_C2;
-	Gun_Bullet			Bullet_C3;
-	Gun_Bullet			Bullet_C4;
+	Gun_Bullet            Bullet_F1; SimpleVertex        m_VertexList_F1[6];
+	Gun_Bullet            Bullet_F2; SimpleVertex        m_VertexList_F2[6];
+	Gun_Bullet            Bullet_F3; SimpleVertex        m_VertexList_F3[6];
+	Gun_Bullet            Bullet_F4; SimpleVertex        m_VertexList_F4[6];
+	Gun_Bullet            Bullet_C1; SimpleVertex        m_VertexList_C1[6];
+	Gun_Bullet            Bullet_C2; SimpleVertex        m_VertexList_C2[6];
+	Gun_Bullet            Bullet_C3; SimpleVertex        m_VertexList_C3[6];
+	Gun_Bullet            Bullet_C4; SimpleVertex        m_VertexList_C4[6];
 
 
 public:
-	virtual bool	Init();
-	bool	Frame();
-	bool	Render();
-	bool	Release();
+	virtual bool    Init();
+	bool    Frame();
+	bool    Render();
+	bool    Release();
 
 public:
 	TSceneGame();
@@ -185,95 +185,95 @@ public:
 
 
 
-bool	TSceneGame::Init()
+bool    TSceneGame::Init()
 {
 	Game_Background.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
-	Game_Background.m_for_update_Rects.x = g_rtClient.right;	Game_Background.m_for_update_Rects.y = g_rtClient.bottom;
+	Game_Background.m_for_update_Rects.x = g_rtClient.right;    Game_Background.m_for_update_Rects.y = g_rtClient.bottom;
 	Game_Background.Window_SetData_factors(0, 0, Game_Background.m_for_update_Rects.x, Game_Background.m_for_update_Rects.y);
 	Game_Background.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/background.bmp");
 
 	UI_Bullet_1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	UI_Bullet_1.m_for_update_Rects.x = g_rtClient.right/10;	UI_Bullet_1.m_for_update_Rects.y = g_rtClient.bottom/10;
+	UI_Bullet_1.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_1.m_for_update_Rects.y = g_rtClient.bottom / 12;
 	UI_Bullet_1.Window_SetData_factors(10, 30, UI_Bullet_1.m_for_update_Rects.x, UI_Bullet_1.m_for_update_Rects.y);
-	UI_Bullet_1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	UI_Bullet_1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_F.png");
 
 	UI_Bullet_2.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	UI_Bullet_2.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_2.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_2.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_2.m_for_update_Rects.y = g_rtClient.bottom / 12;
 	UI_Bullet_2.Window_SetData_factors(10, 80, UI_Bullet_2.m_for_update_Rects.x, UI_Bullet_2.m_for_update_Rects.y);
-	UI_Bullet_2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	UI_Bullet_2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_F.png");
 
 	UI_Bullet_3.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	UI_Bullet_3.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_3.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_3.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_3.m_for_update_Rects.y = g_rtClient.bottom / 12;
 	UI_Bullet_3.Window_SetData_factors(10, 130, UI_Bullet_3.m_for_update_Rects.x, UI_Bullet_3.m_for_update_Rects.y);
-	UI_Bullet_3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	UI_Bullet_3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_F.png");
 
 	UI_Bullet_4.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	UI_Bullet_4.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_4.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_4.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_4.m_for_update_Rects.y = g_rtClient.bottom / 12;
 	UI_Bullet_4.Window_SetData_factors(10, 180, UI_Bullet_4.m_for_update_Rects.x, UI_Bullet_4.m_for_update_Rects.y);
-	UI_Bullet_4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	UI_Bullet_4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_F.png");
 
 
 	UI_Bullet_5.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	UI_Bullet_5.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_5.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_5.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_5.m_for_update_Rects.y = g_rtClient.bottom / 10;
 	UI_Bullet_5.Window_SetData_factors(800, 30, UI_Bullet_5.m_for_update_Rects.x, UI_Bullet_5.m_for_update_Rects.y);
-	UI_Bullet_5.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	UI_Bullet_5.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_C.png");
 
 	UI_Bullet_6.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	UI_Bullet_6.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_6.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_6.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_6.m_for_update_Rects.y = g_rtClient.bottom / 10;
 	UI_Bullet_6.Window_SetData_factors(800, 80, UI_Bullet_6.m_for_update_Rects.x, UI_Bullet_6.m_for_update_Rects.y);
-	UI_Bullet_6.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	UI_Bullet_6.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_C.png");
 
 	UI_Bullet_7.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	UI_Bullet_7.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_7.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_7.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_7.m_for_update_Rects.y = g_rtClient.bottom / 10;
 	UI_Bullet_7.Window_SetData_factors(800, 130, UI_Bullet_7.m_for_update_Rects.x, UI_Bullet_7.m_for_update_Rects.y);
-	UI_Bullet_7.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	UI_Bullet_7.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_C.png");
 
 	UI_Bullet_8.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	UI_Bullet_8.m_for_update_Rects.x = g_rtClient.right / 10;	UI_Bullet_8.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	UI_Bullet_8.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_8.m_for_update_Rects.y = g_rtClient.bottom / 10;
 	UI_Bullet_8.Window_SetData_factors(800, 180, UI_Bullet_8.m_for_update_Rects.x, UI_Bullet_8.m_for_update_Rects.y);
-	UI_Bullet_8.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	UI_Bullet_8.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_C.png");
 
 
 
 
 	Bullet_F1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_F1.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_F1.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_F1.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_F1.m_for_update_Rects.y = g_rtClient.bottom / 11;
 	Bullet_F1.Window_SetData_factors(10, 30, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
 	Bullet_F1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
 	Bullet_F2.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_F2.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_F2.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_F2.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_F2.m_for_update_Rects.y = g_rtClient.bottom / 11;
 	Bullet_F2.Window_SetData_factors(10, 80, Bullet_F2.m_for_update_Rects.x, Bullet_F2.m_for_update_Rects.y);
 	Bullet_F2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
 	Bullet_F3.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_F3.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_F3.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_F3.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_F3.m_for_update_Rects.y = g_rtClient.bottom / 11;
 	Bullet_F3.Window_SetData_factors(10, 130, Bullet_F3.m_for_update_Rects.x, Bullet_F3.m_for_update_Rects.y);
 	Bullet_F3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
 	Bullet_F4.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_F4.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_F4.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_F4.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_F4.m_for_update_Rects.y = g_rtClient.bottom / 11;
 	Bullet_F4.Window_SetData_factors(10, 180, Bullet_F4.m_for_update_Rects.x, Bullet_F4.m_for_update_Rects.y);
 	Bullet_F4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
 
 	Bullet_C1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_C1.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_C1.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C1.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_C1.m_for_update_Rects.y = g_rtClient.bottom / 10;
 	Bullet_C1.Window_SetData_factors(800, 30, UI_Bullet_5.m_for_update_Rects.x, Bullet_C1.m_for_update_Rects.y);
 	Bullet_C1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
 	Bullet_C2.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_C2.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_C2.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C2.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_C2.m_for_update_Rects.y = g_rtClient.bottom / 10;
 	Bullet_C2.Window_SetData_factors(800, 80, Bullet_C2.m_for_update_Rects.x, Bullet_C2.m_for_update_Rects.y);
 	Bullet_C2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
 	Bullet_C3.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_C3.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_C3.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C3.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_C3.m_for_update_Rects.y = g_rtClient.bottom / 10;
 	Bullet_C3.Window_SetData_factors(800, 130, Bullet_C3.m_for_update_Rects.x, Bullet_C3.m_for_update_Rects.y);
 	Bullet_C3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
 	Bullet_C4.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_C4.m_for_update_Rects.x = g_rtClient.right / 10;	Bullet_C4.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C4.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_C4.m_for_update_Rects.y = g_rtClient.bottom / 10;
 	Bullet_C4.Window_SetData_factors(800, 180, Bullet_C4.m_for_update_Rects.x, Bullet_C4.m_for_update_Rects.y);
 	Bullet_C4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
 
@@ -281,26 +281,26 @@ bool	TSceneGame::Init()
 
 
 
-	m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;	m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 9;
-	m_Boy_NPC.in_Texture_SetData_factors(91, 2, 57, 92, 753, 532); 
+	m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;    m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 9;
+	m_Boy_NPC.in_Texture_SetData_factors(91, 2, 57, 92, 753, 532);
 	m_Boy_NPC.Window_SetData_factors(0, 350, m_Boy_NPC.m_for_update_Rects.x, m_Boy_NPC.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 	m_Boy_NPC.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/AD_Boy.png");
-	memcpy(m_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
 
 
-	m_Actor.m_for_update_Rects.x = g_rtClient.right / 9;	m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 9;
+
+	m_Actor.m_for_update_Rects.x = g_rtClient.right / 9;    m_Actor.m_for_update_Rects.y = g_rtClient.bottom / 9;
 	m_Actor.in_Texture_SetData_factors(20, 6, 60, 93, 758, 537);
 	m_Actor.Window_SetData_factors(0, 350, m_Actor.m_for_update_Rects.x, m_Actor.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 	m_Actor.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
-	memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+
 	return true;
 };
 
-bool	TSceneGame::Frame()
+bool    TSceneGame::Frame()
 {
 	static float fAngle = 0.0f;
 
-	if (I_Input.Key('A') )
+	if (I_Input.Key('A'))
 	{
 		m_Actor.Face_Direction = 1;
 		m_Actor.left_walk();
@@ -321,29 +321,20 @@ bool	TSceneGame::Frame()
 		m_Actor.MoveY(g_fSecPerFrame * 0.3f);
 	}
 
-	if (I_Input.Key('S') )
+	if (I_Input.Key('S'))
 	{
 		m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
 	}
 
 
-	if (I_Input.Key('G'))
+	if (I_Input.Key('K') || I_Input.Key('L'))
 	{
 		m_Actor.Gun_step = 1;
 
-		if (m_Actor.Face_Direction == 1)
-		{
-			m_Actor.MoveX(g_fSecPerFrame*0.3f);
-		}
-		else if (m_Actor.Face_Direction == 2)
-		{
-			m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
-		}
+		if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
+		else if (m_Actor.Face_Direction == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
 	}
-
-
-	m_Actor.shot();
-	memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+	m_Actor.shot();     memcpy(m_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 
 
 	for (int iV = 0; iV < 6; iV++)
@@ -375,12 +366,12 @@ bool	TSceneGame::Frame()
 
 	if (m_Boy_NPC.m_bDead == true)
 	{
-		m_Boy_NPC.frame(); 
-		if (m_Boy_NPC.walk_step == 0) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }		if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }		if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }		if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }		if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		m_Boy_NPC.frame();
+		if (m_Boy_NPC.walk_step == 0) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 	}
 
 	memcpy(m_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -401,47 +392,267 @@ bool	TSceneGame::Frame()
 	}
 	g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, m_VertexList_2, 0, 0);
 
-
-	return true;
-}
-
-bool	TSceneGame::Render()
-{
-	Game_Background.Render(g_pContext);
-
-	UI_Bullet_1.Render(g_pContext);
-	UI_Bullet_2.Render(g_pContext);
-	UI_Bullet_3.Render(g_pContext);
-	UI_Bullet_4.Render(g_pContext);
-	UI_Bullet_5.Render(g_pContext);
-	UI_Bullet_6.Render(g_pContext);
-	UI_Bullet_7.Render(g_pContext);
-	UI_Bullet_8.Render(g_pContext);
-
-	m_Boy_NPC.Render(g_pContext);
-	m_Actor.Render(g_pContext);
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-	return true;
-}
+	if (I_Input.Key('K'))
+	{
+		static int count = 1;
+		if (count == 1) { Bullet_F1.Bullet_Go = true; }
+		if (count == 2) { Bullet_F2.Bullet_Go = true; }
+		if (count == 3) { Bullet_F3.Bullet_Go = true; }
+		if (count == 4) { Bullet_F4.Bullet_Go = true; }
+		count++;
+	}
+
+	if (I_Input.Key('L'))
+	{
+		static int count = 1;
+		if (count == 1) { Bullet_C1.Bullet_Go = true; }
+		if (count == 2) { Bullet_C2.Bullet_Go = true; }
+		if (count == 3) { Bullet_C3.Bullet_Go = true; }
+		if (count == 4) { Bullet_C4.Bullet_Go = true; }
+		count++;
 
 
-bool	TSceneGame::Release()
-{
 
-	return true;
-}
+		if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		{
+			Bullet_F1.Bullet_Go = false;
+			Bullet_F1.m_pos.x = m_Actor.m_pos.x - 30; Bullet_F1.m_pos.y = m_Actor.m_pos.y - 5;
+			Bullet_F1.Window_SetData_factors(Bullet_F1.m_pos.x, Bullet_F1.m_pos.y, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
+			Bullet_F1.frame_F();
+			Bullet_F1.m_pos_past.x = Bullet_F1.m_pos.x;
+			Bullet_F1.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
+		}
 
-TSceneGame::TSceneGame()
-{
-	m_iSceneID = GAME_SCENE_PLAY;
-	m_bNextSceneStart = false;
-}
+		else if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{
+			Bullet_F1.Bullet_Go = false;
+			Bullet_F1.m_pos.x = m_Actor.m_pos.x + 30; Bullet_F1.m_pos.y = m_Actor.m_pos.y - 5;
+			Bullet_F1.Window_SetData_factors(Bullet_F1.m_pos.x, Bullet_F1.m_pos.y, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
+			Bullet_F1.frame_F();
+			Bullet_F1.m_pos.x += 1 * g_fSecPerFrame*500.0f;
+		}
 
-TSceneGame::~TSceneGame()
-{
+		if (Bullet_F1.m_pos_past.x < Bullet_F1.m_pos.x)
+		{
+			Bullet_F1.Window_SetData_factors(Bullet_F1.m_pos.x, Bullet_F1.m_pos.y, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
+			Bullet_F1.m_pos.x += 1 * g_fSecPerFrame*500.0f;
+			Bullet_F1.frame_F();
+		}
 
-}
+		else if (Bullet_F1.m_pos_past.x > Bullet_F1.m_pos.x)
+		{
+			Bullet_F1.Window_SetData_factors(Bullet_F1.m_pos.x, Bullet_F1.m_pos.y, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
+			Bullet_F1.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
+			Bullet_F1.frame_F();
+		}
+
+
+
+		if (Bullet_2.Bullet_Go == true && m_Hero.Face_Direction == 1)
+
+		{
+
+			Bullet_2.Bullet_Go = false;
+
+			TSound::Get()->PlayEffect(2);
+
+
+			Bullet_2.m_pos.x = m_Hero.m_pos.x - 30; Bullet_2.m_pos.y = m_Hero.m_pos.y - 5;
+
+			Bullet_2.Set(Bullet_2.m_pos.x, Bullet_2.m_pos.y, 2, 144, 40, 39);
+
+			Bullet_2.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+
+			Bullet_2.m_pos_past.x = Bullet_2.m_pos.x;
+
+			Bullet_2.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
+
+		}
+
+
+		if (Bullet_2.Bullet_Go == true && m_Hero.Face_Direction == 2)
+
+		{
+
+			Bullet_2.Bullet_Go = false;
+
+
+			TSound::Get()->PlayEffect(2);
+
+
+			Bullet_2.m_pos.x = m_Hero.m_pos.x + 30; Bullet_2.m_pos.y = m_Hero.m_pos.y - 5;
+
+			Bullet_2.Set(Bullet_2.m_pos.x, Bullet_2.m_pos.y, 2, 144, 40, 39);
+
+			Bullet_2.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+
+			Bullet_2.m_pos_past.x = Bullet_2.m_pos.x;
+
+			Bullet_2.m_pos.x += 1 * g_fSecPerFrame*500.0f;
+
+		}
+
+
+
+		if (Bullet_2.m_pos_past.x < Bullet_2.m_pos.x)
+
+		{
+
+			Bullet_2.Set(Bullet_2.m_pos.x, Bullet_2.m_pos.y, 2, 144, 40, 39);
+
+			Bullet_2.m_pos.x += 1 * g_fSecPerFrame*500.0f;
+
+			Bullet_2.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+
+
+		}
+
+
+		if (Bullet_2.m_pos_past.x > Bullet_2.m_pos.x)
+
+		{
+
+			Bullet_2.Set(Bullet_2.m_pos.x, Bullet_2.m_pos.y, 2, 144, 40, 39);
+
+			Bullet_2.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
+
+			Bullet_2.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+
+		}
+
+
+
+
+
+
+		if (Bullet_3.Bullet_Go == true && m_Hero.Face_Direction == 1)
+
+		{
+
+			Bullet_3.Bullet_Go = false;
+
+			TSound::Get()->PlayEffect(1);
+
+
+			Bullet_3.m_pos.x = m_Hero.m_pos.x - 30; Bullet_3.m_pos.y = m_Hero.m_pos.y - 5;
+
+			Bullet_3.Set(Bullet_3.m_pos.x, Bullet_3.m_pos.y, 192, 142, 31, 41);
+
+			Bullet_3.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+
+			Bullet_3.m_pos_past.x = Bullet_3.m_pos.x;
+
+			Bullet_3.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
+
+		}
+
+
+		if (Bullet_3.Bullet_Go == true && m_Hero.Face_Direction == 2)
+
+		{
+
+			Bullet_3.Bullet_Go = false;
+
+			TSound::Get()->PlayEffect(1);
+
+
+
+
+
+			Bullet_3.m_pos.x = m_Hero.m_pos.x + 30; Bullet_3.m_pos.y = m_Hero.m_pos.y - 5;
+
+			Bullet_3.Set(Bullet_3.m_pos.x, Bullet_3.m_pos.y, 192, 142, 31, 41);
+
+			Bullet_3.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+
+			Bullet_3.m_pos_past.x = Bullet_3.m_pos.x;
+
+			Bullet_3.m_pos.x += 1 * g_fSecPerFrame*500.0f;
+
+		}
+
+
+
+		if (Bullet_3.m_pos_past.x < Bullet_3.m_pos.x)
+
+		{
+
+			Bullet_3.Set(Bullet_3.m_pos.x, Bullet_3.m_pos.y, 192, 142, 31, 41);
+
+			Bullet_3.m_pos.x += 1 * g_fSecPerFrame*500.0f;
+
+			Bullet_3.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+
+
+		}
+
+
+		if (Bullet_3.m_pos_past.x > Bullet_3.m_pos.x)
+
+		{
+
+			Bullet_3.Set(Bullet_3.m_pos.x, Bullet_3.m_pos.y, 192, 142, 31, 41);
+
+			Bullet_3.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
+
+			Bullet_3.Load(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+
+		}
+
+
+
+
+
+		return true;
+	}
+
+	bool    TSceneGame::Render()
+	{
+		Game_Background.Render(g_pContext);
+
+		UI_Bullet_1.Render(g_pContext);
+		UI_Bullet_2.Render(g_pContext);
+		UI_Bullet_3.Render(g_pContext);
+		UI_Bullet_4.Render(g_pContext);
+		UI_Bullet_5.Render(g_pContext);
+		UI_Bullet_6.Render(g_pContext);
+		UI_Bullet_7.Render(g_pContext);
+		UI_Bullet_8.Render(g_pContext);
+
+		m_Boy_NPC.Render(g_pContext);
+		m_Actor.Render(g_pContext);
+
+
+		return true;
+	}
+
+
+	bool    TSceneGame::Release()
+	{
+
+		return true;
+	}
+
+	TSceneGame::TSceneGame()
+	{
+		m_iSceneID = GAME_SCENE_PLAY;
+		m_bNextSceneStart = false;
+	}
+
+	TSceneGame::~TSceneGame()
+	{
+
+	}
+
+
+
+
+
+
+
 
 
 
