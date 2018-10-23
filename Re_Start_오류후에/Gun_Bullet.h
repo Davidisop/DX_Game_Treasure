@@ -6,6 +6,8 @@ class Gun_Bullet : public Object_Handling
 public:
 	int bullet_step;
 	bool Bullet_Go;
+	bool Face_Direction1_flag;
+	bool Face_Direction2_flag;
 	sprite* sprite_ptr;
 
 public:
@@ -170,6 +172,8 @@ public:
 	}
 
 public:
-	Gun_Bullet() { Bullet_Go = false; bullet_step = 0; }
+	Gun_Bullet() {
+		Bullet_Go = false; bullet_step = 0; Face_Direction1_flag = false; Face_Direction2_flag = false;
+	}
 	virtual ~Gun_Bullet() {}
 };

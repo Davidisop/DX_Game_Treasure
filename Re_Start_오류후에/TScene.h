@@ -373,7 +373,6 @@ bool    TSceneGame::Frame()
 		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 	}
-
 	memcpy(N_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
 
 	for (int iV = 0; iV < 6; iV++)
@@ -419,35 +418,77 @@ bool    TSceneGame::Frame()
 		if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 1)
 		{
 			Bullet_F1.Bullet_Go = false;
-			Bullet_F1.m_pos.x = m_Actor.m_pos.x - 30; Bullet_F1.m_pos.y = m_Actor.m_pos.y - 5;
-			Bullet_F1.Window_SetData_factors(Bullet_F1.m_pos.x, Bullet_F1.m_pos.y, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
-			Bullet_F1.frame_F();
-			Bullet_F1.m_pos_past.x = Bullet_F1.m_pos.x;
-			Bullet_F1.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
+
+			Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900 * g_fSecPerFrame*500.0f;
+
+			Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900 * g_fSecPerFrame*500.0f;
+
+			Bullet_F1.Face_Direction1_flag = true;
 		}
 
 		else if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 2)
 		{
 			Bullet_F1.Bullet_Go = false;
-			Bullet_F1.m_pos.x = m_Actor.m_pos.x + 30; Bullet_F1.m_pos.y = m_Actor.m_pos.y - 5;
-			Bullet_F1.Window_SetData_factors(Bullet_F1.m_pos.x, Bullet_F1.m_pos.y, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
-			Bullet_F1.frame_F();
-			Bullet_F1.m_pos.x += 1 * g_fSecPerFrame*500.0f;
+
+			Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900 * g_fSecPerFrame*500.0f;
+																	
+			Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900 * g_fSecPerFrame*500.0f;
+
+			Bullet_F1.Face_Direction1_flag = true;
 		}
 
-		if (Bullet_F1.m_pos_past.x < Bullet_F1.m_pos.x)
+		if (Bullet_F1.Face_Direction1_flag == true)
 		{
-			Bullet_F1.Window_SetData_factors(Bullet_F1.m_pos.x, Bullet_F1.m_pos.y, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
-			Bullet_F1.m_pos.x += 1 * g_fSecPerFrame*500.0f;
+
+			Bullet_F1.m_VertexList[0].x -= 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[1].x -= 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[3].x -= 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[4].x -= 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[5].x -= 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[6].x -= 30 / 900 * g_fSecPerFrame*500.0f;
 			Bullet_F1.frame_F();
+			memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
 		}
 
 		else if (Bullet_F1.m_pos_past.x > Bullet_F1.m_pos.x)
 		{
-			Bullet_F1.Window_SetData_factors(Bullet_F1.m_pos.x, Bullet_F1.m_pos.y, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
-			Bullet_F1.m_pos.x -= 1 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[0].x += 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[1].x += 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[3].x += 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[4].x += 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[5].x += 30 / 900 * g_fSecPerFrame*500.0f;
+			Bullet_F1.m_VertexList[6].x += 30 / 900 * g_fSecPerFrame*500.0f;
 			Bullet_F1.frame_F();
+			memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
 		}
+
+		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+
+
 
 
 		return true;
@@ -466,6 +507,7 @@ bool    TSceneGame::Frame()
 		UI_Bullet_6.Render(g_pContext);
 		UI_Bullet_7.Render(g_pContext);
 		UI_Bullet_8.Render(g_pContext);
+		Bullet_F1.Render(g_pContext);
 
 		m_Boy_NPC.Render(g_pContext);
 		m_Actor.Render(g_pContext);
