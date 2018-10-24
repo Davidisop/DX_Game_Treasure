@@ -173,6 +173,15 @@ public:
 	Gun_Bullet            Bullet_C3; SimpleVertex        N_VertexList_C3[6];
 	Gun_Bullet            Bullet_C4; SimpleVertex        N_VertexList_C4[6];
 
+	Gun_Bullet            Bullet_Ghost_1; SimpleVertex        N_VertexList_G1[6];
+	Gun_Bullet            Bullet_Ghost_2; SimpleVertex        N_VertexList_G2[6];
+	Gun_Bullet            Bullet_Ghost_3; SimpleVertex        N_VertexList_G3[6];
+	Gun_Bullet            Bullet_Ghost_4; SimpleVertex        N_VertexList_G4[6];
+
+
+
+
+
 	Box_Alive			Box_Alive;
 	Box					Treasure_Box;
 
@@ -297,6 +306,27 @@ bool   TSceneGame::Init()
 	Bullet_C4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 
+
+
+	Bullet_Ghost_1.in_Texture_SetData_factors(0, 0, 67, 79, 67, 79);
+	Bullet_Ghost_1.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_Ghost_1.m_for_update_Rects.y = g_rtClient.bottom / 5;
+	Bullet_Ghost_1.Window_SetData_factors(790, 310, Bullet_Ghost_1.m_for_update_Rects.x, Bullet_Ghost_1.m_for_update_Rects.y);
+	Bullet_Ghost_1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Duskull.png");
+
+	Bullet_Ghost_2.in_Texture_SetData_factors(0, 0, 67, 79, 67, 79);
+	Bullet_Ghost_2.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_Ghost_2.m_for_update_Rects.y = g_rtClient.bottom / 5;
+	Bullet_Ghost_2.Window_SetData_factors(790, 310, Bullet_Ghost_2.m_for_update_Rects.x, Bullet_Ghost_2.m_for_update_Rects.y);
+	Bullet_Ghost_2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Duskull.png");
+
+	Bullet_Ghost_3.in_Texture_SetData_factors(0, 0, 67, 79, 67, 79);
+	Bullet_Ghost_3.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_Ghost_3.m_for_update_Rects.y = g_rtClient.bottom / 5;
+	Bullet_Ghost_3.Window_SetData_factors(790, 310, Bullet_Ghost_3.m_for_update_Rects.x, Bullet_Ghost_3.m_for_update_Rects.y);
+	Bullet_Ghost_3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Duskull.png");
+
+	Bullet_Ghost_4.in_Texture_SetData_factors(0, 0, 67, 79, 67, 79);
+	Bullet_Ghost_4.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_Ghost_4.m_for_update_Rects.y = g_rtClient.bottom / 5;
+	Bullet_Ghost_4.Window_SetData_factors(790, 310, Bullet_Ghost_4.m_for_update_Rects.x, Bullet_Ghost_4.m_for_update_Rects.y);
+	Bullet_Ghost_4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Duskull.png");
 
 
 
@@ -882,6 +912,116 @@ bool    TSceneGame::Frame()
 		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
 
 
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+		if (I_Input.Key('V') == KEY_PUSH)
+
+		{Bullet_Ghost_1.Bullet_Go = true;}
+
+		if (Bullet_Ghost_1.Bullet_Go == true) 
+		{ Bullet_Ghost_1.MoveX(-g_fSecPerFrame * 1.0f);}	
+
+		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x;		 N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
+		}	g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+
+
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (I_Input.Key('B') == KEY_PUSH)
+
+		{
+			Bullet_Ghost_2.Bullet_Go = true;
+		}
+
+		if (Bullet_Ghost_2.Bullet_Go == true)
+		{
+			Bullet_Ghost_2.MoveX(-g_fSecPerFrame * 1.0f);
+		}
+
+		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
+		}	g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (I_Input.Key('N') == KEY_PUSH)
+
+		{
+			Bullet_Ghost_3.Bullet_Go = true;
+		}
+
+		if (Bullet_Ghost_3.Bullet_Go == true)
+		{
+			Bullet_Ghost_3.MoveX(-g_fSecPerFrame * 1.0f);
+		}
+
+		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		  vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
+		}	g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (I_Input.Key('M') == KEY_PUSH)
+
+		{
+			Bullet_Ghost_4.Bullet_Go = true;
+		}
+
+		if (Bullet_Ghost_4.Bullet_Go == true)
+		{
+			Bullet_Ghost_4.MoveX(-g_fSecPerFrame * 1.0f);
+		}
+
+		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
+		}	g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+
+
+
+
+
+
+
+
 		return true;	
 }
 
@@ -908,8 +1048,16 @@ bool    TSceneGame::Frame()
 		Bullet_C3.Render(g_pContext);
 		Bullet_C4.Render(g_pContext);
 
+		
+
 		Box_Alive.Render(g_pContext);
 		Treasure_Box.Render(g_pContext);
+
+
+		Bullet_Ghost_1.Render(g_pContext);
+		Bullet_Ghost_2.Render(g_pContext);
+		Bullet_Ghost_3.Render(g_pContext);
+		Bullet_Ghost_4.Render(g_pContext);
 
 		m_Boy_NPC.Render(g_pContext);
 		m_Actor.Render(g_pContext);
