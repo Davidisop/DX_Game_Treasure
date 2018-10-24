@@ -234,48 +234,48 @@ bool   TSceneGame::Init()
 	UI_Bullet_8.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_C.png");
 
 
+	
 
-
-	Bullet_F1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_F1.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_F1.m_for_update_Rects.y = g_rtClient.bottom / 11;
+	Bullet_F1.in_Texture_SetData_factors(226, 142, 31, 37, 400, 300);
+	Bullet_F1.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F1.m_for_update_Rects.y = g_rtClient.bottom / 15;
 	Bullet_F1.Window_SetData_factors(10, 30, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
-	Bullet_F1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	Bullet_F1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_F2.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_F2.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_F2.m_for_update_Rects.y = g_rtClient.bottom / 11;
+	Bullet_F2.in_Texture_SetData_factors(226, 142, 31, 37, 400, 300);
+	Bullet_F2.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F2.m_for_update_Rects.y = g_rtClient.bottom / 15;
 	Bullet_F2.Window_SetData_factors(10, 80, Bullet_F2.m_for_update_Rects.x, Bullet_F2.m_for_update_Rects.y);
-	Bullet_F2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	Bullet_F2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_F3.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_F3.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_F3.m_for_update_Rects.y = g_rtClient.bottom / 11;
+	Bullet_F3.in_Texture_SetData_factors(226, 142, 31, 37, 400, 300);
+	Bullet_F3.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F3.m_for_update_Rects.y = g_rtClient.bottom / 15;
 	Bullet_F3.Window_SetData_factors(10, 130, Bullet_F3.m_for_update_Rects.x, Bullet_F3.m_for_update_Rects.y);
-	Bullet_F3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	Bullet_F3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_F4.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_F4.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_F4.m_for_update_Rects.y = g_rtClient.bottom / 11;
+	Bullet_F4.in_Texture_SetData_factors(226, 142, 31, 37, 400, 300);
+	Bullet_F4.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F4.m_for_update_Rects.y = g_rtClient.bottom / 15;
 	Bullet_F4.Window_SetData_factors(10, 180, Bullet_F4.m_for_update_Rects.x, Bullet_F4.m_for_update_Rects.y);
-	Bullet_F4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	Bullet_F4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 
-	Bullet_C1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_C1.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_C1.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C1.in_Texture_SetData_factors(253, 62, 9, 10, 400, 300);
+	Bullet_C1.m_for_update_Rects.x = g_rtClient.right / 9;    Bullet_C1.m_for_update_Rects.y = g_rtClient.bottom / 9;
 	Bullet_C1.Window_SetData_factors(800, 30, UI_Bullet_5.m_for_update_Rects.x, Bullet_C1.m_for_update_Rects.y);
-	Bullet_C1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	Bullet_C1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_C2.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_C2.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_C2.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C2.in_Texture_SetData_factors(253, 62, 9, 10, 400, 300);
+	Bullet_C2.m_for_update_Rects.x = g_rtClient.right / 9;    Bullet_C2.m_for_update_Rects.y = g_rtClient.bottom / 9;
 	Bullet_C2.Window_SetData_factors(800, 80, Bullet_C2.m_for_update_Rects.x, Bullet_C2.m_for_update_Rects.y);
-	Bullet_C2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	Bullet_C2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_C3.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_C3.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_C3.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C3.in_Texture_SetData_factors(253, 62, 9, 10, 400, 300);
+	Bullet_C3.m_for_update_Rects.x = g_rtClient.right / 9;    Bullet_C3.m_for_update_Rects.y = g_rtClient.bottom / 9;
 	Bullet_C3.Window_SetData_factors(800, 130, Bullet_C3.m_for_update_Rects.x, Bullet_C3.m_for_update_Rects.y);
-	Bullet_C3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	Bullet_C3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_C4.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
-	Bullet_C4.m_for_update_Rects.x = g_rtClient.right / 10;    Bullet_C4.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Bullet_C4.in_Texture_SetData_factors(253, 62, 9, 10, 400, 300);
+	Bullet_C4.m_for_update_Rects.x = g_rtClient.right / 9;    Bullet_C4.m_for_update_Rects.y = g_rtClient.bottom / 9;
 	Bullet_C4.Window_SetData_factors(800, 180, Bullet_C4.m_for_update_Rects.x, Bullet_C4.m_for_update_Rects.y);
-	Bullet_C4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet.png");
+	Bullet_C4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 
 
@@ -298,145 +298,170 @@ bool   TSceneGame::Init()
 
 bool    TSceneGame::Frame()
 {
-	static float fAngle = 0.0f;
+		static float fAngle = 0.0f;
 
-	if (I_Input.Key('A'))
-	{
-		m_Actor.Face_Direction = 1;
-		m_Actor.left_walk();
-		memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
-		m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
-	}
-
-	if (I_Input.Key('D'))
-	{
-		m_Actor.Face_Direction = 2;
-		m_Actor.right_walk();
-		memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
-		m_Actor.MoveX(g_fSecPerFrame*0.3f);
-	}
-
-	if (I_Input.Key('W'))
-	{
-		m_Actor.MoveY(g_fSecPerFrame * 0.3f);
-	}
-
-	if (I_Input.Key('S'))
-	{
-		m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
-	}
-
-
-	if (I_Input.Key('K') || I_Input.Key('L'))
-	{
-		m_Actor.Gun_step = 1;
-
-		if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
-		else if (m_Actor.Face_Direction == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
-	}
-	m_Actor.shot();     memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
-
-
-	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
-		vertex.x = m_Actor.m_VertexList[iV].x;
-		vertex.y = m_Actor.m_VertexList[iV].y;
-
-		vertex.x -= m_Actor.m_vCenter.x;
-		vertex.y -= m_Actor.m_vCenter.y;
-		float S = sinf(fAngle);
-		float C = cosf(fAngle);
-		N_VertexList[iV].x = vertex.x * C + vertex.y * S;
-		N_VertexList[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList[iV].x += m_Actor.m_vCenter.x;
-		N_VertexList[iV].y += m_Actor.m_vCenter.y;
-	}
-	g_pContext->UpdateSubresource(m_Actor.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList, 0, 0);
-
-
-
-	///////////////////////////////////////////////////////////////////////////////////////
-
-	if (I_Input.Key(VK_LBUTTON))
-	{
-		m_Boy_NPC.m_bDead = true;
-		m_Boy_NPC.m_Collision_number = 1;
-	}
-
-	if (m_Boy_NPC.m_bDead == true)
-	{
-		m_Boy_NPC.frame();
-		if (m_Boy_NPC.walk_step == 0) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-	}
-	memcpy(N_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
-
-	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
-		vertex.x = m_Boy_NPC.m_VertexList[iV].x;
-		vertex.y = m_Boy_NPC.m_VertexList[iV].y;
-		vertex.x -= m_Boy_NPC.m_vCenter.x;
-		vertex.y -= m_Boy_NPC.m_vCenter.y;
-		float S = sinf(fAngle);
-		float C = cosf(fAngle);
-		N_VertexList_2[iV].x = vertex.x * C + vertex.y * S;
-		N_VertexList_2[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList_2[iV].x += m_Boy_NPC.m_vCenter.x;
-		N_VertexList_2[iV].y += m_Boy_NPC.m_vCenter.y;
-	}
-	g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_2, 0, 0);
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-	if (I_Input.Key('K'))
-	{
-		static int count = 1;
-		if (count == 1) { Bullet_F1.Bullet_Go = true; }
-		if (count == 2) { Bullet_F2.Bullet_Go = true; }
-		if (count == 3) { Bullet_F3.Bullet_Go = true; }
-		if (count == 4) { Bullet_F4.Bullet_Go = true; }
-		count++;
-	}
-
-	if (I_Input.Key('L'))
-	{
-		static int count = 1;
-		if (count == 1) { Bullet_C1.Bullet_Go = true; }
-		if (count == 2) { Bullet_C2.Bullet_Go = true; }
-		if (count == 3) { Bullet_C3.Bullet_Go = true; }
-		if (count == 4) { Bullet_C4.Bullet_Go = true; }
-		count++;
-
-
-
-		if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		if (I_Input.Key('A'))
 		{
-			Bullet_F1.Bullet_Go = false;
-
-			Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900 * g_fSecPerFrame*500.0f;
-
-			Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900 * g_fSecPerFrame*500.0f;
-			Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900 * g_fSecPerFrame*500.0f;
-
-			Bullet_F1.Face_Direction1_flag = true;
+			m_Actor.Face_Direction = 1;
+			m_Actor.left_walk();
+			memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+			m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
 		}
+
+		if (I_Input.Key('D'))
+		{
+			m_Actor.Face_Direction = 2;
+			m_Actor.right_walk();
+			memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+			m_Actor.MoveX(g_fSecPerFrame*0.3f);
+		}
+
+		if (I_Input.Key('W'))
+		{
+			m_Actor.MoveY(g_fSecPerFrame * 0.3f);
+		}
+
+		if (I_Input.Key('S'))
+		{
+			m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
+		}
+
+
+		if (I_Input.Key('K') || I_Input.Key('L'))
+		{
+			m_Actor.Gun_step = 1;
+
+			if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
+			else if (m_Actor.Face_Direction == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
+		}
+		m_Actor.shot();     memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = m_Actor.m_VertexList[iV].x;
+			vertex.y = m_Actor.m_VertexList[iV].y;
+
+			vertex.x -= m_Actor.m_vCenter.x;
+			vertex.y -= m_Actor.m_vCenter.y;
+			float S = sinf(fAngle);
+			float C = cosf(fAngle);
+			N_VertexList[iV].x = vertex.x * C + vertex.y * S;
+			N_VertexList[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList[iV].x += m_Actor.m_vCenter.x;
+			N_VertexList[iV].y += m_Actor.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(m_Actor.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList, 0, 0);
+
+
+
+		///////////////////////////////////////////////////////////////////////////////////////
+
+		if (I_Input.Key(VK_LBUTTON))
+		{
+			m_Boy_NPC.m_bDead = true;
+			m_Boy_NPC.m_Collision_number = 1;
+		}
+
+		if (m_Boy_NPC.m_bDead == true)
+		{
+			m_Boy_NPC.frame();
+			if (m_Boy_NPC.walk_step == 0) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+			if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+			if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+			if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+			if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		}
+		memcpy(N_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = m_Boy_NPC.m_VertexList[iV].x;
+			vertex.y = m_Boy_NPC.m_VertexList[iV].y;
+			vertex.x -= m_Boy_NPC.m_vCenter.x;
+			vertex.y -= m_Boy_NPC.m_vCenter.y;
+			float S = sinf(fAngle);
+			float C = cosf(fAngle);
+			N_VertexList_2[iV].x = vertex.x * C + vertex.y * S;
+			N_VertexList_2[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_2[iV].x += m_Boy_NPC.m_vCenter.x;
+			N_VertexList_2[iV].y += m_Boy_NPC.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_2, 0, 0);
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+		if (I_Input.Key('K'))
+		{
+			static int count_K = 1;
+			if (count_K == 1) { Bullet_F1.Bullet_Go = true; }
+			if (count_K == 2) { Bullet_F2.Bullet_Go = true; }
+			if (count_K == 3) { Bullet_F3.Bullet_Go = true; }
+			if (count_K == 4) { Bullet_F4.Bullet_Go = true; }
+			count_K++;
+		}
+
+		if (I_Input.Key('L'))
+		{
+			static int count_L = 1;
+			if (count_L == 1) { Bullet_C1.Bullet_Go = true; }
+			if (count_L == 2) { Bullet_C2.Bullet_Go = true; }
+			if (count_L == 3) { Bullet_C3.Bullet_Go = true; }
+			if (count_L == 4) { Bullet_C4.Bullet_Go = true; }
+			count_L++;
+		}
+
+		if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction==1)
+		{	Bullet_F1.Bullet_Go = false; Bullet_F1.Face_Direction1_flag = true;
+			Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900 ; Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
+			Bullet_F1.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900 ; Bullet_F1.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
+			Bullet_F1.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900 ; Bullet_F1.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
+			Bullet_F1.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900 ; Bullet_F1.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
+			Bullet_F1.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900 ; Bullet_F1.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
+			Bullet_F1.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900 ; Bullet_F1.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
+			Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900 ; Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;}
+
+		if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{	Bullet_F1.Bullet_Go = false; Bullet_F1.Face_Direction2_flag = true;
+			Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900 ; Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
+			Bullet_F1.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900 ; Bullet_F1.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
+			Bullet_F1.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900 ; Bullet_F1.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
+			Bullet_F1.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900 ; Bullet_F1.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
+			Bullet_F1.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900 ; Bullet_F1.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
+			Bullet_F1.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900 ; Bullet_F1.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
+			Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900 ; Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;}
+
+		if(Bullet_F1.Face_Direction1_flag == true)
+		{	Bullet_F1.frame_F();
+			if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }
+			if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }
+			if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }
+			if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }	}	
+
+		if (Bullet_F1.Face_Direction2_flag == true)
+		{	Bullet_F1.frame_F();
+			if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }}	
+		
+		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
+		for (int iV = 0; iV < 6; iV++)
+		{	D3DVECTOR vertex;
+			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
+			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;}
+		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+
+
+
+
+/*
 
 		else if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 2)
 		{
@@ -485,14 +510,10 @@ bool    TSceneGame::Frame()
 			Bullet_F1.frame_F();
 			memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
 		}
+*/
+		
 
-		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
-
-
-
-
-		return true;
-	}
+		return true;	
 }
 
 	bool   TSceneGame::Render()
@@ -507,7 +528,16 @@ bool    TSceneGame::Frame()
 		UI_Bullet_6.Render(g_pContext);
 		UI_Bullet_7.Render(g_pContext);
 		UI_Bullet_8.Render(g_pContext);
+		
 		Bullet_F1.Render(g_pContext);
+		Bullet_F2.Render(g_pContext);
+		Bullet_F3.Render(g_pContext);
+		Bullet_F4.Render(g_pContext);
+
+		Bullet_C1.Render(g_pContext);
+		Bullet_C2.Render(g_pContext);
+		Bullet_C3.Render(g_pContext);
+		Bullet_C4.Render(g_pContext);
 
 		m_Boy_NPC.Render(g_pContext);
 		m_Actor.Render(g_pContext);

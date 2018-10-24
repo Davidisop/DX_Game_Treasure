@@ -11,17 +11,17 @@ public:
 	sprite* sprite_ptr;
 
 public:
+
+
+
 	bool frame_F()
 	{
 		static float fAddTime = 0.0f;
 		fAddTime += g_fSecPerFrame;
-		if (fAddTime >= 0.1f)
+		if (fAddTime >= 0.05f)
 		{
 			switch (bullet_step)
 			{
-
-
-
 				case 0:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 8, 0, 400, 300);
@@ -73,20 +73,22 @@ public:
 					bullet_step++;
 
 				}break;
+
 				case 6:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 8, 6, 400, 300);
 					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
+					bullet_step = 0;
 				}break;
 
 			}
 
 		}
 
-		if (fAddTime >= 0.1f)
+		if (fAddTime >= 0.05f)
 		{
-			fAddTime -= 0.1f;
+			fAddTime -= 0.05f;
 		}
 		return true;
 	}
@@ -96,7 +98,7 @@ public:
 	{
 		static float fAddTime = 0.0f;
 		fAddTime += g_fSecPerFrame;
-		if (fAddTime >= 0.1f)
+		if (fAddTime >= 0.2f)
 		{
 			switch (bullet_step)
 			{
@@ -146,9 +148,9 @@ public:
 
 		}
 
-		if (fAddTime >= 0.1f)
+		if (fAddTime >= 0.2f)
 		{
-			fAddTime -= 0.1f;
+			fAddTime -= 0.2f;
 		}
 
 		return true;
@@ -172,8 +174,15 @@ public:
 	}
 
 public:
-	Gun_Bullet() {
-		Bullet_Go = false; bullet_step = 0; Face_Direction1_flag = false; Face_Direction2_flag = false;
+	Gun_Bullet()
+	{
+		Bullet_Go = false; 
+		bullet_step = 0; 
+		Face_Direction1_flag = false;
+		Face_Direction2_flag = false;
+		sprite_ptr = new sprite;
+
+
 	}
 	virtual ~Gun_Bullet() {}
 };
