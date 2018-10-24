@@ -343,6 +343,7 @@ bool   TSceneGame::Init()
 	m_Actor.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
 	return true;
+
 };
 
 bool    TSceneGame::Frame()
@@ -509,7 +510,6 @@ bool    TSceneGame::Frame()
 		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
 
 		///////////////////////////////////////////////////////////
-
 
 		if (Bullet_F2.Bullet_Go == true && m_Actor.Face_Direction == 1)
 		{
@@ -1021,10 +1021,6 @@ bool    TSceneGame::Frame()
 
 
 
-		if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
-		{
-			int a = 1;
-		}
 
 
 
@@ -1033,12 +1029,8 @@ bool    TSceneGame::Frame()
 
 
 
-
-
-
-
-
-		return true;	
+		return true;
+		
 }
 
 	bool   TSceneGame::Render()

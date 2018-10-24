@@ -1,55 +1,99 @@
 #pragma once
 #include "Object_Handling.h"
-
-
-enum { Detection_0 = 0, Detection_1 = 1 };
+//
+//
+//enum { Detection_0 = 0, Detection_1 = 1 };
 
 class Box_Alive : public Object_Handling
 {
 
 public:
-
-	float detection_time;
-	bool  ghost_shoot_flag;
-	int   state;
-
-public:
-
-
-	void frame()
-	{
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	}
-
-
-
-
-
-
-
-
+//
+//	float detection_time;
+//	bool  ghost_shoot_flag;
+//	int   state;
+//	bool Bullet_F1_Bullet_Go;
+//	bool Bullet_F2_Bullet_Go;
+//	bool Bullet_F3_Bullet_Go;
+//	bool Bullet_F4_Bullet_Go;
+//
+//public:
+//
+//
+//	void frame()
+//	{
+//
+//		if (감지중)
+//		{
+//
+//			static float fAddTime = 0.0f;
+//			fAddTime += g_fSecPerFrame;
+//			
+//			if (fAddTime >= 1f)
+//			{
+//				Detction_FULL();
+//				fAddTime = 0;
+//			}
+//		
+//		}
+//
+//
+//		{
+//
+//
+//
+//		void Detction_FULL(void)
+//		{
+//			
+//			else if (state == 0초 감지)
+//			{
+//				state = 1초 감지;
+//				attack();
+//			}
+//		}
+//
+//	public:
+//
+//		void attack(void)
+//		{
+//			if (state == 1초감지)
+//			{
+//				state = 0초 감지;
+//				고스트 샷 플래그 발동();
+//
+//				if (고스트 샷 플래그 발동 되면,)
+//				{
+//					static int count_K = 1;
+//					if (count_K == 1) { Bullet_F1_Bullet_Go = true; }  // 씬에서 이거와 연동되서, 고스트 나간다.
+//					if (count_K == 2) { Bullet_F2_Bullet_Go = true; }
+//					if (count_K == 3) { Bullet_F3_Bullet_Go = true; }
+//					if (count_K == 4) { Bullet_F4_Bullet_Go = true; }
+//					count_K++;
+//				}
+//
+//
+//			}
+//		}
+//	}
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 	Box_Alive()
 	{
-		detection_time = 0;
+	/*	detection_time = 0;
 		ghost_shoot_flag = false;
 		state = Detection_0;
+		 Bullet_F1_Bullet_Go = false;
+		 Bullet_F2_Bullet_Go = false;
+		 Bullet_F3_Bullet_Go = false;
+		 Bullet_F4_Bullet_Go = false; */
 	}
 	virtual ~Box_Alive() {}
 	   
