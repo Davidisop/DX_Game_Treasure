@@ -98,7 +98,7 @@ public:
 	{
 		static float fAddTime = 0.0f;
 		fAddTime += g_fSecPerFrame;
-		if (fAddTime >= 0.2f)
+		if (fAddTime >= 0.05f)
 		{
 			switch (bullet_step)
 			{
@@ -140,7 +140,7 @@ public:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 9, 4, 400, 300);
 					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
-					bullet_step++;
+					bullet_step=0;
 
 				}break;
 
@@ -148,9 +148,9 @@ public:
 
 		}
 
-		if (fAddTime >= 0.2f)
+		if (fAddTime >= 0.05f)
 		{
-			fAddTime -= 0.2f;
+			fAddTime -= 0.05f;
 		}
 
 		return true;
