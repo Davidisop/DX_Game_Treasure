@@ -2,19 +2,57 @@
 #include "Object_Handling.h"
 
 
+enum { Detection_0 = 0, Detection_1 = 1 };
+
 class Box_Alive : public Object_Handling
 {
+
 public:
 
-	Box_Alive() {}
+	float detection_time;
+	bool  ghost_shoot_flag;
+	int   state;
+
+public:
+
+
+	void frame()
+	{
+
+		
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+	}
+
+
+
+
+
+
+
+
+
+
+	Box_Alive()
+	{
+		detection_time = 0;
+		ghost_shoot_flag = false;
+		state = Detection_0;
+	}
 	virtual ~Box_Alive() {}
-
-
-
-
+	   
 };
 
 

@@ -1015,6 +1015,22 @@ bool    TSceneGame::Frame()
 			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
 		}	g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+		if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+		{
+			int a = 1;
+		}
+
+
+
+
+
+
 
 
 
