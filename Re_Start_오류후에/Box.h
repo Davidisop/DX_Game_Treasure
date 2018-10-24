@@ -8,8 +8,9 @@ public:
 	int Linger_Stage;
 
 public:
+
 	Box()
-	{		Linger_Stage = 0;	}
+	{	Linger_Stage = 0;	}
 	~Box() {}
 };
 

@@ -4,6 +4,8 @@
 #include "TCollision.h"
 #include "Boy_NPC.h"
 #include "Gun_Bullet.h"
+#include "Box_Alive.h"
+#include "Box.h"
 
 enum TSceneState
 {
@@ -150,7 +152,7 @@ class TSceneGame : public TScene
 {
 public:
 	Background				Game_Background;
-	THeroObj				m_Actor;    SimpleVertex          N_VertexList[6];
+	THeroObj				m_Actor;      SimpleVertex          N_VertexList[6];
 	Boy_NPC					m_Boy_NPC;    SimpleVertex        N_VertexList_2[6];
 
 	Box                    UI_Bullet_1;
@@ -170,6 +172,11 @@ public:
 	Gun_Bullet            Bullet_C2; SimpleVertex        N_VertexList_C2[6];
 	Gun_Bullet            Bullet_C3; SimpleVertex        N_VertexList_C3[6];
 	Gun_Bullet            Bullet_C4; SimpleVertex        N_VertexList_C4[6];
+
+	Box_Alive			Box_Alive;
+	Box					Treasure_Box;
+
+
 
 
 public:
@@ -191,6 +198,19 @@ bool   TSceneGame::Init()
 	Game_Background.m_for_update_Rects.x = g_rtClient.right;    Game_Background.m_for_update_Rects.y = g_rtClient.bottom;
 	Game_Background.Window_SetData_factors(0, 0, Game_Background.m_for_update_Rects.x, Game_Background.m_for_update_Rects.y);
 	Game_Background.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/background.bmp");
+
+	Treasure_Box.in_Texture_SetData_factors(0, 0, 100, 75, 100, 75);
+	Treasure_Box.m_for_update_Rects.x = g_rtClient.right / 10;    Treasure_Box.m_for_update_Rects.y = g_rtClient.bottom / 8;
+	Treasure_Box.Window_SetData_factors(390, 275, Treasure_Box.m_for_update_Rects.x, Treasure_Box.m_for_update_Rects.y);
+	Treasure_Box.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Treasure_Close_100_75.png");
+	
+
+	Box_Alive.in_Texture_SetData_factors(0, 0, 125, 127, 125, 127);
+	Box_Alive.m_for_update_Rects.x = g_rtClient.right/7;    Box_Alive.m_for_update_Rects.y = g_rtClient.bottom / 4;
+	Box_Alive.Window_SetData_factors(760, 290, Box_Alive.m_for_update_Rects.x, Box_Alive.m_for_update_Rects.y);
+	Box_Alive.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Alter.png");
+
+
 
 	UI_Bullet_1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
 	UI_Bullet_1.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_1.m_for_update_Rects.y = g_rtClient.bottom / 12;
@@ -235,44 +255,43 @@ bool   TSceneGame::Init()
 
 
 	
-
-	Bullet_F1.in_Texture_SetData_factors(226, 142, 31, 37, 400, 300);
+	
+	Bullet_F1.in_Texture_SetData_factors(225, 141, 32, 38, 400, 300);
 	Bullet_F1.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F1.m_for_update_Rects.y = g_rtClient.bottom / 15;
 	Bullet_F1.Window_SetData_factors(10, 30, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
 	Bullet_F1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_F2.in_Texture_SetData_factors(226, 142, 31, 37, 400, 300);
+	Bullet_F2.in_Texture_SetData_factors(225, 141, 32, 38, 400, 300);
 	Bullet_F2.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F2.m_for_update_Rects.y = g_rtClient.bottom / 15;
 	Bullet_F2.Window_SetData_factors(10, 80, Bullet_F2.m_for_update_Rects.x, Bullet_F2.m_for_update_Rects.y);
 	Bullet_F2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_F3.in_Texture_SetData_factors(226, 142, 31, 37, 400, 300);
+	Bullet_F3.in_Texture_SetData_factors(225, 141, 32, 38, 400, 300);
 	Bullet_F3.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F3.m_for_update_Rects.y = g_rtClient.bottom / 15;
 	Bullet_F3.Window_SetData_factors(10, 130, Bullet_F3.m_for_update_Rects.x, Bullet_F3.m_for_update_Rects.y);
 	Bullet_F3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_F4.in_Texture_SetData_factors(226, 142, 31, 37, 400, 300);
+	Bullet_F4.in_Texture_SetData_factors(225, 141, 32, 38, 400, 300);
 	Bullet_F4.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F4.m_for_update_Rects.y = g_rtClient.bottom / 15;
 	Bullet_F4.Window_SetData_factors(10, 180, Bullet_F4.m_for_update_Rects.x, Bullet_F4.m_for_update_Rects.y);
 	Bullet_F4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-
-	Bullet_C1.in_Texture_SetData_factors(254, 63, 9, 9, 400, 300);
+	Bullet_C1.in_Texture_SetData_factors(253, 61, 10, 12, 400, 300);
 	Bullet_C1.m_for_update_Rects.x = g_rtClient.right / 20;    Bullet_C1.m_for_update_Rects.y = g_rtClient.bottom / 20;
 	Bullet_C1.Window_SetData_factors(815, 45, Bullet_C1.m_for_update_Rects.x, Bullet_C1.m_for_update_Rects.y);
 	Bullet_C1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_C2.in_Texture_SetData_factors(254, 63, 9, 9, 400, 300);
+	Bullet_C2.in_Texture_SetData_factors(253, 61, 10, 12, 400, 300);
 	Bullet_C2.m_for_update_Rects.x = g_rtClient.right / 20;    Bullet_C2.m_for_update_Rects.y = g_rtClient.bottom / 20;
 	Bullet_C2.Window_SetData_factors(815, 95, Bullet_C2.m_for_update_Rects.x, Bullet_C2.m_for_update_Rects.y);
 	Bullet_C2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_C3.in_Texture_SetData_factors(254, 63, 9, 9, 400, 300);
+	Bullet_C3.in_Texture_SetData_factors(253, 61, 10, 12, 400, 300);
 	Bullet_C3.m_for_update_Rects.x = g_rtClient.right / 20;    Bullet_C3.m_for_update_Rects.y = g_rtClient.bottom / 20;
 	Bullet_C3.Window_SetData_factors(815, 145, Bullet_C3.m_for_update_Rects.x, Bullet_C3.m_for_update_Rects.y);
 	Bullet_C3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
-	Bullet_C4.in_Texture_SetData_factors(254, 63, 9, 9, 400, 300);
+	Bullet_C4.in_Texture_SetData_factors(253, 61, 10, 12, 400, 300);
 	Bullet_C4.m_for_update_Rects.x = g_rtClient.right / 20;    Bullet_C4.m_for_update_Rects.y = g_rtClient.bottom / 20;
 	Bullet_C4.Window_SetData_factors(815, 195, Bullet_C4.m_for_update_Rects.x, Bullet_C4.m_for_update_Rects.y);
 	Bullet_C4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
@@ -888,6 +907,9 @@ bool    TSceneGame::Frame()
 		Bullet_C2.Render(g_pContext);
 		Bullet_C3.Render(g_pContext);
 		Bullet_C4.Render(g_pContext);
+
+		Box_Alive.Render(g_pContext);
+		Treasure_Box.Render(g_pContext);
 
 		m_Boy_NPC.Render(g_pContext);
 		m_Actor.Render(g_pContext);
