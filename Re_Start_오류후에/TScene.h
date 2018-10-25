@@ -390,18 +390,214 @@ bool    TSceneGame::Frame()
 
 
 			memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
-			
+			memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
 			for (int iV = 0; iV < 6; iV++)
 			{	D3DVECTOR vertex;
 				vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
 				vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
 				float S = sinf(fAngle);	float C = cosf(fAngle);
 				N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;}
+
+			for (int iV = 0; iV < 6; iV++)
+			{	D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;}
+
+
+			g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+		}
+
+
+		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+		{
+			Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
+			Bullet_F1.m_VertexList[1].x = 1.5f; Bullet_F1.m_VertexList[1].y = 1.5f;
+			Bullet_F1.m_VertexList[2].x = 1.5f; Bullet_F1.m_VertexList[2].y = 1.5f;
+			Bullet_F1.m_VertexList[3].x = 1.5f; Bullet_F1.m_VertexList[3].y = 1.5f;
+			Bullet_F1.m_VertexList[4].x = 1.5f; Bullet_F1.m_VertexList[4].y = 1.5f;
+			Bullet_F1.m_VertexList[5].x = 1.5f; Bullet_F1.m_VertexList[5].y = 1.5f;
+			Bullet_F1.m_VertexList[6].x = 1.5f; Bullet_F1.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
+				vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
 				N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
-			}g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
+			}
 
 
+			g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		}
+
+		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+		{
+			
+			Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
+			Bullet_F1.m_VertexList[1].x = 1.5f; Bullet_F1.m_VertexList[1].y = 1.5f;
+			Bullet_F1.m_VertexList[2].x = 1.5f; Bullet_F1.m_VertexList[2].y = 1.5f;
+			Bullet_F1.m_VertexList[3].x = 1.5f; Bullet_F1.m_VertexList[3].y = 1.5f;
+			Bullet_F1.m_VertexList[4].x = 1.5f; Bullet_F1.m_VertexList[4].y = 1.5f;
+			Bullet_F1.m_VertexList[5].x = 1.5f; Bullet_F1.m_VertexList[5].y = 1.5f;
+			Bullet_F1.m_VertexList[6].x = 1.5f; Bullet_F1.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
+				vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
+			}
+
+
+			g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+
+		}
+
+
+
+
+
+
+
+		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+		{
+			Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
+			Bullet_F1.m_VertexList[1].x = 1.5f; Bullet_F1.m_VertexList[1].y = 1.5f;
+			Bullet_F1.m_VertexList[2].x = 1.5f; Bullet_F1.m_VertexList[2].y = 1.5f;
+			Bullet_F1.m_VertexList[3].x = 1.5f; Bullet_F1.m_VertexList[3].y = 1.5f;
+			Bullet_F1.m_VertexList[4].x = 1.5f; Bullet_F1.m_VertexList[4].y = 1.5f;
+			Bullet_F1.m_VertexList[5].x = 1.5f; Bullet_F1.m_VertexList[5].y = 1.5f;
+			Bullet_F1.m_VertexList[6].x = 1.5f; Bullet_F1.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
+				vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
+			}
+
+
+			g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+		}
+
+		//
+
+
+
+		if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+		{
+			Bullet_F2.m_VertexList[0].x = 1.5f; Bullet_F2.m_VertexList[0].y = 1.5f;
+			Bullet_F2.m_VertexList[1].x = 1.5f; Bullet_F2.m_VertexList[1].y = 1.5f;
+			Bullet_F2.m_VertexList[2].x = 1.5f; Bullet_F2.m_VertexList[2].y = 1.5f;
+			Bullet_F2.m_VertexList[3].x = 1.5f; Bullet_F2.m_VertexList[3].y = 1.5f;
+			Bullet_F2.m_VertexList[4].x = 1.5f; Bullet_F2.m_VertexList[4].y = 1.5f;
+			Bullet_F2.m_VertexList[5].x = 1.5f; Bullet_F2.m_VertexList[5].y = 1.5f;
+			Bullet_F2.m_VertexList[6].x = 1.5f; Bullet_F2.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
 			memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
+				vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
+			}
 
 			for (int iV = 0; iV < 6; iV++)
 			{
@@ -411,50 +607,156 @@ bool    TSceneGame::Frame()
 				float S = sinf(fAngle);	float C = cosf(fAngle);
 				N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
 				N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-			}g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+			}
 
+
+			g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
 			g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
-		}
-
-
-		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
-		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
-		}
-
-		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
-		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
-		}
-
-		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
-		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
-		}
-
-		//
-
-
-
-		if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
-		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
 		}
 
 
 		if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+			Bullet_F2.m_VertexList[0].x = 1.5f; Bullet_F2.m_VertexList[0].y = 1.5f;
+			Bullet_F2.m_VertexList[1].x = 1.5f; Bullet_F2.m_VertexList[1].y = 1.5f;
+			Bullet_F2.m_VertexList[2].x = 1.5f; Bullet_F2.m_VertexList[2].y = 1.5f;
+			Bullet_F2.m_VertexList[3].x = 1.5f; Bullet_F2.m_VertexList[3].y = 1.5f;
+			Bullet_F2.m_VertexList[4].x = 1.5f; Bullet_F2.m_VertexList[4].y = 1.5f;
+			Bullet_F2.m_VertexList[5].x = 1.5f; Bullet_F2.m_VertexList[5].y = 1.5f;
+			Bullet_F2.m_VertexList[6].x = 1.5f; Bullet_F2.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
+				vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
+			}
+
+
+			g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 		}
 
 		if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+	
+			Bullet_F2.m_VertexList[0].x = 1.5f; Bullet_F2.m_VertexList[0].y = 1.5f;
+			Bullet_F2.m_VertexList[1].x = 1.5f; Bullet_F2.m_VertexList[1].y = 1.5f;
+			Bullet_F2.m_VertexList[2].x = 1.5f; Bullet_F2.m_VertexList[2].y = 1.5f;
+			Bullet_F2.m_VertexList[3].x = 1.5f; Bullet_F2.m_VertexList[3].y = 1.5f;
+			Bullet_F2.m_VertexList[4].x = 1.5f; Bullet_F2.m_VertexList[4].y = 1.5f;
+			Bullet_F2.m_VertexList[5].x = 1.5f; Bullet_F2.m_VertexList[5].y = 1.5f;
+			Bullet_F2.m_VertexList[6].x = 1.5f; Bullet_F2.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
+				vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
+			}
+
+
+			g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+
 		}
 
 		if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+			Bullet_F2.m_VertexList[0].x = 1.5f; Bullet_F2.m_VertexList[0].y = 1.5f;
+			Bullet_F2.m_VertexList[1].x = 1.5f; Bullet_F2.m_VertexList[1].y = 1.5f;
+			Bullet_F2.m_VertexList[2].x = 1.5f; Bullet_F2.m_VertexList[2].y = 1.5f;
+			Bullet_F2.m_VertexList[3].x = 1.5f; Bullet_F2.m_VertexList[3].y = 1.5f;
+			Bullet_F2.m_VertexList[4].x = 1.5f; Bullet_F2.m_VertexList[4].y = 1.5f;
+			Bullet_F2.m_VertexList[5].x = 1.5f; Bullet_F2.m_VertexList[5].y = 1.5f;
+			Bullet_F2.m_VertexList[6].x = 1.5f; Bullet_F2.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
+				vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
+			}
+
+
+			g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+
 		}
 
 
@@ -462,23 +764,192 @@ bool    TSceneGame::Frame()
 
 		if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+
+			Bullet_F3.m_VertexList[0].x = 1.5f; Bullet_F3.m_VertexList[0].y = 1.5f;
+			Bullet_F3.m_VertexList[1].x = 1.5f; Bullet_F3.m_VertexList[1].y = 1.5f;
+			Bullet_F3.m_VertexList[2].x = 1.5f; Bullet_F3.m_VertexList[2].y = 1.5f;
+			Bullet_F3.m_VertexList[3].x = 1.5f; Bullet_F3.m_VertexList[3].y = 1.5f;
+			Bullet_F3.m_VertexList[4].x = 1.5f; Bullet_F3.m_VertexList[4].y = 1.5f;
+			Bullet_F3.m_VertexList[5].x = 1.5f; Bullet_F3.m_VertexList[5].y = 1.5f;
+			Bullet_F3.m_VertexList[6].x = 1.5f; Bullet_F3.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
+				vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
+			}
+
+
+			g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 		}
 
 
 		if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+			Bullet_F3.m_VertexList[0].x = 1.5f; Bullet_F3.m_VertexList[0].y = 1.5f;
+			Bullet_F3.m_VertexList[1].x = 1.5f; Bullet_F3.m_VertexList[1].y = 1.5f;
+			Bullet_F3.m_VertexList[2].x = 1.5f; Bullet_F3.m_VertexList[2].y = 1.5f;
+			Bullet_F3.m_VertexList[3].x = 1.5f; Bullet_F3.m_VertexList[3].y = 1.5f;
+			Bullet_F3.m_VertexList[4].x = 1.5f; Bullet_F3.m_VertexList[4].y = 1.5f;
+			Bullet_F3.m_VertexList[5].x = 1.5f; Bullet_F3.m_VertexList[5].y = 1.5f;
+			Bullet_F3.m_VertexList[6].x = 1.5f; Bullet_F3.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
+				vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
+			}
+
+
+			g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 		}
 
 		if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+			Bullet_F3.m_VertexList[0].x = 1.5f; Bullet_F3.m_VertexList[0].y = 1.5f;
+			Bullet_F3.m_VertexList[1].x = 1.5f; Bullet_F3.m_VertexList[1].y = 1.5f;
+			Bullet_F3.m_VertexList[2].x = 1.5f; Bullet_F3.m_VertexList[2].y = 1.5f;
+			Bullet_F3.m_VertexList[3].x = 1.5f; Bullet_F3.m_VertexList[3].y = 1.5f;
+			Bullet_F3.m_VertexList[4].x = 1.5f; Bullet_F3.m_VertexList[4].y = 1.5f;
+			Bullet_F3.m_VertexList[5].x = 1.5f; Bullet_F3.m_VertexList[5].y = 1.5f;
+			Bullet_F3.m_VertexList[6].x = 1.5f; Bullet_F3.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
+				vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
+			}
+
+
+			g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
 		}
 
 		if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 		{
-			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+			Bullet_F3.m_VertexList[0].x = 1.5f; Bullet_F3.m_VertexList[0].y = 1.5f;
+			Bullet_F3.m_VertexList[1].x = 1.5f; Bullet_F3.m_VertexList[1].y = 1.5f;
+			Bullet_F3.m_VertexList[2].x = 1.5f; Bullet_F3.m_VertexList[2].y = 1.5f;
+			Bullet_F3.m_VertexList[3].x = 1.5f; Bullet_F3.m_VertexList[3].y = 1.5f;
+			Bullet_F3.m_VertexList[4].x = 1.5f; Bullet_F3.m_VertexList[4].y = 1.5f;
+			Bullet_F3.m_VertexList[5].x = 1.5f; Bullet_F3.m_VertexList[5].y = 1.5f;
+			Bullet_F3.m_VertexList[6].x = 1.5f; Bullet_F3.m_VertexList[6].y = 1.5f;
+
+			Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+
+
+			memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
+			memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
+				vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
+			}
+
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
+			}
+
+
+			g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
+			g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 		}
 
 		//
@@ -505,7 +976,16 @@ bool    TSceneGame::Frame()
 			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
 		}
 
+
+
+
+
+
 		//
+
+
+
+
 
 		if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 		{
