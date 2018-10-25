@@ -914,12 +914,20 @@ bool    TSceneGame::Frame()
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-		if (I_Input.Key('V') == KEY_PUSH)
 
-		{Bullet_Ghost_1.Bullet_Go = true;}
 
-		if (Bullet_Ghost_1.Bullet_Go == true) 
-		{ Bullet_Ghost_1.MoveX(-g_fSecPerFrame * 1.0f);}	
+		if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Treasure_Box.m_rtDetection))
+		{
+			Box_Alive.frame();
+		}
+
+
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		
+		if (Box_Alive.Bullet_F1_Bullet_Go == true)	{Bullet_Ghost_1.Bullet_Go = true;}
+		if (Bullet_Ghost_1.Bullet_Go == true) { Bullet_Ghost_1.MoveX(-g_fSecPerFrame * 1.0f);}	
 
 		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -938,16 +946,8 @@ bool    TSceneGame::Frame()
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		if (I_Input.Key('B') == KEY_PUSH)
-
-		{
-			Bullet_Ghost_2.Bullet_Go = true;
-		}
-
-		if (Bullet_Ghost_2.Bullet_Go == true)
-		{
-			Bullet_Ghost_2.MoveX(-g_fSecPerFrame * 1.0f);
-		}
+		if (Box_Alive.Bullet_F2_Bullet_Go == true) { Bullet_Ghost_2.Bullet_Go = true; }
+		if (Bullet_Ghost_2.Bullet_Go == true) { Bullet_Ghost_2.MoveX(-g_fSecPerFrame * 1.0f); }
 
 		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -965,16 +965,8 @@ bool    TSceneGame::Frame()
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		if (I_Input.Key('N') == KEY_PUSH)
-
-		{
-			Bullet_Ghost_3.Bullet_Go = true;
-		}
-
-		if (Bullet_Ghost_3.Bullet_Go == true)
-		{
-			Bullet_Ghost_3.MoveX(-g_fSecPerFrame * 1.0f);
-		}
+		if (Box_Alive.Bullet_F3_Bullet_Go == true) { Bullet_Ghost_3.Bullet_Go = true; }
+		if (Bullet_Ghost_3.Bullet_Go == true) { Bullet_Ghost_3.MoveX(-g_fSecPerFrame * 1.0f); }
 
 		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -992,16 +984,8 @@ bool    TSceneGame::Frame()
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		if (I_Input.Key('M') == KEY_PUSH)
-
-		{
-			Bullet_Ghost_4.Bullet_Go = true;
-		}
-
-		if (Bullet_Ghost_4.Bullet_Go == true)
-		{
-			Bullet_Ghost_4.MoveX(-g_fSecPerFrame * 1.0f);
-		}
+		if (Box_Alive.Bullet_F4_Bullet_Go == true) { Bullet_Ghost_4.Bullet_Go = true; }
+		if (Bullet_Ghost_4.Bullet_Go == true) { Bullet_Ghost_4.MoveX(-g_fSecPerFrame * 1.0f); }
 
 		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -1015,13 +999,7 @@ bool    TSceneGame::Frame()
 			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
 		}	g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
+		
 
 
 
