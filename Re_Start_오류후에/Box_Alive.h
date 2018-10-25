@@ -47,13 +47,13 @@ public:
 
 	void frame()
 	{
-		 static float fAddTime = 0.0f;
-		 fAddTime += g_fSecPerFrame;
+		
+		 detection_time += g_fSecPerFrame;
 
-		 if (fAddTime >= 1.0f)
+		 if (detection_time >= 3.0f)
 		 {
 			 Detction_FULL();
-			 fAddTime = 0;
+			 detection_time = 0;
 		 }
 
 	}

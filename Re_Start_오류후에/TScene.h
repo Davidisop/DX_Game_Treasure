@@ -151,6 +151,10 @@ TSceneLobby::~TSceneLobby()
 class TSceneGame : public TScene
 {
 public:
+	
+	float fAngle;
+
+public:
 	Background				Game_Background;
 	THeroObj				m_Actor;      SimpleVertex          N_VertexList[6];
 	Boy_NPC					m_Boy_NPC;    SimpleVertex        N_VertexList_2[6];
@@ -195,7 +199,15 @@ public:
 	bool    Release();
 
 public:
+
+	void Hero_Actions();
+	void Boy_NPC_Action();
+	void bullets_basic_Action();
+	void Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
+
+public:
 	TSceneGame();
+
 	virtual ~TSceneGame();
 };
 
@@ -348,660 +360,247 @@ bool   TSceneGame::Init()
 
 bool    TSceneGame::Frame()
 {
-		static float fAngle = 0.0f;
-
-		if (I_Input.Key('A'))
-		{
-			m_Actor.Face_Direction = 1;
-			m_Actor.left_walk();
-			memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
-			m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
-		}
-
-		if (I_Input.Key('D'))
-		{
-			m_Actor.Face_Direction = 2;
-			m_Actor.right_walk();
-			memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
-			m_Actor.MoveX(g_fSecPerFrame*0.3f);
-		}
-
-		if (I_Input.Key('W'))
-		{
-			m_Actor.MoveY(g_fSecPerFrame * 0.3f);
-		}
-
-		if (I_Input.Key('S'))
-		{
-			m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
-		}
-
-
-		if (I_Input.Key('K') || I_Input.Key('L'))
-		{
-			m_Actor.Gun_step = 1;
-
-			if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
-			else if (m_Actor.Face_Direction == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
-		}
-		m_Actor.shot();     memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
-
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = m_Actor.m_VertexList[iV].x;
-			vertex.y = m_Actor.m_VertexList[iV].y;
-
-			vertex.x -= m_Actor.m_vCenter.x;
-			vertex.y -= m_Actor.m_vCenter.y;
-			float S = sinf(fAngle);
-			float C = cosf(fAngle);
-			N_VertexList[iV].x = vertex.x * C + vertex.y * S;
-			N_VertexList[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList[iV].x += m_Actor.m_vCenter.x;
-			N_VertexList[iV].y += m_Actor.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(m_Actor.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList, 0, 0);
-
-
-
-		///////////////////////////////////////////////////////////////////////////////////////
-
-		if (I_Input.Key(VK_LBUTTON))
-		{
-			m_Boy_NPC.m_bDead = true;
-			m_Boy_NPC.m_Collision_number = 1;
-		}
-
-		if (m_Boy_NPC.m_bDead == true)
-		{
-			m_Boy_NPC.frame();
-			if (m_Boy_NPC.walk_step == 0) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-			if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-			if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-			if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-			if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		}
-		memcpy(N_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = m_Boy_NPC.m_VertexList[iV].x;
-			vertex.y = m_Boy_NPC.m_VertexList[iV].y;
-			vertex.x -= m_Boy_NPC.m_vCenter.x;
-			vertex.y -= m_Boy_NPC.m_vCenter.y;
-			float S = sinf(fAngle);
-			float C = cosf(fAngle);
-			N_VertexList_2[iV].x = vertex.x * C + vertex.y * S;
-			N_VertexList_2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_2[iV].x += m_Boy_NPC.m_vCenter.x;
-			N_VertexList_2[iV].y += m_Boy_NPC.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_2, 0, 0);
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-		if (I_Input.Key('K') == KEY_PUSH)
-		{
-			static int count_K = 1;
-			if (count_K == 1) { Bullet_F1.Bullet_Go = true; }
-			if (count_K == 2) { Bullet_F2.Bullet_Go = true; }
-			if (count_K == 3) { Bullet_F3.Bullet_Go = true; }
-			if (count_K == 4) { Bullet_F4.Bullet_Go = true; }
-			count_K++;
-		}
-
-		if (I_Input.Key('L') == KEY_PUSH)
-		{
-			static int count_L = 1;
-			if (count_L == 1) { Bullet_C1.Bullet_Go = true; }
-			if (count_L == 2) { Bullet_C2.Bullet_Go = true; }
-			if (count_L == 3) { Bullet_C3.Bullet_Go = true; }
-			if (count_L == 4) { Bullet_C4.Bullet_Go = true; }
-			count_L++;
-		}
-		//////////////////////////////////////////////////////
-
-		if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction==1)
-		{	Bullet_F1.Bullet_Go = false; Bullet_F1.Face_Direction1_flag = true;
-			Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900 ; Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
-			Bullet_F1.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900 ; Bullet_F1.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
-			Bullet_F1.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900 ; Bullet_F1.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
-			Bullet_F1.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900 ; Bullet_F1.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
-			Bullet_F1.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900 ; Bullet_F1.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
-			Bullet_F1.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900 ; Bullet_F1.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
-			Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900 ; Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;}
-
-		if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 2)
-		{	Bullet_F1.Bullet_Go = false; Bullet_F1.Face_Direction2_flag = true;
-			Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900 ; Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
-			Bullet_F1.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900 ; Bullet_F1.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
-			Bullet_F1.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900 ; Bullet_F1.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
-			Bullet_F1.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900 ; Bullet_F1.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
-			Bullet_F1.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900 ; Bullet_F1.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
-			Bullet_F1.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900 ; Bullet_F1.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
-			Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900 ; Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;}
-
-		if(Bullet_F1.Face_Direction1_flag == true)
-		{	Bullet_F1.frame_F();
-			if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }
-			if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }
-			if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }
-			if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(-g_fSecPerFrame*1.0f); }	}	
-
-		if (Bullet_F1.Face_Direction2_flag == true)
-		{	Bullet_F1.frame_F();
-			if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }}	
 		
-		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
-		for (int iV = 0; iV < 6; iV++)
-		{	D3DVECTOR vertex;
-			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
-			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;}
-		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+		Hero_Actions();
+		Boy_NPC_Action();
+		bullets_basic_Action();
+		Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
 
-		///////////////////////////////////////////////////////////
+		// 총알과 Ghost_총알의 충돌. ////
 
-		if (Bullet_F2.Bullet_Go == true && m_Actor.Face_Direction == 1)
+
+		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 		{
-			Bullet_F2.Bullet_Go = false; Bullet_F2.Face_Direction1_flag = true;
-			Bullet_F2.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_F2.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
-			Bullet_F2.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_F2.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
-			Bullet_F2.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_F2.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
-			Bullet_F2.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_F2.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
-			Bullet_F2.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_F2.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
-			Bullet_F2.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_F2.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
-			Bullet_F2.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F2.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
-		}
+			
+			Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
+			Bullet_F1.m_VertexList[1].x = 1.5f; Bullet_F1.m_VertexList[1].y = 1.5f;
+			Bullet_F1.m_VertexList[2].x = 1.5f; Bullet_F1.m_VertexList[2].y = 1.5f;
+			Bullet_F1.m_VertexList[3].x = 1.5f; Bullet_F1.m_VertexList[3].y = 1.5f;
+			Bullet_F1.m_VertexList[4].x = 1.5f; Bullet_F1.m_VertexList[4].y = 1.5f;
+			Bullet_F1.m_VertexList[5].x = 1.5f; Bullet_F1.m_VertexList[5].y = 1.5f;
+			Bullet_F1.m_VertexList[6].x = 1.5f; Bullet_F1.m_VertexList[6].y = 1.5f;
 
-		if (Bullet_F2.Bullet_Go == true && m_Actor.Face_Direction == 2)
-		{
-			Bullet_F2.Bullet_Go = false; Bullet_F2.Face_Direction2_flag = true;
-			Bullet_F2.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F2.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
-			Bullet_F2.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_F2.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
-			Bullet_F2.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_F2.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
-			Bullet_F2.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_F2.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
-			Bullet_F2.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_F2.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
-			Bullet_F2.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_F2.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
-			Bullet_F2.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_F2.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
-		}
-
-		if (Bullet_F2.Face_Direction1_flag == true)
-		{
-			Bullet_F2.frame_F();
-			if (Bullet_F2.bullet_step == 0) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F2.bullet_step == 1) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_F2.bullet_step == 2) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F2.bullet_step == 3) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_F2.bullet_step == 4) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F2.bullet_step == 5) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_F2.bullet_step == 6) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
-		}
-
-		if (Bullet_F2.Face_Direction2_flag == true)
-		{
-			Bullet_F2.frame_F();
-			if (Bullet_F2.bullet_step == 0) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F2.bullet_step == 1) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F2.bullet_step == 2) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F2.bullet_step == 3) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F2.bullet_step == 4) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F2.bullet_step == 5) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F2.bullet_step == 6) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
-		}
-
-		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
-			vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
-
-		///////////////////////////////////////////////////////////
+			Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
+			Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
 
 
-		if (Bullet_F3.Bullet_Go == true && m_Actor.Face_Direction == 1)
-		{
-			Bullet_F3.Bullet_Go = false; Bullet_F3.Face_Direction1_flag = true;
-			Bullet_F3.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_F3.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
-			Bullet_F3.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_F3.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
-			Bullet_F3.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_F3.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
-			Bullet_F3.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_F3.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
-			Bullet_F3.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_F3.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
-			Bullet_F3.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_F3.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
-			Bullet_F3.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F3.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
-		}
-
-		if (Bullet_F3.Bullet_Go == true && m_Actor.Face_Direction == 2)
-		{
-			Bullet_F3.Bullet_Go = false; Bullet_F3.Face_Direction2_flag = true;
-			Bullet_F3.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F3.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
-			Bullet_F3.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_F3.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
-			Bullet_F3.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_F3.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
-			Bullet_F3.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_F3.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
-			Bullet_F3.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_F3.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
-			Bullet_F3.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_F3.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
-			Bullet_F3.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_F3.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
-		}
-
-		if (Bullet_F3.Face_Direction1_flag == true)
-		{
-			Bullet_F3.frame_F();
-			if (Bullet_F3.bullet_step == 0) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F3.bullet_step == 1) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_F3.bullet_step == 2) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F3.bullet_step == 3) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_F3.bullet_step == 4) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F3.bullet_step == 5) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_F3.bullet_step == 6) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
-		}
-
-		if (Bullet_F3.Face_Direction2_flag == true)
-		{
-			Bullet_F3.frame_F();
-			if (Bullet_F3.bullet_step == 0) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F3.bullet_step == 1) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F3.bullet_step == 2) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F3.bullet_step == 3) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F3.bullet_step == 4) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F3.bullet_step == 5) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F3.bullet_step == 6) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
-		}
-
-		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
-			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		if (Bullet_F4.Bullet_Go == true && m_Actor.Face_Direction == 1)
-		{
-			Bullet_F4.Bullet_Go = false; Bullet_F4.Face_Direction1_flag = true;
-			Bullet_F4.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_F4.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
-			Bullet_F4.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_F4.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
-			Bullet_F4.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_F4.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
-			Bullet_F4.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_F4.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
-			Bullet_F4.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_F4.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
-			Bullet_F4.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_F4.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
-			Bullet_F4.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F4.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
-		}
-
-		if (Bullet_F4.Bullet_Go == true && m_Actor.Face_Direction == 2)
-		{
-			Bullet_F4.Bullet_Go = false; Bullet_F4.Face_Direction2_flag = true;
-			Bullet_F4.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F4.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
-			Bullet_F4.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_F4.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
-			Bullet_F4.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_F4.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
-			Bullet_F4.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_F4.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
-			Bullet_F4.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_F4.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
-			Bullet_F4.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_F4.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
-			Bullet_F4.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_F4.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
-		}
-
-		if (Bullet_F4.Face_Direction1_flag == true)
-		{
-			Bullet_F4.frame_F();
-			if (Bullet_F4.bullet_step == 0) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F4.bullet_step == 1) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_F4.bullet_step == 2) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F4.bullet_step == 3) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_F4.bullet_step == 4) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F4.bullet_step == 5) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_F4.bullet_step == 6) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
-		}
-
-		if (Bullet_F4.Face_Direction2_flag == true)
-		{
-			Bullet_F4.frame_F();
-			if (Bullet_F4.bullet_step == 0) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F4.bullet_step == 1) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F4.bullet_step == 2) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F4.bullet_step == 3) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F4.bullet_step == 4) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F4.bullet_step == 5) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_F4.bullet_step == 6) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
-		}
-
-		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		if (Bullet_C1.Bullet_Go == true && m_Actor.Face_Direction == 1)
-		{
-			Bullet_C1.Bullet_Go = false; Bullet_C1.Face_Direction1_flag = true;
-			Bullet_C1.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_C1.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
-			Bullet_C1.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_C1.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
-			Bullet_C1.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_C1.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
-			Bullet_C1.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_C1.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
-			Bullet_C1.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_C1.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
-			Bullet_C1.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_C1.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
-			Bullet_C1.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C1.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
-		}
-
-		if (Bullet_C1.Bullet_Go == true && m_Actor.Face_Direction == 2)
-		{
-			Bullet_C1.Bullet_Go = false; Bullet_C1.Face_Direction2_flag = true;
-			Bullet_C1.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C1.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
-			Bullet_C1.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_C1.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
-			Bullet_C1.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_C1.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
-			Bullet_C1.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_C1.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
-			Bullet_C1.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_C1.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
-			Bullet_C1.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_C1.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
-			Bullet_C1.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_C1.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
-		}
-
-		if (Bullet_C1.Face_Direction1_flag == true)
-		{
-			Bullet_C1.frame_C();
-			if (Bullet_C1.bullet_step == 0) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C1.bullet_step == 1) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C1.bullet_step == 2) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C1.bullet_step == 3) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C1.bullet_step == 4) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C1.bullet_step == 5) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C1.bullet_step == 6) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
-		}
-
-		if (Bullet_C1.Face_Direction2_flag == true)
-		{
-			Bullet_C1.frame_C();
-			if (Bullet_C1.bullet_step == 0) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C1.bullet_step == 1) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C1.bullet_step == 2) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C1.bullet_step == 3) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C1.bullet_step == 4) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C1.bullet_step == 5) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C1.bullet_step == 6) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
-		}
-
-		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		if (Bullet_C2.Bullet_Go == true && m_Actor.Face_Direction == 1)
-		{
-			Bullet_C2.Bullet_Go = false; Bullet_C2.Face_Direction1_flag = true;
-			Bullet_C2.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_C2.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
-			Bullet_C2.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_C2.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
-			Bullet_C2.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_C2.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
-			Bullet_C2.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_C2.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
-			Bullet_C2.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_C2.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
-			Bullet_C2.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_C2.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
-			Bullet_C2.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C2.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
-		}
-
-		if (Bullet_C2.Bullet_Go == true && m_Actor.Face_Direction == 2)
-		{
-			Bullet_C2.Bullet_Go = false; Bullet_C2.Face_Direction2_flag = true;
-			Bullet_C2.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C2.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
-			Bullet_C2.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_C2.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
-			Bullet_C2.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_C2.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
-			Bullet_C2.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_C2.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
-			Bullet_C2.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_C2.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
-			Bullet_C2.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_C2.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
-			Bullet_C2.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_C2.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
-		}
-
-		if (Bullet_C2.Face_Direction1_flag == true)
-		{
-			Bullet_C2.frame_C();
-			if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
-		}
-
-		if (Bullet_C2.Face_Direction2_flag == true)
-		{
-			Bullet_C2.frame_C();
-			if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
-		}
-
-		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
+			memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
+			
+			for (int iV = 0; iV < 6; iV++)
+			{	D3DVECTOR vertex;
+				vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
+				vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
+			}g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
 
 
+			memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
 
+			for (int iV = 0; iV < 6; iV++)
+			{
+				D3DVECTOR vertex;
+				vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
+				vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+				float S = sinf(fAngle);	float C = cosf(fAngle);
+				N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
+				N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
+			}g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		if (Bullet_C3.Bullet_Go == true && m_Actor.Face_Direction == 1)
-		{
-			Bullet_C3.Bullet_Go = false; Bullet_C3.Face_Direction1_flag = true;
-			Bullet_C3.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_C3.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
-			Bullet_C3.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_C3.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
-			Bullet_C3.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_C3.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
-			Bullet_C3.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_C3.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
-			Bullet_C3.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_C3.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
-			Bullet_C3.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_C3.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
-			Bullet_C3.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C3.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
-		}
-
-		if (Bullet_C3.Bullet_Go == true && m_Actor.Face_Direction == 2)
-		{
-			Bullet_C3.Bullet_Go = false; Bullet_C3.Face_Direction2_flag = true;
-			Bullet_C3.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C3.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
-			Bullet_C3.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_C3.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
-			Bullet_C3.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_C3.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
-			Bullet_C3.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_C3.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
-			Bullet_C3.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_C3.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
-			Bullet_C3.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_C3.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
-			Bullet_C3.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_C3.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
-		}
-
-		if (Bullet_C3.Face_Direction1_flag == true)
-		{
-			Bullet_C3.frame_C();
-			if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
-		}
-
-		if (Bullet_C3.Face_Direction2_flag == true)
-		{
-			Bullet_C3.frame_C();
-			if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
-		}
-
-		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
-
-			////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		if (Bullet_C4.Bullet_Go == true && m_Actor.Face_Direction == 1)
-		{
-			Bullet_C4.Bullet_Go = false; Bullet_C4.Face_Direction1_flag = true;
-			Bullet_C4.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_C4.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
-			Bullet_C4.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_C4.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
-			Bullet_C4.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_C4.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
-			Bullet_C4.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_C4.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
-			Bullet_C4.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_C4.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
-			Bullet_C4.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_C4.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
-			Bullet_C4.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C4.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
-		}
-
-		if (Bullet_C4.Bullet_Go == true && m_Actor.Face_Direction == 2)
-		{
-			Bullet_C4.Bullet_Go = false; Bullet_C4.Face_Direction2_flag = true;
-			Bullet_C4.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C4.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
-			Bullet_C4.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_C4.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
-			Bullet_C4.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_C4.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
-			Bullet_C4.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_C4.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
-			Bullet_C4.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_C4.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
-			Bullet_C4.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_C4.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
-			Bullet_C4.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_C4.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
-		}
-
-		if (Bullet_C4.Face_Direction1_flag == true)
-		{
-			Bullet_C4.frame_C();
-			if (Bullet_C4.bullet_step == 0) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C4.bullet_step == 1) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C4.bullet_step == 2) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C4.bullet_step == 3) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C4.bullet_step == 4) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C4.bullet_step == 5) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
-			if (Bullet_C4.bullet_step == 6) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
-		}
-
-		if (Bullet_C4.Face_Direction2_flag == true)
-		{
-			Bullet_C4.frame_C();
-			if (Bullet_C4.bullet_step == 0) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C4.bullet_step == 1) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C4.bullet_step == 2) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C4.bullet_step == 3) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C4.bullet_step == 4) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C4.bullet_step == 5) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
-			if (Bullet_C4.bullet_step == 6) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
-		}
-
-		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-
-
-		if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Treasure_Box.m_rtDetection))
-		{
-			Box_Alive.frame();
+			g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 		}
 
 
-
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		
-		if (Box_Alive.Bullet_F1_Bullet_Go == true)	{Bullet_Ghost_1.Bullet_Go = true;}
-		if (Bullet_Ghost_1.Bullet_Go == true) { Bullet_Ghost_1.MoveX(-g_fSecPerFrame * 1.0f);}	
-
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
+		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x;		 N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}	g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
 
-
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		if (Box_Alive.Bullet_F2_Bullet_Go == true) { Bullet_Ghost_2.Bullet_Go = true; }
-		if (Bullet_Ghost_2.Bullet_Go == true) { Bullet_Ghost_2.MoveX(-g_fSecPerFrame * 1.0f); }
-
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
+		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}	g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
 
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		if (Box_Alive.Bullet_F3_Bullet_Go == true) { Bullet_Ghost_3.Bullet_Go = true; }
-		if (Bullet_Ghost_3.Bullet_Go == true) { Bullet_Ghost_3.MoveX(-g_fSecPerFrame * 1.0f); }
-
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
+		if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		  vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}	g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		//
 
 
 
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		if (Box_Alive.Bullet_F4_Bullet_Go == true) { Bullet_Ghost_4.Bullet_Go = true; }
-		if (Bullet_Ghost_4.Bullet_Go == true) { Bullet_Ghost_4.MoveX(-g_fSecPerFrame * 1.0f); }
-
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
+		if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}	g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
-
-		
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
 
 
+		if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+
+		//
+
+		if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+
+		if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		//
+
+
+		if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+
+		if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		//
+
+		if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+
+		if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		//
+
+
+		if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+
+		if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		//
+
+
+		if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+
+		if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		//
+
+
+		if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+
+		if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+		{
+			// 둘다 멀리 사라지거나 - 이건 가능해. 아예 사라지는 건데... 그게 가능해? Render()가 들어가 있기에 불가능해.
+		}
+
+		//
 
 
 
@@ -1061,6 +660,7 @@ bool    TSceneGame::Frame()
 	{
 		m_iSceneID = GAME_SCENE_PLAY;
 		m_bNextSceneStart = false;
+		fAngle = 0.0f;
 	}
 
 	TSceneGame::~TSceneGame()
@@ -1070,12 +670,680 @@ bool    TSceneGame::Frame()
 
 
 
+	void TSceneGame::Hero_Actions()
+	{
+
+		
+
+		if (I_Input.Key('A'))
+		{
+			m_Actor.Face_Direction = 1;
+			m_Actor.left_walk();
+			memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+			m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
+		}
+
+		if (I_Input.Key('D'))
+		{
+			m_Actor.Face_Direction = 2;
+			m_Actor.right_walk();
+			memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+			m_Actor.MoveX(g_fSecPerFrame*0.3f);
+		}
+
+		if (I_Input.Key('W'))
+		{
+			m_Actor.MoveY(g_fSecPerFrame * 0.3f);
+		}
+
+		if (I_Input.Key('S'))
+		{
+			m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
+		}
+
+
+		if (I_Input.Key('K') || I_Input.Key('L'))
+		{
+			m_Actor.Gun_step = 1;
+
+			if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
+			else if (m_Actor.Face_Direction == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
+		}
+		m_Actor.shot();     memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = m_Actor.m_VertexList[iV].x;
+			vertex.y = m_Actor.m_VertexList[iV].y;
+
+			vertex.x -= m_Actor.m_vCenter.x;
+			vertex.y -= m_Actor.m_vCenter.y;
+			float S = sinf(fAngle);
+			float C = cosf(fAngle);
+			N_VertexList[iV].x = vertex.x * C + vertex.y * S;
+			N_VertexList[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList[iV].x += m_Actor.m_vCenter.x;
+			N_VertexList[iV].y += m_Actor.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(m_Actor.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList, 0, 0);
+
+
+	}
+
+
+	void TSceneGame::Boy_NPC_Action()
+	{
+		
+
+		if (I_Input.Key(VK_LBUTTON))
+		{
+			m_Boy_NPC.m_bDead = true;
+			m_Boy_NPC.m_Collision_number = 1;
+		}
+
+		if (m_Boy_NPC.m_bDead == true)
+		{
+			m_Boy_NPC.frame();
+			if (m_Boy_NPC.walk_step == 0) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+			if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+			if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+			if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+			if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		}
+		memcpy(N_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = m_Boy_NPC.m_VertexList[iV].x;
+			vertex.y = m_Boy_NPC.m_VertexList[iV].y;
+			vertex.x -= m_Boy_NPC.m_vCenter.x;
+			vertex.y -= m_Boy_NPC.m_vCenter.y;
+			float S = sinf(fAngle);
+			float C = cosf(fAngle);
+			N_VertexList_2[iV].x = vertex.x * C + vertex.y * S;
+			N_VertexList_2[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_2[iV].x += m_Boy_NPC.m_vCenter.x;
+			N_VertexList_2[iV].y += m_Boy_NPC.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_2, 0, 0);
+
+	}
+
+
+	void TSceneGame::bullets_basic_Action()
+	{
+
+		if (I_Input.Key('K') == KEY_PUSH)
+		{
+			static int count_K = 1;
+			if (count_K == 1) { Bullet_F1.Bullet_Go = true; }
+			if (count_K == 2) { Bullet_F2.Bullet_Go = true; }
+			if (count_K == 3) { Bullet_F3.Bullet_Go = true; }
+			if (count_K == 4) { Bullet_F4.Bullet_Go = true; }
+			count_K++;
+		}
+
+		if (I_Input.Key('L') == KEY_PUSH)
+		{
+			static int count_L = 1;
+			if (count_L == 1) { Bullet_C1.Bullet_Go = true; }
+			if (count_L == 2) { Bullet_C2.Bullet_Go = true; }
+			if (count_L == 3) { Bullet_C3.Bullet_Go = true; }
+			if (count_L == 4) { Bullet_C4.Bullet_Go = true; }
+			count_L++;
+		}
+
+		//////////////     총알의 움직임   /////////////////////////////////////
+
+		if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		{
+			Bullet_F1.Bullet_Go = false; Bullet_F1.Face_Direction1_flag = true;
+			Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
+			Bullet_F1.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_F1.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
+			Bullet_F1.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_F1.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
+			Bullet_F1.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_F1.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
+			Bullet_F1.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_F1.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
+			Bullet_F1.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_F1.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
+			Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
+		}
+
+		if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{
+			Bullet_F1.Bullet_Go = false; Bullet_F1.Face_Direction2_flag = true;
+			Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
+			Bullet_F1.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_F1.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
+			Bullet_F1.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_F1.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
+			Bullet_F1.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_F1.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
+			Bullet_F1.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_F1.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
+			Bullet_F1.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_F1.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
+			Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
+		}
+
+		if (Bullet_F1.Face_Direction1_flag == true)
+		{
+			Bullet_F1.frame_F();
+			if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
+		}
+
+		if (Bullet_F1.Face_Direction2_flag == true)
+		{
+			Bullet_F1.frame_F();
+			if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+		}
+
+		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
+			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+
+		//////////////     총알의 움직임   /////////////////////////////////////
+
+		if (Bullet_F2.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		{
+			Bullet_F2.Bullet_Go = false; Bullet_F2.Face_Direction1_flag = true;
+			Bullet_F2.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_F2.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
+			Bullet_F2.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_F2.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
+			Bullet_F2.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_F2.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
+			Bullet_F2.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_F2.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
+			Bullet_F2.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_F2.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
+			Bullet_F2.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_F2.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
+			Bullet_F2.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F2.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
+		}
+
+		if (Bullet_F2.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{
+			Bullet_F2.Bullet_Go = false; Bullet_F2.Face_Direction2_flag = true;
+			Bullet_F2.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F2.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
+			Bullet_F2.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_F2.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
+			Bullet_F2.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_F2.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
+			Bullet_F2.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_F2.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
+			Bullet_F2.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_F2.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
+			Bullet_F2.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_F2.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
+			Bullet_F2.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_F2.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
+		}
+
+		if (Bullet_F2.Face_Direction1_flag == true)
+		{
+			Bullet_F2.frame_F();
+			if (Bullet_F2.bullet_step == 0) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F2.bullet_step == 1) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F2.bullet_step == 2) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F2.bullet_step == 3) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F2.bullet_step == 4) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F2.bullet_step == 5) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F2.bullet_step == 6) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
+		}
+
+		if (Bullet_F2.Face_Direction2_flag == true)
+		{
+			Bullet_F2.frame_F();
+			if (Bullet_F2.bullet_step == 0) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F2.bullet_step == 1) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F2.bullet_step == 2) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F2.bullet_step == 3) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F2.bullet_step == 4) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F2.bullet_step == 5) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F2.bullet_step == 6) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
+		}
+
+		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
+			vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
+
+		//////////////     총알의 움직임   /////////////////////////////////////
+
+
+		if (Bullet_F3.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		{
+			Bullet_F3.Bullet_Go = false; Bullet_F3.Face_Direction1_flag = true;
+			Bullet_F3.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_F3.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
+			Bullet_F3.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_F3.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
+			Bullet_F3.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_F3.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
+			Bullet_F3.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_F3.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
+			Bullet_F3.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_F3.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
+			Bullet_F3.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_F3.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
+			Bullet_F3.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F3.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
+		}
+
+		if (Bullet_F3.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{
+			Bullet_F3.Bullet_Go = false; Bullet_F3.Face_Direction2_flag = true;
+			Bullet_F3.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F3.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
+			Bullet_F3.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_F3.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
+			Bullet_F3.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_F3.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
+			Bullet_F3.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_F3.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
+			Bullet_F3.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_F3.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
+			Bullet_F3.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_F3.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
+			Bullet_F3.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_F3.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
+		}
+
+		if (Bullet_F3.Face_Direction1_flag == true)
+		{
+			Bullet_F3.frame_F();
+			if (Bullet_F3.bullet_step == 0) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F3.bullet_step == 1) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F3.bullet_step == 2) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F3.bullet_step == 3) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F3.bullet_step == 4) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F3.bullet_step == 5) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F3.bullet_step == 6) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
+		}
+
+		if (Bullet_F3.Face_Direction2_flag == true)
+		{
+			Bullet_F3.frame_F();
+			if (Bullet_F3.bullet_step == 0) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F3.bullet_step == 1) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F3.bullet_step == 2) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F3.bullet_step == 3) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F3.bullet_step == 4) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F3.bullet_step == 5) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F3.bullet_step == 6) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
+		}
+
+		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
+			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
+
+		//////////////     총알의 움직임   /////////////////////////////////////
+
+		if (Bullet_F4.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		{
+			Bullet_F4.Bullet_Go = false; Bullet_F4.Face_Direction1_flag = true;
+			Bullet_F4.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_F4.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
+			Bullet_F4.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_F4.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
+			Bullet_F4.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_F4.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
+			Bullet_F4.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_F4.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
+			Bullet_F4.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_F4.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
+			Bullet_F4.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_F4.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
+			Bullet_F4.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F4.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
+		}
+
+		if (Bullet_F4.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{
+			Bullet_F4.Bullet_Go = false; Bullet_F4.Face_Direction2_flag = true;
+			Bullet_F4.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F4.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
+			Bullet_F4.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_F4.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
+			Bullet_F4.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_F4.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
+			Bullet_F4.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_F4.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
+			Bullet_F4.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_F4.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
+			Bullet_F4.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_F4.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
+			Bullet_F4.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_F4.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
+		}
+
+		if (Bullet_F4.Face_Direction1_flag == true)
+		{
+			Bullet_F4.frame_F();
+			if (Bullet_F4.bullet_step == 0) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F4.bullet_step == 1) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F4.bullet_step == 2) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F4.bullet_step == 3) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F4.bullet_step == 4) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F4.bullet_step == 5) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_F4.bullet_step == 6) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
+		}
+
+		if (Bullet_F4.Face_Direction2_flag == true)
+		{
+			Bullet_F4.frame_F();
+			if (Bullet_F4.bullet_step == 0) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F4.bullet_step == 1) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F4.bullet_step == 2) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F4.bullet_step == 3) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F4.bullet_step == 4) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F4.bullet_step == 5) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_F4.bullet_step == 6) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
+		}
+
+		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
+			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
+
+		//////////////     총알의 움직임   /////////////////////////////////////
+
+		if (Bullet_C1.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		{
+			Bullet_C1.Bullet_Go = false; Bullet_C1.Face_Direction1_flag = true;
+			Bullet_C1.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_C1.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
+			Bullet_C1.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_C1.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
+			Bullet_C1.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_C1.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
+			Bullet_C1.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_C1.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
+			Bullet_C1.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_C1.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
+			Bullet_C1.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_C1.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
+			Bullet_C1.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C1.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
+		}
+
+		if (Bullet_C1.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{
+			Bullet_C1.Bullet_Go = false; Bullet_C1.Face_Direction2_flag = true;
+			Bullet_C1.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C1.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
+			Bullet_C1.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_C1.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
+			Bullet_C1.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_C1.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
+			Bullet_C1.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_C1.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
+			Bullet_C1.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_C1.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
+			Bullet_C1.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_C1.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
+			Bullet_C1.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_C1.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
+		}
+
+		if (Bullet_C1.Face_Direction1_flag == true)
+		{
+			Bullet_C1.frame_C();
+			if (Bullet_C1.bullet_step == 0) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C1.bullet_step == 1) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C1.bullet_step == 2) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C1.bullet_step == 3) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C1.bullet_step == 4) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C1.bullet_step == 5) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C1.bullet_step == 6) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
+		}
+
+		if (Bullet_C1.Face_Direction2_flag == true)
+		{
+			Bullet_C1.frame_C();
+			if (Bullet_C1.bullet_step == 0) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C1.bullet_step == 1) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C1.bullet_step == 2) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C1.bullet_step == 3) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C1.bullet_step == 4) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C1.bullet_step == 5) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C1.bullet_step == 6) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
+		}
+
+		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
+			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
+
+		//////////////     총알의 움직임   /////////////////////////////////////
+
+		if (Bullet_C2.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		{
+			Bullet_C2.Bullet_Go = false; Bullet_C2.Face_Direction1_flag = true;
+			Bullet_C2.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_C2.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
+			Bullet_C2.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_C2.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
+			Bullet_C2.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_C2.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
+			Bullet_C2.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_C2.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
+			Bullet_C2.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_C2.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
+			Bullet_C2.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_C2.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
+			Bullet_C2.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C2.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
+		}
+
+		if (Bullet_C2.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{
+			Bullet_C2.Bullet_Go = false; Bullet_C2.Face_Direction2_flag = true;
+			Bullet_C2.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C2.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
+			Bullet_C2.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_C2.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
+			Bullet_C2.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_C2.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
+			Bullet_C2.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_C2.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
+			Bullet_C2.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_C2.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
+			Bullet_C2.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_C2.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
+			Bullet_C2.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_C2.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
+		}
+
+		if (Bullet_C2.Face_Direction1_flag == true)
+		{
+			Bullet_C2.frame_C();
+			if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
+		}
+
+		if (Bullet_C2.Face_Direction2_flag == true)
+		{
+			Bullet_C2.frame_C();
+			if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
+		}
+
+		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
+			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
 
 
 
 
+		//////////////     총알의 움직임   /////////////////////////////////////
+
+		if (Bullet_C3.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		{
+			Bullet_C3.Bullet_Go = false; Bullet_C3.Face_Direction1_flag = true;
+			Bullet_C3.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_C3.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
+			Bullet_C3.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_C3.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
+			Bullet_C3.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_C3.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
+			Bullet_C3.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_C3.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
+			Bullet_C3.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_C3.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
+			Bullet_C3.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_C3.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
+			Bullet_C3.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C3.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
+		}
+
+		if (Bullet_C3.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{
+			Bullet_C3.Bullet_Go = false; Bullet_C3.Face_Direction2_flag = true;
+			Bullet_C3.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C3.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
+			Bullet_C3.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_C3.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
+			Bullet_C3.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_C3.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
+			Bullet_C3.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_C3.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
+			Bullet_C3.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_C3.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
+			Bullet_C3.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_C3.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
+			Bullet_C3.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_C3.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
+		}
+
+		if (Bullet_C3.Face_Direction1_flag == true)
+		{
+			Bullet_C3.frame_C();
+			if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
+		}
+
+		if (Bullet_C3.Face_Direction2_flag == true)
+		{
+			Bullet_C3.frame_C();
+			if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
+		}
+
+		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
+			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (Bullet_C4.Bullet_Go == true && m_Actor.Face_Direction == 1)
+		{
+			Bullet_C4.Bullet_Go = false; Bullet_C4.Face_Direction1_flag = true;
+			Bullet_C4.m_VertexList[0].x = m_Actor.m_VertexList[0].x - 30 / 900; Bullet_C4.m_VertexList[0].y = m_Actor.m_VertexList[0].y - 5 / 900;
+			Bullet_C4.m_VertexList[1].x = m_Actor.m_VertexList[1].x - 30 / 900; Bullet_C4.m_VertexList[1].y = m_Actor.m_VertexList[1].y - 5 / 900;
+			Bullet_C4.m_VertexList[2].x = m_Actor.m_VertexList[2].x - 30 / 900; Bullet_C4.m_VertexList[2].y = m_Actor.m_VertexList[2].y - 5 / 900;
+			Bullet_C4.m_VertexList[3].x = m_Actor.m_VertexList[3].x - 30 / 900; Bullet_C4.m_VertexList[3].y = m_Actor.m_VertexList[3].y - 5 / 900;
+			Bullet_C4.m_VertexList[4].x = m_Actor.m_VertexList[4].x - 30 / 900; Bullet_C4.m_VertexList[4].y = m_Actor.m_VertexList[4].y - 5 / 900;
+			Bullet_C4.m_VertexList[5].x = m_Actor.m_VertexList[5].x - 30 / 900; Bullet_C4.m_VertexList[5].y = m_Actor.m_VertexList[5].y - 5 / 900;
+			Bullet_C4.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C4.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
+		}
+
+		if (Bullet_C4.Bullet_Go == true && m_Actor.Face_Direction == 2)
+		{
+			Bullet_C4.Bullet_Go = false; Bullet_C4.Face_Direction2_flag = true;
+			Bullet_C4.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C4.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
+			Bullet_C4.m_VertexList[1].x = m_Actor.m_VertexList[1].x + 30 / 900; Bullet_C4.m_VertexList[1].y = m_Actor.m_VertexList[1].y + 5 / 900;
+			Bullet_C4.m_VertexList[2].x = m_Actor.m_VertexList[2].x + 30 / 900; Bullet_C4.m_VertexList[2].y = m_Actor.m_VertexList[2].y + 5 / 900;
+			Bullet_C4.m_VertexList[3].x = m_Actor.m_VertexList[3].x + 30 / 900; Bullet_C4.m_VertexList[3].y = m_Actor.m_VertexList[3].y + 5 / 900;
+			Bullet_C4.m_VertexList[4].x = m_Actor.m_VertexList[4].x + 30 / 900; Bullet_C4.m_VertexList[4].y = m_Actor.m_VertexList[4].y + 5 / 900;
+			Bullet_C4.m_VertexList[5].x = m_Actor.m_VertexList[5].x + 30 / 900; Bullet_C4.m_VertexList[5].y = m_Actor.m_VertexList[5].y + 5 / 900;
+			Bullet_C4.m_VertexList[6].x = m_Actor.m_VertexList[6].x + 30 / 900; Bullet_C4.m_VertexList[6].y = m_Actor.m_VertexList[6].y + 5 / 900;
+		}
+
+		if (Bullet_C4.Face_Direction1_flag == true)
+		{
+			Bullet_C4.frame_C();
+			if (Bullet_C4.bullet_step == 0) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C4.bullet_step == 1) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C4.bullet_step == 2) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C4.bullet_step == 3) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C4.bullet_step == 4) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C4.bullet_step == 5) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
+			if (Bullet_C4.bullet_step == 6) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
+		}
+
+		if (Bullet_C4.Face_Direction2_flag == true)
+		{
+			Bullet_C4.frame_C();
+			if (Bullet_C4.bullet_step == 0) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C4.bullet_step == 1) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C4.bullet_step == 2) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C4.bullet_step == 3) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C4.bullet_step == 4) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C4.bullet_step == 5) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
+			if (Bullet_C4.bullet_step == 6) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
+		}
+
+		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
+			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
 
 
+	}
+
+
+	void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
+	{
+
+
+		if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Treasure_Box.m_rtDetection))
+		{
+			Box_Alive.frame();
+		}
+
+		if (!TCollision::SphereInSphere(m_Actor.m_rtCollision, Treasure_Box.m_rtDetection))
+		{
+			Box_Alive.detection_time = 0.0f;
+		}
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (Box_Alive.Bullet_F1_Bullet_Go == true) { Bullet_Ghost_1.Bullet_Go = true; }
+		if (Bullet_Ghost_1.Bullet_Go == true) { Bullet_Ghost_1.MoveX(-g_fSecPerFrame * 1.0f); }
+
+		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x;		 N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
+		}	g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (Box_Alive.Bullet_F2_Bullet_Go == true) { Bullet_Ghost_2.Bullet_Go = true; }
+		if (Bullet_Ghost_2.Bullet_Go == true) { Bullet_Ghost_2.MoveX(-g_fSecPerFrame * 1.0f); }
+
+		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
+		}	g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (Box_Alive.Bullet_F3_Bullet_Go == true) { Bullet_Ghost_3.Bullet_Go = true; }
+		if (Bullet_Ghost_3.Bullet_Go == true) { Bullet_Ghost_3.MoveX(-g_fSecPerFrame * 1.0f); }
+
+		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		  vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
+		}	g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		if (Box_Alive.Bullet_F4_Bullet_Go == true) { Bullet_Ghost_4.Bullet_Go = true; }
+		if (Bullet_Ghost_4.Bullet_Go == true) { Bullet_Ghost_4.MoveX(-g_fSecPerFrame * 1.0f); }
+
+		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
+		}	g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+
+	}
 
 
 class TSceneEnd : public TScene
@@ -1127,8 +1395,6 @@ TSceneEnd::TSceneEnd()
 
 TSceneEnd::~TSceneEnd()
 {}
-
-
 
 
 
