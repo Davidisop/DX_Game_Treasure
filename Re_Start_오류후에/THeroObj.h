@@ -20,7 +20,7 @@ public:
 	void shot();
 	//void jump();
 	void sword();
-	void slide()
+	void slide();
 	
 public:
 
@@ -400,15 +400,26 @@ void THeroObj::right_walk()
 		DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
 
 
-		if (Gun_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+		if (slide_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
 		{
-			Gun_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+			slide_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
 		}
 
-		if (Gun_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+		if (slide_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
 		{
-			Gun_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+			slide_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
 		}
+		
+		if (slide_step == 3 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+		{
+			slide_step = 4;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+		}
+
+		if (slide_step == 4 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+		{
+			slide_step = 5;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+		}
+
 
 		if (Jump_Yes_No == false)
 		{
@@ -417,7 +428,7 @@ void THeroObj::right_walk()
 
 			{
 
-				switch (Gun_step)
+				switch (slide_step)
 				{
 				case 1:
 				{
@@ -425,7 +436,7 @@ void THeroObj::right_walk()
 					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
 
-					++Gun_step;
+					++slide_step;
 				}break;
 
 				case 2:
@@ -434,7 +445,7 @@ void THeroObj::right_walk()
 					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
 
-					++Gun_step;
+					++slide_step;
 
 				}break;
 
@@ -444,7 +455,23 @@ void THeroObj::right_walk()
 					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
 
-					Gun_step = 0;
+					++slide_step;
+				}break;
+				case 4:
+				{
+					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+
+
+					++slide_step;
+				}break;
+				case 5:
+				{
+					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+
+
+					slide_step=0;
 				}break;
 
 				}
@@ -454,31 +481,50 @@ void THeroObj::right_walk()
 			{
 
 
-				switch (Gun_step)
+				switch (slide_step)
 				{
 				case 1:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 2, 0, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 0, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
 
-					++Gun_step;
+					++slide_step;
 				}break;
 
 				case 2:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 2, 1, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 1, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
-					++Gun_step;
+
+					++slide_step;
+
 				}break;
 
 				case 3:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 2, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Left.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
-					Gun_step = 0;
+
+					++slide_step;
+				}break;
+				case 4:
+				{
+					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+
+
+					++slide_step;
+				}break;
+				case 5:
+				{
+					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+
+
+					slide_step = 0;
 				}break;
 
 				}
