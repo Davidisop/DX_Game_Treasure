@@ -432,8 +432,8 @@ void THeroObj::right_walk()
 				{
 				case 1:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 0, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 13, 0, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++slide_step;
@@ -441,8 +441,8 @@ void THeroObj::right_walk()
 
 				case 2:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 1, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 13, 1, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++slide_step;
@@ -451,24 +451,24 @@ void THeroObj::right_walk()
 
 				case 3:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 13, 2, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++slide_step;
 				}break;
 				case 4:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 13, 3, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++slide_step;
 				}break;
 				case 5:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 13, 4, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					slide_step=0;
@@ -485,8 +485,8 @@ void THeroObj::right_walk()
 				{
 				case 1:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 0, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 12, 0, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++slide_step;
@@ -494,8 +494,8 @@ void THeroObj::right_walk()
 
 				case 2:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 1, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 12, 1, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++slide_step;
@@ -504,24 +504,24 @@ void THeroObj::right_walk()
 
 				case 3:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 12, 2, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++slide_step;
 				}break;
 				case 4:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 12, 3, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++slide_step;
 				}break;
 				case 5:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 12, 4, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					slide_step = 0;
@@ -584,8 +584,8 @@ void THeroObj::right_walk()
 				{
 					case 1:
 					{
-						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 0, 758, 535);
-						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+						in_Texture_SetData_sprite_factors(sprite_ptr, 11, 0, 757, 1274);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 						++sword_step;
@@ -593,8 +593,8 @@ void THeroObj::right_walk()
 
 					case 2:
 					{
-						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 1, 758, 535);
-						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+						in_Texture_SetData_sprite_factors(sprite_ptr, 11, 1, 757, 1274);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 						++sword_step;
@@ -603,8 +603,8 @@ void THeroObj::right_walk()
 
 					case 3:
 					{
-						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+						in_Texture_SetData_sprite_factors(sprite_ptr, 11, 2, 757, 1274);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 						++sword_step;
@@ -613,8 +613,8 @@ void THeroObj::right_walk()
 
 					case 4:
 					{
-						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 1, 758, 535);
-						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+						in_Texture_SetData_sprite_factors(sprite_ptr, 11, 3, 757, 1274);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 						++sword_step;
@@ -623,8 +623,8 @@ void THeroObj::right_walk()
 
 					case 5:
 					{
-						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+						in_Texture_SetData_sprite_factors(sprite_ptr, 11, 4, 757, 1274);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 						++sword_step;
@@ -632,8 +632,8 @@ void THeroObj::right_walk()
 
 					case 6:
 					{
-						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+						in_Texture_SetData_sprite_factors(sprite_ptr, 11, 5, 757, 1274);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 						++sword_step;
@@ -641,8 +641,8 @@ void THeroObj::right_walk()
 
 					case 7:
 					{
-						in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+						in_Texture_SetData_sprite_factors(sprite_ptr, 11, 6, 757, 1274);
+						Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 						sword_step=0;
@@ -661,8 +661,8 @@ void THeroObj::right_walk()
 
 				case 1:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 0, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 10, 0, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++sword_step;
@@ -670,8 +670,8 @@ void THeroObj::right_walk()
 
 				case 2:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 1, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 10, 1, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++sword_step;
@@ -680,8 +680,8 @@ void THeroObj::right_walk()
 
 				case 3:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 10, 2, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++sword_step;
@@ -690,8 +690,8 @@ void THeroObj::right_walk()
 
 				case 4:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 1, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 10, 3, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++sword_step;
@@ -700,8 +700,8 @@ void THeroObj::right_walk()
 
 				case 5:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 10, 4, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++sword_step;
@@ -709,8 +709,8 @@ void THeroObj::right_walk()
 
 				case 6:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 10, 5, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					++sword_step;
@@ -718,8 +718,8 @@ void THeroObj::right_walk()
 
 				case 7:
 				{
-					in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
+					in_Texture_SetData_sprite_factors(sprite_ptr, 10, 6, 757, 1274);
+					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
 					sword_step = 0;
