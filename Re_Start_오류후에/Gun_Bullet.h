@@ -13,7 +13,6 @@ public:
 public:
 
 
-
 	bool frame_F()
 	{
 		static float fAddTime = 0.0f;
@@ -140,7 +139,7 @@ public:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 9, 4, 400, 300);
 					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
-					bullet_step=0;
+					bullet_step = 0;
 
 				}break;
 
@@ -176,12 +175,11 @@ public:
 public:
 	Gun_Bullet()
 	{
-		Bullet_Go = false; 
-		bullet_step = 0; 
+		Bullet_Go = false;
+		bullet_step = 0;
 		Face_Direction1_flag = false;
 		Face_Direction2_flag = false;
 		sprite_ptr = new sprite;
-
 
 	}
 	virtual ~Gun_Bullet() {}
