@@ -116,6 +116,9 @@
     <ClInclude Include="Box_Alive.h">
       <Filter>Thing</Filter>
     </ClInclude>
+    <ClInclude Include="BOSS_NPC.h">
+      <Filter>Character</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="sprite.txt">

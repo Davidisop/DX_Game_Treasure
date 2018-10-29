@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
+    <ClInclude Include="BOSS_NPC.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Box_Alive.h" />
     <ClInclude Include="Character.h" />

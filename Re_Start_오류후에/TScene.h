@@ -42,8 +42,6 @@ class TSceneLobby : public TScene
 {
 public:
 	Background			Lobby_Background;
-
-
 	Box					UI_BUTTON;
 
 public:
