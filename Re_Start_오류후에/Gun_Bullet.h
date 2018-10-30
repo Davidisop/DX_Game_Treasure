@@ -155,6 +155,23 @@ public:
 		return true;
 	}
 
+
+
+	bool frame_B_R()
+	{
+		in_Texture_SetData_sprite_factors(sprite_ptr, 22, 0, 702, 1843);
+		Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
+		return true;
+	}
+
+	bool frame_B_L()
+	{
+		in_Texture_SetData_sprite_factors(sprite_ptr, 23, 0, 702, 1843);
+		Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
+		return true;
+	}
+
+
 public:
 	void  in_Texture_SetData_sprite_factors(sprite* sprite_ptr_in, int a, int b, float texture_width, float texture_height)
 	{
