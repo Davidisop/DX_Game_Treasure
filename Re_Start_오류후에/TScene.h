@@ -518,26 +518,37 @@ void TSceneGame::Hero_Actions()
 		m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
 	}
 
-	if (I_Input.Key('O'))
-	{
-		m_Actor.sword_step = 1;
-	}m_Actor.sword();
+	if (I_Input.Key('I'))
+	{		m_Actor.slide_step = 1;}
 
+
+
+	if (m_Actor.Face_Direction == 2 && m_Actor.slide_step != 0)
+	{	if (m_Actor.slide_step == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }     if (m_Actor.slide_step == 2) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
+		if (m_Actor.slide_step == 3) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }        if (m_Actor.slide_step == 4) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
+		if (m_Actor.slide_step == 5) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }	}
+	   
+	if (m_Actor.Face_Direction == 1 && m_Actor.slide_step != 0)
+	{	if (m_Actor.slide_step == 1) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }     if (m_Actor.slide_step == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
+		if (m_Actor.slide_step == 3) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }     if (m_Actor.slide_step == 4) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
+		if (m_Actor.slide_step == 5) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }	}
+
+	if (I_Input.Key('O'))
+	{	m_Actor.sword_step = 1;}
 
 	if (I_Input.Key('K') || I_Input.Key('L'))
 	{
 		m_Actor.Gun_step = 1;
-
 		if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
 		else if (m_Actor.Face_Direction == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
-	}	m_Actor.shot();
-
+	}
+	m_Actor.shot();
+	m_Actor.slide();
+	m_Actor.sword();
 	memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 
-
 	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
+	{	D3DVECTOR vertex;
 		vertex.x = m_Actor.m_VertexList[iV].x;
 		vertex.y = m_Actor.m_VertexList[iV].y;
 
@@ -551,8 +562,6 @@ void TSceneGame::Hero_Actions()
 		N_VertexList[iV].y += m_Actor.m_vCenter.y;
 	}
 	g_pContext->UpdateSubresource(m_Actor.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList, 0, 0);
-
-
 }
 
 
