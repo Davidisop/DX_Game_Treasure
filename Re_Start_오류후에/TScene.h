@@ -1,4 +1,3 @@
-
 #include "THeroObj.h"
 #include "Background.h"
 #include "Box.h"
@@ -7,6 +6,7 @@
 #include "Gun_Bullet.h"
 #include "Box_Alive.h"
 #include "Box.h"
+#include "BOSS_NPC.h"
 
 enum TSceneState
 {
@@ -36,8 +36,6 @@ public:
 };
 
 
-
-
 class TSceneLobby : public TScene
 {
 public:
@@ -64,15 +62,10 @@ bool	TSceneLobby::Init()
 	Lobby_Background.Window_SetData_factors(0, 0, Lobby_Background.m_for_update_Rects.x, Lobby_Background.m_for_update_Rects.y);
 	Lobby_Background.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Treasure_Island.bmp");
 
-
-
-
 	UI_BUTTON.m_for_update_Rects.x = g_rtClient.right / 4;	UI_BUTTON.m_for_update_Rects.y = g_rtClient.bottom / 8;
 	UI_BUTTON.in_Texture_SetData_factors(0, 0, 334, 82, 334, 82);
 	UI_BUTTON.Window_SetData_factors(340, 240, UI_BUTTON.m_for_update_Rects.x, UI_BUTTON.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 	UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_dis.bmp");
-
-
 	return true;
 };
 
@@ -96,7 +89,6 @@ bool	TSceneLobby::Frame()
 			m_bNextSceneStart = true;
 		}
 	}
-
 	return true;
 };
 
@@ -140,13 +132,6 @@ TSceneLobby::~TSceneLobby()
 
 
 
-
-
-
-
-
-
-
 class TSceneGame : public TScene
 {
 public:
@@ -155,8 +140,9 @@ public:
 
 public:
 	Background				Game_Background;
-	THeroObj				m_Actor;      SimpleVertex          N_VertexList[6];
+	THeroObj				m_Actor;      SimpleVertex        N_VertexList[6];
 	Boy_NPC					m_Boy_NPC;    SimpleVertex        N_VertexList_2[6];
+	BOSS_NPC				Robot;		  SimpleVertex        N_VertexList_R[6];
 
 	Box                    UI_Bullet_1;
 	Box                    UI_Bullet_2;
@@ -183,8 +169,11 @@ public:
 
 
 
+
+
 	Box_Alive			Box_Alive;
 	Box					Treasure_Box;
+
 
 
 
@@ -200,7 +189,8 @@ public:
 	void Boy_NPC_Action();
 	void bullets_basic_Action();
 	void Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
-	void bullet_Ghostbullet_collision_taken_away();
+	void Bullet_Ghost_collision();
+	void Boss_Action();
 
 public:
 	TSceneGame();
@@ -351,6 +341,13 @@ bool   TSceneGame::Init()
 	m_Actor.Window_SetData_factors(0, 350, m_Actor.m_for_update_Rects.x, m_Actor.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 	m_Actor.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
+
+	Robot.m_for_update_Rects.x = g_rtClient.right / 9;    Robot.m_for_update_Rects.y = g_rtClient.bottom / 7;
+	Robot.in_Texture_SetData_factors(213, 1230, 65, 120, 702, 1843);
+	Robot.Window_SetData_factors(700, 350, Robot.m_for_update_Rects.x, Robot.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+	Robot.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
+
+
 	return true;
 
 };
@@ -358,14 +355,14 @@ bool   TSceneGame::Init()
 bool    TSceneGame::Frame()
 {
 
-	Hero_Actions();
+	//Hero_Actions();
 	Boy_NPC_Action();
 	bullets_basic_Action();
 	Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
-	bullet_Ghostbullet_collision_taken_away();
+	Bullet_Ghost_collision();
+	Boss_Action();
 
 	return true;
-
 }
 
 bool   TSceneGame::Render()
@@ -391,6 +388,8 @@ bool   TSceneGame::Render()
 	Bullet_C3.Render(g_pContext);
 	Bullet_C4.Render(g_pContext);
 
+
+
 	Box_Alive.Render(g_pContext);
 	Treasure_Box.Render(g_pContext);
 
@@ -402,6 +401,8 @@ bool   TSceneGame::Render()
 
 	m_Boy_NPC.Render(g_pContext);
 	m_Actor.Render(g_pContext);
+	Robot.Render(g_pContext);
+
 	return true;
 }
 
@@ -425,12 +426,72 @@ TSceneGame::~TSceneGame()
 }
 
 
+void TSceneGame::Boss_Action()
+{
+	if (I_Input.Key('A'))
+	{
+		Robot.Face_Direction = 1;
+		Robot.left_walk();
+		memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
+		Robot.MoveX(-g_fSecPerFrame * 0.3f);
+	}
+
+	if (I_Input.Key('D'))
+	{
+		Robot.Face_Direction = 2;
+		Robot.right_walk();
+		memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
+		Robot.MoveX(g_fSecPerFrame*0.3f);
+	}
+
+	if (I_Input.Key('W'))
+	{
+		Robot.MoveY(g_fSecPerFrame * 0.3f);
+	}
+
+	if (I_Input.Key('S'))
+	{
+		Robot.MoveY(-g_fSecPerFrame * 0.3f);
+	}
+
+	if (I_Input.Key('O'))
+	{
+		Robot.sword_step = 1;
+	}Robot.sword();
+
+
+
+	if (I_Input.Key('K') || I_Input.Key('L'))
+	{
+		Robot.Gun_step = 1;
+
+		if (Robot.Face_Direction == 1) { Robot.MoveX(g_fSecPerFrame*0.3f); }
+		else if (Robot.Face_Direction == 2) { Robot.MoveX(-g_fSecPerFrame * 0.3f); }
+	}
+	Robot.shot();     memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
+
+
+	for (int iV = 0; iV < 6; iV++)
+	{
+		D3DVECTOR vertex;
+		vertex.x = Robot.m_VertexList[iV].x;
+		vertex.y = Robot.m_VertexList[iV].y;
+
+		vertex.x -= Robot.m_vCenter.x;
+		vertex.y -= Robot.m_vCenter.y;
+		float S = sinf(fAngle);
+		float C = cosf(fAngle);
+		N_VertexList[iV].x = vertex.x * C + vertex.y * S;
+		N_VertexList[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList[iV].x += Robot.m_vCenter.x;
+		N_VertexList[iV].y += Robot.m_vCenter.y;
+	}
+	g_pContext->UpdateSubresource(Robot.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_R, 0, 0);
+
+}
 
 void TSceneGame::Hero_Actions()
 {
-
-
-
 	if (I_Input.Key('A'))
 	{
 		m_Actor.Face_Direction = 1;
@@ -457,33 +518,10 @@ void TSceneGame::Hero_Actions()
 		m_Actor.MoveY(-g_fSecPerFrame * 0.3f);
 	}
 
-	if (I_Input.Key('I'))
-	{
-		m_Actor.slide_step = 1;
-	}
-
-	if (m_Actor.Face_Direction == 2 && m_Actor.slide_step != 0)
-	{
-		if (m_Actor.slide_step == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }    	if (m_Actor.slide_step == 2) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
-		if (m_Actor.slide_step == 3) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }        if (m_Actor.slide_step == 4) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
-		if (m_Actor.slide_step == 5) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
-	}
-
-	if (m_Actor.Face_Direction == 1 && m_Actor.slide_step != 0)
-	{
-		if (m_Actor.slide_step == 1) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }    	if (m_Actor.slide_step == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
-		if (m_Actor.slide_step == 3) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }       if (m_Actor.slide_step == 4) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
-		if (m_Actor.slide_step == 5) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
-	}
-
-
-
 	if (I_Input.Key('O'))
 	{
 		m_Actor.sword_step = 1;
-	}
-
-
+	}m_Actor.sword();
 
 
 	if (I_Input.Key('K') || I_Input.Key('L'))
@@ -492,13 +530,10 @@ void TSceneGame::Hero_Actions()
 
 		if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
 		else if (m_Actor.Face_Direction == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
-	}
-
-	m_Actor.shot();
-	m_Actor.slide();
-	m_Actor.sword();
+	}	m_Actor.shot();
 
 	memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+
 
 	for (int iV = 0; iV < 6; iV++)
 	{
@@ -516,6 +551,8 @@ void TSceneGame::Hero_Actions()
 		N_VertexList[iV].y += m_Actor.m_vCenter.y;
 	}
 	g_pContext->UpdateSubresource(m_Actor.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList, 0, 0);
+
+
 }
 
 
@@ -555,6 +592,7 @@ void TSceneGame::Boy_NPC_Action()
 		N_VertexList_2[iV].y += m_Boy_NPC.m_vCenter.y;
 	}
 	g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_2, 0, 0);
+
 }
 
 
@@ -1131,15 +1169,11 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 }
 
 
-void TSceneGame::bullet_Ghostbullet_collision_taken_away()
+void TSceneGame::Bullet_Ghost_collision()
 {
-
-	// 총알과 Ghost_총알의 충돌. ////
-
 
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-
 		Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
 		Bullet_F1.m_VertexList[1].x = 1.5f; Bullet_F1.m_VertexList[1].y = 1.5f;
 		Bullet_F1.m_VertexList[2].x = 1.5f; Bullet_F1.m_VertexList[2].y = 1.5f;
@@ -1282,6 +1316,7 @@ void TSceneGame::bullet_Ghostbullet_collision_taken_away()
 
 	}
 
+
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
 		Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
@@ -1328,9 +1363,6 @@ void TSceneGame::bullet_Ghostbullet_collision_taken_away()
 		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 	}
-
-	//
-
 
 
 	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
@@ -1530,7 +1562,6 @@ void TSceneGame::bullet_Ghostbullet_collision_taken_away()
 
 	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-
 		Bullet_F3.m_VertexList[0].x = 1.5f; Bullet_F3.m_VertexList[0].y = 1.5f;
 		Bullet_F3.m_VertexList[1].x = 1.5f; Bullet_F3.m_VertexList[1].y = 1.5f;
 		Bullet_F3.m_VertexList[2].x = 1.5f; Bullet_F3.m_VertexList[2].y = 1.5f;
@@ -1718,123 +1749,146 @@ void TSceneGame::bullet_Ghostbullet_collision_taken_away()
 		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 	}
 
+	//
+
+
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_F4.m_VertexList[0].x = 1.8f; Bullet_F4.m_VertexList[0].y = 1.8f;
-		Bullet_F4.m_VertexList[1].x = 1.8f; Bullet_F4.m_VertexList[1].y = 1.8f;
-		Bullet_F4.m_VertexList[2].x = 1.8f; Bullet_F4.m_VertexList[2].y = 1.8f;
-		Bullet_F4.m_VertexList[3].x = 1.8f; Bullet_F4.m_VertexList[3].y = 1.8f;
-		Bullet_F4.m_VertexList[4].x = 1.8f; Bullet_F4.m_VertexList[4].y = 1.8f;
-		Bullet_F4.m_VertexList[5].x = 1.8f; Bullet_F4.m_VertexList[5].y = 1.8f;
-		Bullet_F4.m_VertexList[6].x = 1.8f; Bullet_F4.m_VertexList[6].y = 1.8f;
-		Bullet_Ghost_1.m_VertexList[0].x = 1.8f; Bullet_Ghost_1.m_VertexList[0].y = 1.8f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.8f; Bullet_Ghost_1.m_VertexList[1].y = 1.8f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.8f; Bullet_Ghost_1.m_VertexList[2].y = 1.8f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.8f; Bullet_Ghost_1.m_VertexList[3].y = 1.8f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.8f; Bullet_Ghost_1.m_VertexList[4].y = 1.8f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.8f; Bullet_Ghost_1.m_VertexList[5].y = 1.8f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.8f; Bullet_Ghost_1.m_VertexList[6].y = 1.8f;
+		Bullet_F4.m_VertexList[0].x = 1.5f; Bullet_F4.m_VertexList[0].y = 1.5f;
+		Bullet_F4.m_VertexList[1].x = 1.5f; Bullet_F4.m_VertexList[1].y = 1.5f;
+		Bullet_F4.m_VertexList[2].x = 1.5f; Bullet_F4.m_VertexList[2].y = 1.5f;
+		Bullet_F4.m_VertexList[3].x = 1.5f; Bullet_F4.m_VertexList[3].y = 1.5f;
+		Bullet_F4.m_VertexList[4].x = 1.5f; Bullet_F4.m_VertexList[4].y = 1.5f;
+		Bullet_F4.m_VertexList[5].x = 1.5f; Bullet_F4.m_VertexList[5].y = 1.5f;
+		Bullet_F4.m_VertexList[6].x = 1.5f; Bullet_F4.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;  vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;  N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
+			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
 		}
 
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;  vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 	}
 
+
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_F4.m_VertexList[0].x = 1.8f; Bullet_F4.m_VertexList[0].y = 1.8f;
-		Bullet_F4.m_VertexList[1].x = 1.8f; Bullet_F4.m_VertexList[1].y = 1.8f;
-		Bullet_F4.m_VertexList[2].x = 1.8f; Bullet_F4.m_VertexList[2].y = 1.8f;
-		Bullet_F4.m_VertexList[3].x = 1.8f; Bullet_F4.m_VertexList[3].y = 1.8f;
-		Bullet_F4.m_VertexList[4].x = 1.8f; Bullet_F4.m_VertexList[4].y = 1.8f;
-		Bullet_F4.m_VertexList[5].x = 1.8f; Bullet_F4.m_VertexList[5].y = 1.8f;
-		Bullet_F4.m_VertexList[6].x = 1.8f; Bullet_F4.m_VertexList[6].y = 1.8f;
-		Bullet_Ghost_2.m_VertexList[0].x = 1.8f; Bullet_Ghost_2.m_VertexList[0].y = 1.8f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.8f; Bullet_Ghost_2.m_VertexList[1].y = 1.8f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.8f; Bullet_Ghost_2.m_VertexList[2].y = 1.8f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.8f; Bullet_Ghost_2.m_VertexList[3].y = 1.8f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.8f; Bullet_Ghost_2.m_VertexList[4].y = 1.8f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.8f; Bullet_Ghost_2.m_VertexList[5].y = 1.8f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.8f; Bullet_Ghost_2.m_VertexList[6].y = 1.8f;
+		Bullet_F4.m_VertexList[0].x = 1.5f; Bullet_F4.m_VertexList[0].y = 1.5f;
+		Bullet_F4.m_VertexList[1].x = 1.5f; Bullet_F4.m_VertexList[1].y = 1.5f;
+		Bullet_F4.m_VertexList[2].x = 1.5f; Bullet_F4.m_VertexList[2].y = 1.5f;
+		Bullet_F4.m_VertexList[3].x = 1.5f; Bullet_F4.m_VertexList[3].y = 1.5f;
+		Bullet_F4.m_VertexList[4].x = 1.5f; Bullet_F4.m_VertexList[4].y = 1.5f;
+		Bullet_F4.m_VertexList[5].x = 1.5f; Bullet_F4.m_VertexList[5].y = 1.5f;
+		Bullet_F4.m_VertexList[6].x = 1.5f; Bullet_F4.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;  vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;  N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
+			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
 		}
 
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;  vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
+		}
+
+
+		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_F4.m_VertexList[0].x = 1.8f; Bullet_F4.m_VertexList[0].y = 1.8f;
-		Bullet_F4.m_VertexList[1].x = 1.8f; Bullet_F4.m_VertexList[1].y = 1.8f;
-		Bullet_F4.m_VertexList[2].x = 1.8f; Bullet_F4.m_VertexList[2].y = 1.8f;
-		Bullet_F4.m_VertexList[3].x = 1.8f; Bullet_F4.m_VertexList[3].y = 1.8f;
-		Bullet_F4.m_VertexList[4].x = 1.8f; Bullet_F4.m_VertexList[4].y = 1.8f;
-		Bullet_F4.m_VertexList[5].x = 1.8f; Bullet_F4.m_VertexList[5].y = 1.8f;
-		Bullet_F4.m_VertexList[6].x = 1.8f; Bullet_F4.m_VertexList[6].y = 1.8f;
-		Bullet_Ghost_3.m_VertexList[0].x = 1.8f; Bullet_Ghost_3.m_VertexList[0].y = 1.8f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.8f; Bullet_Ghost_3.m_VertexList[1].y = 1.8f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.8f; Bullet_Ghost_3.m_VertexList[2].y = 1.8f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.8f; Bullet_Ghost_3.m_VertexList[3].y = 1.8f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.8f; Bullet_Ghost_3.m_VertexList[4].y = 1.8f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.8f; Bullet_Ghost_3.m_VertexList[5].y = 1.8f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.8f; Bullet_Ghost_3.m_VertexList[6].y = 1.8f;
+		Bullet_F4.m_VertexList[0].x = 1.5f; Bullet_F4.m_VertexList[0].y = 1.5f;
+		Bullet_F4.m_VertexList[1].x = 1.5f; Bullet_F4.m_VertexList[1].y = 1.5f;
+		Bullet_F4.m_VertexList[2].x = 1.5f; Bullet_F4.m_VertexList[2].y = 1.5f;
+		Bullet_F4.m_VertexList[3].x = 1.5f; Bullet_F4.m_VertexList[3].y = 1.5f;
+		Bullet_F4.m_VertexList[4].x = 1.5f; Bullet_F4.m_VertexList[4].y = 1.5f;
+		Bullet_F4.m_VertexList[5].x = 1.5f; Bullet_F4.m_VertexList[5].y = 1.5f;
+		Bullet_F4.m_VertexList[6].x = 1.5f; Bullet_F4.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;  vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;  N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
+			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;  vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
 		}
+
 
 		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
@@ -1842,40 +1896,47 @@ void TSceneGame::bullet_Ghostbullet_collision_taken_away()
 
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_F4.m_VertexList[0].x = 1.8f; Bullet_F4.m_VertexList[0].y = 1.8f;
-		Bullet_F4.m_VertexList[1].x = 1.8f; Bullet_F4.m_VertexList[1].y = 1.8f;
-		Bullet_F4.m_VertexList[2].x = 1.8f; Bullet_F4.m_VertexList[2].y = 1.8f;
-		Bullet_F4.m_VertexList[3].x = 1.8f; Bullet_F4.m_VertexList[3].y = 1.8f;
-		Bullet_F4.m_VertexList[4].x = 1.8f; Bullet_F4.m_VertexList[4].y = 1.8f;
-		Bullet_F4.m_VertexList[5].x = 1.8f; Bullet_F4.m_VertexList[5].y = 1.8f;
-		Bullet_F4.m_VertexList[6].x = 1.8f; Bullet_F4.m_VertexList[6].y = 1.8f;
-		Bullet_Ghost_4.m_VertexList[0].x = 1.8f; Bullet_Ghost_4.m_VertexList[0].y = 1.8f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.8f; Bullet_Ghost_4.m_VertexList[1].y = 1.8f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.8f; Bullet_Ghost_4.m_VertexList[2].y = 1.8f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.8f; Bullet_Ghost_4.m_VertexList[3].y = 1.8f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.8f; Bullet_Ghost_4.m_VertexList[4].y = 1.8f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.8f; Bullet_Ghost_4.m_VertexList[5].y = 1.8f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.8f; Bullet_Ghost_4.m_VertexList[6].y = 1.8f;
+		Bullet_F4.m_VertexList[0].x = 1.5f; Bullet_F4.m_VertexList[0].y = 1.5f;
+		Bullet_F4.m_VertexList[1].x = 1.5f; Bullet_F4.m_VertexList[1].y = 1.5f;
+		Bullet_F4.m_VertexList[2].x = 1.5f; Bullet_F4.m_VertexList[2].y = 1.5f;
+		Bullet_F4.m_VertexList[3].x = 1.5f; Bullet_F4.m_VertexList[3].y = 1.5f;
+		Bullet_F4.m_VertexList[4].x = 1.5f; Bullet_F4.m_VertexList[4].y = 1.5f;
+		Bullet_F4.m_VertexList[5].x = 1.5f; Bullet_F4.m_VertexList[5].y = 1.5f;
+		Bullet_F4.m_VertexList[6].x = 1.5f; Bullet_F4.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;  vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;  N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
+			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;  vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 	}
@@ -1884,370 +1945,462 @@ void TSceneGame::bullet_Ghostbullet_collision_taken_away()
 
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_C1.m_VertexList[0].x = 1.9f; Bullet_C1.m_VertexList[0].y = 1.9f;
-		Bullet_C1.m_VertexList[1].x = 1.9f; Bullet_C1.m_VertexList[1].y = 1.9f;
-		Bullet_C1.m_VertexList[2].x = 1.9f; Bullet_C1.m_VertexList[2].y = 1.9f;
-		Bullet_C1.m_VertexList[3].x = 1.9f; Bullet_C1.m_VertexList[3].y = 1.9f;
-		Bullet_C1.m_VertexList[4].x = 1.9f; Bullet_C1.m_VertexList[4].y = 1.9f;
-		Bullet_C1.m_VertexList[5].x = 1.9f; Bullet_C1.m_VertexList[5].y = 1.9f;
-		Bullet_C1.m_VertexList[6].x = 1.9f; Bullet_C1.m_VertexList[6].y = 1.9f;
-		Bullet_Ghost_1.m_VertexList[0].x = 1.9f; Bullet_Ghost_1.m_VertexList[0].y = 1.9f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.9f; Bullet_Ghost_1.m_VertexList[1].y = 1.9f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.9f; Bullet_Ghost_1.m_VertexList[2].y = 1.9f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.9f; Bullet_Ghost_1.m_VertexList[3].y = 1.9f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.9f; Bullet_Ghost_1.m_VertexList[4].y = 1.9f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.9f; Bullet_Ghost_1.m_VertexList[5].y = 1.9f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.9f; Bullet_Ghost_1.m_VertexList[6].y = 1.9f;
+
+		Bullet_C1.m_VertexList[0].x = 1.5f; Bullet_C1.m_VertexList[0].y = 1.5f;
+		Bullet_C1.m_VertexList[1].x = 1.5f; Bullet_C1.m_VertexList[1].y = 1.5f;
+		Bullet_C1.m_VertexList[2].x = 1.5f; Bullet_C1.m_VertexList[2].y = 1.5f;
+		Bullet_C1.m_VertexList[3].x = 1.5f; Bullet_C1.m_VertexList[3].y = 1.5f;
+		Bullet_C1.m_VertexList[4].x = 1.5f; Bullet_C1.m_VertexList[4].y = 1.5f;
+		Bullet_C1.m_VertexList[5].x = 1.5f; Bullet_C1.m_VertexList[5].y = 1.5f;
+		Bullet_C1.m_VertexList[6].x = 1.5f; Bullet_C1.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;  vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;  N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
+			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;  vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}	g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
+		}
+
+
+		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 	}
+
+
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_C1.m_VertexList[0].x = 1.9f; Bullet_C1.m_VertexList[0].y = 1.9f;
-		Bullet_C1.m_VertexList[1].x = 1.9f; Bullet_C1.m_VertexList[1].y = 1.9f;
-		Bullet_C1.m_VertexList[2].x = 1.9f; Bullet_C1.m_VertexList[2].y = 1.9f;
-		Bullet_C1.m_VertexList[3].x = 1.9f; Bullet_C1.m_VertexList[3].y = 1.9f;
-		Bullet_C1.m_VertexList[4].x = 1.9f; Bullet_C1.m_VertexList[4].y = 1.9f;
-		Bullet_C1.m_VertexList[5].x = 1.9f; Bullet_C1.m_VertexList[5].y = 1.9f;
-		Bullet_C1.m_VertexList[6].x = 1.9f; Bullet_C1.m_VertexList[6].y = 1.9f;
-		Bullet_Ghost_2.m_VertexList[0].x = 1.9f; Bullet_Ghost_2.m_VertexList[0].y = 1.9f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.9f; Bullet_Ghost_2.m_VertexList[1].y = 1.9f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.9f; Bullet_Ghost_2.m_VertexList[2].y = 1.9f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.9f; Bullet_Ghost_2.m_VertexList[3].y = 1.9f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.9f; Bullet_Ghost_2.m_VertexList[4].y = 1.9f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.9f; Bullet_Ghost_2.m_VertexList[5].y = 1.9f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.9f; Bullet_Ghost_2.m_VertexList[6].y = 1.9f;
+		Bullet_C1.m_VertexList[0].x = 1.5f; Bullet_C1.m_VertexList[0].y = 1.5f;
+		Bullet_C1.m_VertexList[1].x = 1.5f; Bullet_C1.m_VertexList[1].y = 1.5f;
+		Bullet_C1.m_VertexList[2].x = 1.5f; Bullet_C1.m_VertexList[2].y = 1.5f;
+		Bullet_C1.m_VertexList[3].x = 1.5f; Bullet_C1.m_VertexList[3].y = 1.5f;
+		Bullet_C1.m_VertexList[4].x = 1.5f; Bullet_C1.m_VertexList[4].y = 1.5f;
+		Bullet_C1.m_VertexList[5].x = 1.5f; Bullet_C1.m_VertexList[5].y = 1.5f;
+		Bullet_C1.m_VertexList[6].x = 1.5f; Bullet_C1.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;  vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;  N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
+			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;  vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_C1.m_VertexList[0].x = 1.9f; Bullet_C1.m_VertexList[0].y = 1.9f;
-		Bullet_C1.m_VertexList[1].x = 1.9f; Bullet_C1.m_VertexList[1].y = 1.9f;
-		Bullet_C1.m_VertexList[2].x = 1.9f; Bullet_C1.m_VertexList[2].y = 1.9f;
-		Bullet_C1.m_VertexList[3].x = 1.9f; Bullet_C1.m_VertexList[3].y = 1.9f;
-		Bullet_C1.m_VertexList[4].x = 1.9f; Bullet_C1.m_VertexList[4].y = 1.9f;
-		Bullet_C1.m_VertexList[5].x = 1.9f; Bullet_C1.m_VertexList[5].y = 1.9f;
-		Bullet_C1.m_VertexList[6].x = 1.9f; Bullet_C1.m_VertexList[6].y = 1.9f;
-		Bullet_Ghost_3.m_VertexList[0].x = 1.9f; Bullet_Ghost_3.m_VertexList[0].y = 1.9f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.9f; Bullet_Ghost_3.m_VertexList[1].y = 1.9f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.9f; Bullet_Ghost_3.m_VertexList[2].y = 1.9f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.9f; Bullet_Ghost_3.m_VertexList[3].y = 1.9f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.9f; Bullet_Ghost_3.m_VertexList[4].y = 1.9f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.9f; Bullet_Ghost_3.m_VertexList[5].y = 1.9f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.9f; Bullet_Ghost_3.m_VertexList[6].y = 1.9f;
+
+		Bullet_C1.m_VertexList[0].x = 1.5f; Bullet_C1.m_VertexList[0].y = 1.5f;
+		Bullet_C1.m_VertexList[1].x = 1.5f; Bullet_C1.m_VertexList[1].y = 1.5f;
+		Bullet_C1.m_VertexList[2].x = 1.5f; Bullet_C1.m_VertexList[2].y = 1.5f;
+		Bullet_C1.m_VertexList[3].x = 1.5f; Bullet_C1.m_VertexList[3].y = 1.5f;
+		Bullet_C1.m_VertexList[4].x = 1.5f; Bullet_C1.m_VertexList[4].y = 1.5f;
+		Bullet_C1.m_VertexList[5].x = 1.5f; Bullet_C1.m_VertexList[5].y = 1.5f;
+		Bullet_C1.m_VertexList[6].x = 1.5f; Bullet_C1.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;  vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;  N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
+			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;  vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+
 	}
+
 
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_C1.m_VertexList[0].x = 1.9f; Bullet_C1.m_VertexList[0].y = 1.9f;
-		Bullet_C1.m_VertexList[1].x = 1.9f; Bullet_C1.m_VertexList[1].y = 1.9f;
-		Bullet_C1.m_VertexList[2].x = 1.9f; Bullet_C1.m_VertexList[2].y = 1.9f;
-		Bullet_C1.m_VertexList[3].x = 1.9f; Bullet_C1.m_VertexList[3].y = 1.9f;
-		Bullet_C1.m_VertexList[4].x = 1.9f; Bullet_C1.m_VertexList[4].y = 1.9f;
-		Bullet_C1.m_VertexList[5].x = 1.9f; Bullet_C1.m_VertexList[5].y = 1.9f;
-		Bullet_C1.m_VertexList[6].x = 1.9f; Bullet_C1.m_VertexList[6].y = 1.9f;
-		Bullet_Ghost_4.m_VertexList[0].x = 1.9f; Bullet_Ghost_4.m_VertexList[0].y = 1.9f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.9f; Bullet_Ghost_4.m_VertexList[1].y = 1.9f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.9f; Bullet_Ghost_4.m_VertexList[2].y = 1.9f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.9f; Bullet_Ghost_4.m_VertexList[3].y = 1.9f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.9f; Bullet_Ghost_4.m_VertexList[4].y = 1.9f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.9f; Bullet_Ghost_4.m_VertexList[5].y = 1.9f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.9f; Bullet_Ghost_4.m_VertexList[6].y = 1.9f;
+		Bullet_C1.m_VertexList[0].x = 1.5f; Bullet_C1.m_VertexList[0].y = 1.5f;
+		Bullet_C1.m_VertexList[1].x = 1.5f; Bullet_C1.m_VertexList[1].y = 1.5f;
+		Bullet_C1.m_VertexList[2].x = 1.5f; Bullet_C1.m_VertexList[2].y = 1.5f;
+		Bullet_C1.m_VertexList[3].x = 1.5f; Bullet_C1.m_VertexList[3].y = 1.5f;
+		Bullet_C1.m_VertexList[4].x = 1.5f; Bullet_C1.m_VertexList[4].y = 1.5f;
+		Bullet_C1.m_VertexList[5].x = 1.5f; Bullet_C1.m_VertexList[5].y = 1.5f;
+		Bullet_C1.m_VertexList[6].x = 1.5f; Bullet_C1.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;  vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;  N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
-		}	for (int iV = 0; iV < 6; iV++)
+			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
+		}
+
+		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;  vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
+		}
+
+
+		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 	}
 
 
+
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_C2.m_VertexList[0].x = 2.0f; Bullet_C2.m_VertexList[0].y = 2.0f;
-		Bullet_C2.m_VertexList[1].x = 2.0f; Bullet_C2.m_VertexList[1].y = 2.0f;
-		Bullet_C2.m_VertexList[2].x = 2.0f; Bullet_C2.m_VertexList[2].y = 2.0f;
-		Bullet_C2.m_VertexList[3].x = 2.0f; Bullet_C2.m_VertexList[3].y = 2.0f;
-		Bullet_C2.m_VertexList[4].x = 2.0f; Bullet_C2.m_VertexList[4].y = 2.0f;
-		Bullet_C2.m_VertexList[5].x = 2.0f; Bullet_C2.m_VertexList[5].y = 2.0f;
-		Bullet_C2.m_VertexList[6].x = 2.0f; Bullet_C2.m_VertexList[6].y = 2.0f;
-		Bullet_Ghost_1.m_VertexList[0].x = 2.0f; Bullet_Ghost_1.m_VertexList[0].y = 2.0f;
-		Bullet_Ghost_1.m_VertexList[1].x = 2.0f; Bullet_Ghost_1.m_VertexList[1].y = 2.0f;
-		Bullet_Ghost_1.m_VertexList[2].x = 2.0f; Bullet_Ghost_1.m_VertexList[2].y = 2.0f;
-		Bullet_Ghost_1.m_VertexList[3].x = 2.0f; Bullet_Ghost_1.m_VertexList[3].y = 2.0f;
-		Bullet_Ghost_1.m_VertexList[4].x = 2.0f; Bullet_Ghost_1.m_VertexList[4].y = 2.0f;
-		Bullet_Ghost_1.m_VertexList[5].x = 2.0f; Bullet_Ghost_1.m_VertexList[5].y = 2.0f;
-		Bullet_Ghost_1.m_VertexList[6].x = 2.0f; Bullet_Ghost_1.m_VertexList[6].y = 2.0f;
+
+		Bullet_C2.m_VertexList[0].x = 1.5f; Bullet_C2.m_VertexList[0].y = 1.5f;
+		Bullet_C2.m_VertexList[1].x = 1.5f; Bullet_C2.m_VertexList[1].y = 1.5f;
+		Bullet_C2.m_VertexList[2].x = 1.5f; Bullet_C2.m_VertexList[2].y = 1.5f;
+		Bullet_C2.m_VertexList[3].x = 1.5f; Bullet_C2.m_VertexList[3].y = 1.5f;
+		Bullet_C2.m_VertexList[4].x = 1.5f; Bullet_C2.m_VertexList[4].y = 1.5f;
+		Bullet_C2.m_VertexList[5].x = 1.5f; Bullet_C2.m_VertexList[5].y = 1.5f;
+		Bullet_C2.m_VertexList[6].x = 1.5f; Bullet_C2.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;  vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;  N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
+			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
 		}
 
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;  vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
+		}
+
+
+		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 	}
+
+
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_C2.m_VertexList[0].x = 2.0f; Bullet_C2.m_VertexList[0].y = 2.0f;
-		Bullet_C2.m_VertexList[1].x = 2.0f; Bullet_C2.m_VertexList[1].y = 2.0f;
-		Bullet_C2.m_VertexList[2].x = 2.0f; Bullet_C2.m_VertexList[2].y = 2.0f;
-		Bullet_C2.m_VertexList[3].x = 2.0f; Bullet_C2.m_VertexList[3].y = 2.0f;
-		Bullet_C2.m_VertexList[4].x = 2.0f; Bullet_C2.m_VertexList[4].y = 2.0f;
-		Bullet_C2.m_VertexList[5].x = 2.0f; Bullet_C2.m_VertexList[5].y = 2.0f;
-		Bullet_C2.m_VertexList[6].x = 2.0f; Bullet_C2.m_VertexList[6].y = 2.0f;
-		Bullet_Ghost_2.m_VertexList[0].x = 2.0f; Bullet_Ghost_2.m_VertexList[0].y = 2.0f;
-		Bullet_Ghost_2.m_VertexList[1].x = 2.0f; Bullet_Ghost_2.m_VertexList[1].y = 2.0f;
-		Bullet_Ghost_2.m_VertexList[2].x = 2.0f; Bullet_Ghost_2.m_VertexList[2].y = 2.0f;
-		Bullet_Ghost_2.m_VertexList[3].x = 2.0f; Bullet_Ghost_2.m_VertexList[3].y = 2.0f;
-		Bullet_Ghost_2.m_VertexList[4].x = 2.0f; Bullet_Ghost_2.m_VertexList[4].y = 2.0f;
-		Bullet_Ghost_2.m_VertexList[5].x = 2.0f; Bullet_Ghost_2.m_VertexList[5].y = 2.0f;
-		Bullet_Ghost_2.m_VertexList[6].x = 2.0f; Bullet_Ghost_2.m_VertexList[6].y = 2.0f;
+		Bullet_C2.m_VertexList[0].x = 1.5f; Bullet_C2.m_VertexList[0].y = 1.5f;
+		Bullet_C2.m_VertexList[1].x = 1.5f; Bullet_C2.m_VertexList[1].y = 1.5f;
+		Bullet_C2.m_VertexList[2].x = 1.5f; Bullet_C2.m_VertexList[2].y = 1.5f;
+		Bullet_C2.m_VertexList[3].x = 1.5f; Bullet_C2.m_VertexList[3].y = 1.5f;
+		Bullet_C2.m_VertexList[4].x = 1.5f; Bullet_C2.m_VertexList[4].y = 1.5f;
+		Bullet_C2.m_VertexList[5].x = 1.5f; Bullet_C2.m_VertexList[5].y = 1.5f;
+		Bullet_C2.m_VertexList[6].x = 1.5f; Bullet_C2.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;  vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;  N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}		for (int iV = 0; iV < 6; iV++)
+			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
+		}
+
+		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;  vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
+		}
+
+
+		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_C2.m_VertexList[0].x = 2.0f; Bullet_C2.m_VertexList[0].y = 2.0f;
-		Bullet_C2.m_VertexList[1].x = 2.0f; Bullet_C2.m_VertexList[1].y = 2.0f;
-		Bullet_C2.m_VertexList[2].x = 2.0f; Bullet_C2.m_VertexList[2].y = 2.0f;
-		Bullet_C2.m_VertexList[3].x = 2.0f; Bullet_C2.m_VertexList[3].y = 2.0f;
-		Bullet_C2.m_VertexList[4].x = 2.0f; Bullet_C2.m_VertexList[4].y = 2.0f;
-		Bullet_C2.m_VertexList[5].x = 2.0f; Bullet_C2.m_VertexList[5].y = 2.0f;
-		Bullet_C2.m_VertexList[6].x = 2.0f; Bullet_C2.m_VertexList[6].y = 2.0f;
-		Bullet_Ghost_3.m_VertexList[0].x = 2.0f; Bullet_Ghost_3.m_VertexList[0].y = 2.0f;
-		Bullet_Ghost_3.m_VertexList[1].x = 2.0f; Bullet_Ghost_3.m_VertexList[1].y = 2.0f;
-		Bullet_Ghost_3.m_VertexList[2].x = 2.0f; Bullet_Ghost_3.m_VertexList[2].y = 2.0f;
-		Bullet_Ghost_3.m_VertexList[3].x = 2.0f; Bullet_Ghost_3.m_VertexList[3].y = 2.0f;
-		Bullet_Ghost_3.m_VertexList[4].x = 2.0f; Bullet_Ghost_3.m_VertexList[4].y = 2.0f;
-		Bullet_Ghost_3.m_VertexList[5].x = 2.0f; Bullet_Ghost_3.m_VertexList[5].y = 2.0f;
-		Bullet_Ghost_3.m_VertexList[6].x = 2.0f; Bullet_Ghost_3.m_VertexList[6].y = 2.0f;
+
+		Bullet_C2.m_VertexList[0].x = 1.5f; Bullet_C2.m_VertexList[0].y = 1.5f;
+		Bullet_C2.m_VertexList[1].x = 1.5f; Bullet_C2.m_VertexList[1].y = 1.5f;
+		Bullet_C2.m_VertexList[2].x = 1.5f; Bullet_C2.m_VertexList[2].y = 1.5f;
+		Bullet_C2.m_VertexList[3].x = 1.5f; Bullet_C2.m_VertexList[3].y = 1.5f;
+		Bullet_C2.m_VertexList[4].x = 1.5f; Bullet_C2.m_VertexList[4].y = 1.5f;
+		Bullet_C2.m_VertexList[5].x = 1.5f; Bullet_C2.m_VertexList[5].y = 1.5f;
+		Bullet_C2.m_VertexList[6].x = 1.5f; Bullet_C2.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;  vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;  N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}		for (int iV = 0; iV < 6; iV++)
+			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
+		}
+
+		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;  vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
+		}
+
+
+		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
 	}
 
+
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_C2.m_VertexList[0].x = 2.0f; Bullet_C2.m_VertexList[0].y = 2.0f;
-		Bullet_C2.m_VertexList[1].x = 2.0f; Bullet_C2.m_VertexList[1].y = 2.0f;
-		Bullet_C2.m_VertexList[2].x = 2.0f; Bullet_C2.m_VertexList[2].y = 2.0f;
-		Bullet_C2.m_VertexList[3].x = 2.0f; Bullet_C2.m_VertexList[3].y = 2.0f;
-		Bullet_C2.m_VertexList[4].x = 2.0f; Bullet_C2.m_VertexList[4].y = 2.0f;
-		Bullet_C2.m_VertexList[5].x = 2.0f; Bullet_C2.m_VertexList[5].y = 2.0f;
-		Bullet_C2.m_VertexList[6].x = 2.0f; Bullet_C2.m_VertexList[6].y = 2.0f;
-		Bullet_Ghost_4.m_VertexList[0].x = 2.0f; Bullet_Ghost_4.m_VertexList[0].y = 2.0f;
-		Bullet_Ghost_4.m_VertexList[1].x = 2.0f; Bullet_Ghost_4.m_VertexList[1].y = 2.0f;
-		Bullet_Ghost_4.m_VertexList[2].x = 2.0f; Bullet_Ghost_4.m_VertexList[2].y = 2.0f;
-		Bullet_Ghost_4.m_VertexList[3].x = 2.0f; Bullet_Ghost_4.m_VertexList[3].y = 2.0f;
-		Bullet_Ghost_4.m_VertexList[4].x = 2.0f; Bullet_Ghost_4.m_VertexList[4].y = 2.0f;
-		Bullet_Ghost_4.m_VertexList[5].x = 2.0f; Bullet_Ghost_4.m_VertexList[5].y = 2.0f;
-		Bullet_Ghost_4.m_VertexList[6].x = 2.0f; Bullet_Ghost_4.m_VertexList[6].y = 2.0f;
+		Bullet_C2.m_VertexList[0].x = 1.5f; Bullet_C2.m_VertexList[0].y = 1.5f;
+		Bullet_C2.m_VertexList[1].x = 1.5f; Bullet_C2.m_VertexList[1].y = 1.5f;
+		Bullet_C2.m_VertexList[2].x = 1.5f; Bullet_C2.m_VertexList[2].y = 1.5f;
+		Bullet_C2.m_VertexList[3].x = 1.5f; Bullet_C2.m_VertexList[3].y = 1.5f;
+		Bullet_C2.m_VertexList[4].x = 1.5f; Bullet_C2.m_VertexList[4].y = 1.5f;
+		Bullet_C2.m_VertexList[5].x = 1.5f; Bullet_C2.m_VertexList[5].y = 1.5f;
+		Bullet_C2.m_VertexList[6].x = 1.5f; Bullet_C2.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;  vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;  N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}		for (int iV = 0; iV < 6; iV++)
+			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
+		}
+
+		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;  vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
+		}
+
+
+		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 	}
 
-	//
+
+
+
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_C3.m_VertexList[0].x = 2.1f; Bullet_C3.m_VertexList[0].y = 2.1f;
-		Bullet_C3.m_VertexList[1].x = 2.1f; Bullet_C3.m_VertexList[1].y = 2.1f;
-		Bullet_C3.m_VertexList[2].x = 2.1f; Bullet_C3.m_VertexList[2].y = 2.1f;
-		Bullet_C3.m_VertexList[3].x = 2.1f; Bullet_C3.m_VertexList[3].y = 2.1f;
-		Bullet_C3.m_VertexList[4].x = 2.1f; Bullet_C3.m_VertexList[4].y = 2.1f;
-		Bullet_C3.m_VertexList[5].x = 2.1f; Bullet_C3.m_VertexList[5].y = 2.1f;
-		Bullet_C3.m_VertexList[6].x = 2.1f; Bullet_C3.m_VertexList[6].y = 2.1f;
-		Bullet_Ghost_1.m_VertexList[0].x = 2.1f; Bullet_Ghost_1.m_VertexList[0].y = 2.1f;
-		Bullet_Ghost_1.m_VertexList[1].x = 2.1f; Bullet_Ghost_1.m_VertexList[1].y = 2.1f;
-		Bullet_Ghost_1.m_VertexList[2].x = 2.1f; Bullet_Ghost_1.m_VertexList[2].y = 2.1f;
-		Bullet_Ghost_1.m_VertexList[3].x = 2.1f; Bullet_Ghost_1.m_VertexList[3].y = 2.1f;
-		Bullet_Ghost_1.m_VertexList[4].x = 2.1f; Bullet_Ghost_1.m_VertexList[4].y = 2.1f;
-		Bullet_Ghost_1.m_VertexList[5].x = 2.1f; Bullet_Ghost_1.m_VertexList[5].y = 2.1f;
-		Bullet_Ghost_1.m_VertexList[6].x = 2.1f; Bullet_Ghost_1.m_VertexList[6].y = 2.1f;
+
+		Bullet_C3.m_VertexList[0].x = 1.5f; Bullet_C3.m_VertexList[0].y = 1.5f;
+		Bullet_C3.m_VertexList[1].x = 1.5f; Bullet_C3.m_VertexList[1].y = 1.5f;
+		Bullet_C3.m_VertexList[2].x = 1.5f; Bullet_C3.m_VertexList[2].y = 1.5f;
+		Bullet_C3.m_VertexList[3].x = 1.5f; Bullet_C3.m_VertexList[3].y = 1.5f;
+		Bullet_C3.m_VertexList[4].x = 1.5f; Bullet_C3.m_VertexList[4].y = 1.5f;
+		Bullet_C3.m_VertexList[5].x = 1.5f; Bullet_C3.m_VertexList[5].y = 1.5f;
+		Bullet_C3.m_VertexList[6].x = 1.5f; Bullet_C3.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;  vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;  N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
+			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;  vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
+		}
+
+
+		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 	}
 
+
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_C3.m_VertexList[0].x = 2.1f; Bullet_C3.m_VertexList[0].y = 2.1f;
-		Bullet_C3.m_VertexList[1].x = 2.1f; Bullet_C3.m_VertexList[1].y = 2.1f;
-		Bullet_C3.m_VertexList[2].x = 2.1f; Bullet_C3.m_VertexList[2].y = 2.1f;
-		Bullet_C3.m_VertexList[3].x = 2.1f; Bullet_C3.m_VertexList[3].y = 2.1f;
-		Bullet_C3.m_VertexList[4].x = 2.1f; Bullet_C3.m_VertexList[4].y = 2.1f;
-		Bullet_C3.m_VertexList[5].x = 2.1f; Bullet_C3.m_VertexList[5].y = 2.1f;
-		Bullet_C3.m_VertexList[6].x = 2.1f; Bullet_C3.m_VertexList[6].y = 2.1f;
-		Bullet_Ghost_2.m_VertexList[0].x = 2.1f; Bullet_Ghost_2.m_VertexList[0].y = 2.1f;
-		Bullet_Ghost_2.m_VertexList[1].x = 2.1f; Bullet_Ghost_2.m_VertexList[1].y = 2.1f;
-		Bullet_Ghost_2.m_VertexList[2].x = 2.1f; Bullet_Ghost_2.m_VertexList[2].y = 2.1f;
-		Bullet_Ghost_2.m_VertexList[3].x = 2.1f; Bullet_Ghost_2.m_VertexList[3].y = 2.1f;
-		Bullet_Ghost_2.m_VertexList[4].x = 2.1f; Bullet_Ghost_2.m_VertexList[4].y = 2.1f;
-		Bullet_Ghost_2.m_VertexList[5].x = 2.1f; Bullet_Ghost_2.m_VertexList[5].y = 2.1f;
-		Bullet_Ghost_2.m_VertexList[6].x = 2.1f; Bullet_Ghost_2.m_VertexList[6].y = 2.1f;
+		Bullet_C3.m_VertexList[0].x = 1.5f; Bullet_C3.m_VertexList[0].y = 1.5f;
+		Bullet_C3.m_VertexList[1].x = 1.5f; Bullet_C3.m_VertexList[1].y = 1.5f;
+		Bullet_C3.m_VertexList[2].x = 1.5f; Bullet_C3.m_VertexList[2].y = 1.5f;
+		Bullet_C3.m_VertexList[3].x = 1.5f; Bullet_C3.m_VertexList[3].y = 1.5f;
+		Bullet_C3.m_VertexList[4].x = 1.5f; Bullet_C3.m_VertexList[4].y = 1.5f;
+		Bullet_C3.m_VertexList[5].x = 1.5f; Bullet_C3.m_VertexList[5].y = 1.5f;
+		Bullet_C3.m_VertexList[6].x = 1.5f; Bullet_C3.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2255,41 +2408,47 @@ void TSceneGame::bullet_Ghostbullet_collision_taken_away()
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;  vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;  N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
+			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
 		}
 
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;  vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_C3.m_VertexList[0].x = 2.1f; Bullet_C3.m_VertexList[0].y = 2.1f;
-		Bullet_C3.m_VertexList[1].x = 2.1f; Bullet_C3.m_VertexList[1].y = 2.1f;
-		Bullet_C3.m_VertexList[2].x = 2.1f; Bullet_C3.m_VertexList[2].y = 2.1f;
-		Bullet_C3.m_VertexList[3].x = 2.1f; Bullet_C3.m_VertexList[3].y = 2.1f;
-		Bullet_C3.m_VertexList[4].x = 2.1f; Bullet_C3.m_VertexList[4].y = 2.1f;
-		Bullet_C3.m_VertexList[5].x = 2.1f; Bullet_C3.m_VertexList[5].y = 2.1f;
-		Bullet_C3.m_VertexList[6].x = 2.1f; Bullet_C3.m_VertexList[6].y = 2.1f;
-		Bullet_Ghost_3.m_VertexList[0].x = 2.1f; Bullet_Ghost_3.m_VertexList[0].y = 2.1f;
-		Bullet_Ghost_3.m_VertexList[1].x = 2.1f; Bullet_Ghost_3.m_VertexList[1].y = 2.1f;
-		Bullet_Ghost_3.m_VertexList[2].x = 2.1f; Bullet_Ghost_3.m_VertexList[2].y = 2.1f;
-		Bullet_Ghost_3.m_VertexList[3].x = 2.1f; Bullet_Ghost_3.m_VertexList[3].y = 2.1f;
-		Bullet_Ghost_3.m_VertexList[4].x = 2.1f; Bullet_Ghost_3.m_VertexList[4].y = 2.1f;
-		Bullet_Ghost_3.m_VertexList[5].x = 2.1f; Bullet_Ghost_3.m_VertexList[5].y = 2.1f;
-		Bullet_Ghost_3.m_VertexList[6].x = 2.1f; Bullet_Ghost_3.m_VertexList[6].y = 2.1f;
+
+		Bullet_C3.m_VertexList[0].x = 1.5f; Bullet_C3.m_VertexList[0].y = 1.5f;
+		Bullet_C3.m_VertexList[1].x = 1.5f; Bullet_C3.m_VertexList[1].y = 1.5f;
+		Bullet_C3.m_VertexList[2].x = 1.5f; Bullet_C3.m_VertexList[2].y = 1.5f;
+		Bullet_C3.m_VertexList[3].x = 1.5f; Bullet_C3.m_VertexList[3].y = 1.5f;
+		Bullet_C3.m_VertexList[4].x = 1.5f; Bullet_C3.m_VertexList[4].y = 1.5f;
+		Bullet_C3.m_VertexList[5].x = 1.5f; Bullet_C3.m_VertexList[5].y = 1.5f;
+		Bullet_C3.m_VertexList[6].x = 1.5f; Bullet_C3.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2297,39 +2456,48 @@ void TSceneGame::bullet_Ghostbullet_collision_taken_away()
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;  vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;  N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
+			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;  vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+
 	}
+
+
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_C3.m_VertexList[0].x = 2.1f; Bullet_C3.m_VertexList[0].y = 2.1f;
-		Bullet_C3.m_VertexList[1].x = 2.1f; Bullet_C3.m_VertexList[1].y = 2.1f;
-		Bullet_C3.m_VertexList[2].x = 2.1f; Bullet_C3.m_VertexList[2].y = 2.1f;
-		Bullet_C3.m_VertexList[3].x = 2.1f; Bullet_C3.m_VertexList[3].y = 2.1f;
-		Bullet_C3.m_VertexList[4].x = 2.1f; Bullet_C3.m_VertexList[4].y = 2.1f;
-		Bullet_C3.m_VertexList[5].x = 2.1f; Bullet_C3.m_VertexList[5].y = 2.1f;
-		Bullet_C3.m_VertexList[6].x = 2.1f; Bullet_C3.m_VertexList[6].y = 2.1f;
-		Bullet_Ghost_4.m_VertexList[0].x = 2.1f; Bullet_Ghost_4.m_VertexList[0].y = 2.1f;
-		Bullet_Ghost_4.m_VertexList[1].x = 2.1f; Bullet_Ghost_4.m_VertexList[1].y = 2.1f;
-		Bullet_Ghost_4.m_VertexList[2].x = 2.1f; Bullet_Ghost_4.m_VertexList[2].y = 2.1f;
-		Bullet_Ghost_4.m_VertexList[3].x = 2.1f; Bullet_Ghost_4.m_VertexList[3].y = 2.1f;
-		Bullet_Ghost_4.m_VertexList[4].x = 2.1f; Bullet_Ghost_4.m_VertexList[4].y = 2.1f;
-		Bullet_Ghost_4.m_VertexList[5].x = 2.1f; Bullet_Ghost_4.m_VertexList[5].y = 2.1f;
-		Bullet_Ghost_4.m_VertexList[6].x = 2.1f; Bullet_Ghost_4.m_VertexList[6].y = 2.1f;
+		Bullet_C3.m_VertexList[0].x = 1.5f; Bullet_C3.m_VertexList[0].y = 1.5f;
+		Bullet_C3.m_VertexList[1].x = 1.5f; Bullet_C3.m_VertexList[1].y = 1.5f;
+		Bullet_C3.m_VertexList[2].x = 1.5f; Bullet_C3.m_VertexList[2].y = 1.5f;
+		Bullet_C3.m_VertexList[3].x = 1.5f; Bullet_C3.m_VertexList[3].y = 1.5f;
+		Bullet_C3.m_VertexList[4].x = 1.5f; Bullet_C3.m_VertexList[4].y = 1.5f;
+		Bullet_C3.m_VertexList[5].x = 1.5f; Bullet_C3.m_VertexList[5].y = 1.5f;
+		Bullet_C3.m_VertexList[6].x = 1.5f; Bullet_C3.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+
+
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2337,198 +2505,227 @@ void TSceneGame::bullet_Ghostbullet_collision_taken_away()
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;  vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;  N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
+			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;  vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 	}
-	//
+
+
+
+
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_C4.m_VertexList[0].x = 2.2f; Bullet_C4.m_VertexList[0].y = 2.2f;
-		Bullet_C4.m_VertexList[1].x = 2.2f; Bullet_C4.m_VertexList[1].y = 2.2f;
-		Bullet_C4.m_VertexList[2].x = 2.2f; Bullet_C4.m_VertexList[2].y = 2.2f;
-		Bullet_C4.m_VertexList[3].x = 2.2f; Bullet_C4.m_VertexList[3].y = 2.2f;
-		Bullet_C4.m_VertexList[4].x = 2.2f; Bullet_C4.m_VertexList[4].y = 2.2f;
-		Bullet_C4.m_VertexList[5].x = 2.2f; Bullet_C4.m_VertexList[5].y = 2.2f;
-		Bullet_C4.m_VertexList[6].x = 2.2f; Bullet_C4.m_VertexList[6].y = 2.2f;
-		Bullet_Ghost_1.m_VertexList[0].x = 2.2f; Bullet_Ghost_1.m_VertexList[0].y = 2.2f;
-		Bullet_Ghost_1.m_VertexList[1].x = 2.2f; Bullet_Ghost_1.m_VertexList[1].y = 2.2f;
-		Bullet_Ghost_1.m_VertexList[2].x = 2.2f; Bullet_Ghost_1.m_VertexList[2].y = 2.2f;
-		Bullet_Ghost_1.m_VertexList[3].x = 2.2f; Bullet_Ghost_1.m_VertexList[3].y = 2.2f;
-		Bullet_Ghost_1.m_VertexList[4].x = 2.2f; Bullet_Ghost_1.m_VertexList[4].y = 2.2f;
-		Bullet_Ghost_1.m_VertexList[5].x = 2.2f; Bullet_Ghost_1.m_VertexList[5].y = 2.2f;
-		Bullet_Ghost_1.m_VertexList[6].x = 2.2f; Bullet_Ghost_1.m_VertexList[6].y = 2.2f;
+
+		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
+		Bullet_C4.m_VertexList[1].x = 1.5f; Bullet_C4.m_VertexList[1].y = 1.5f;
+		Bullet_C4.m_VertexList[2].x = 1.5f; Bullet_C4.m_VertexList[2].y = 1.5f;
+		Bullet_C4.m_VertexList[3].x = 1.5f; Bullet_C4.m_VertexList[3].y = 1.5f;
+		Bullet_C4.m_VertexList[4].x = 1.5f; Bullet_C4.m_VertexList[4].y = 1.5f;
+		Bullet_C4.m_VertexList[5].x = 1.5f; Bullet_C4.m_VertexList[5].y = 1.5f;
+		Bullet_C4.m_VertexList[6].x = 1.5f; Bullet_C4.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;  vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;  N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
+			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;  vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 	}
 
 
-
-
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_2.m_rtCollision))
+	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_C4.m_VertexList[0].x = 2.2f; Bullet_C4.m_VertexList[0].y = 2.2f;
-		Bullet_C4.m_VertexList[1].x = 2.2f; Bullet_C4.m_VertexList[1].y = 2.2f;
-		Bullet_C4.m_VertexList[2].x = 2.2f; Bullet_C4.m_VertexList[2].y = 2.2f;
-		Bullet_C4.m_VertexList[3].x = 2.2f; Bullet_C4.m_VertexList[3].y = 2.2f;
-		Bullet_C4.m_VertexList[4].x = 2.2f; Bullet_C4.m_VertexList[4].y = 2.2f;
-		Bullet_C4.m_VertexList[5].x = 2.2f; Bullet_C4.m_VertexList[5].y = 2.2f;
-		Bullet_C4.m_VertexList[6].x = 2.2f; Bullet_C4.m_VertexList[6].y = 2.2f;
-		Bullet_Ghost_2.m_VertexList[0].x = 2.2f; Bullet_Ghost_2.m_VertexList[0].y = 2.2f;
-		Bullet_Ghost_2.m_VertexList[1].x = 2.2f; Bullet_Ghost_2.m_VertexList[1].y = 2.2f;
-		Bullet_Ghost_2.m_VertexList[2].x = 2.2f; Bullet_Ghost_2.m_VertexList[2].y = 2.2f;
-		Bullet_Ghost_2.m_VertexList[3].x = 2.2f; Bullet_Ghost_2.m_VertexList[3].y = 2.2f;
-		Bullet_Ghost_2.m_VertexList[4].x = 2.2f; Bullet_Ghost_2.m_VertexList[4].y = 2.2f;
-		Bullet_Ghost_2.m_VertexList[5].x = 2.2f; Bullet_Ghost_2.m_VertexList[5].y = 2.2f;
-		Bullet_Ghost_2.m_VertexList[6].x = 2.2f; Bullet_Ghost_2.m_VertexList[6].y = 2.2f;
+		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
+		Bullet_C4.m_VertexList[1].x = 1.5f; Bullet_C4.m_VertexList[1].y = 1.5f;
+		Bullet_C4.m_VertexList[2].x = 1.5f; Bullet_C4.m_VertexList[2].y = 1.5f;
+		Bullet_C4.m_VertexList[3].x = 1.5f; Bullet_C4.m_VertexList[3].y = 1.5f;
+		Bullet_C4.m_VertexList[4].x = 1.5f; Bullet_C4.m_VertexList[4].y = 1.5f;
+		Bullet_C4.m_VertexList[5].x = 1.5f; Bullet_C4.m_VertexList[5].y = 1.5f;
+		Bullet_C4.m_VertexList[6].x = 1.5f; Bullet_C4.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;  vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;  N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
+			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;  vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_1.m_vCenter.y;
+			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
-
-
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_3.m_rtCollision))
+	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_C4.m_VertexList[0].x = 2.2f; Bullet_C4.m_VertexList[0].y = 2.2f;
-		Bullet_C4.m_VertexList[1].x = 2.2f; Bullet_C4.m_VertexList[1].y = 2.2f;
-		Bullet_C4.m_VertexList[2].x = 2.2f; Bullet_C4.m_VertexList[2].y = 2.2f;
-		Bullet_C4.m_VertexList[3].x = 2.2f; Bullet_C4.m_VertexList[3].y = 2.2f;
-		Bullet_C4.m_VertexList[4].x = 2.2f; Bullet_C4.m_VertexList[4].y = 2.2f;
-		Bullet_C4.m_VertexList[5].x = 2.2f; Bullet_C4.m_VertexList[5].y = 2.2f;
-		Bullet_C4.m_VertexList[6].x = 2.2f; Bullet_C4.m_VertexList[6].y = 2.2f;
-		Bullet_Ghost_3.m_VertexList[0].x = 2.2f; Bullet_Ghost_3.m_VertexList[0].y = 2.2f;
-		Bullet_Ghost_3.m_VertexList[1].x = 2.2f; Bullet_Ghost_3.m_VertexList[1].y = 2.2f;
-		Bullet_Ghost_3.m_VertexList[2].x = 2.2f; Bullet_Ghost_3.m_VertexList[2].y = 2.2f;
-		Bullet_Ghost_3.m_VertexList[3].x = 2.2f; Bullet_Ghost_3.m_VertexList[3].y = 2.2f;
-		Bullet_Ghost_3.m_VertexList[4].x = 2.2f; Bullet_Ghost_3.m_VertexList[4].y = 2.2f;
-		Bullet_Ghost_3.m_VertexList[5].x = 2.2f; Bullet_Ghost_3.m_VertexList[5].y = 2.2f;
-		Bullet_Ghost_3.m_VertexList[6].x = 2.2f; Bullet_Ghost_3.m_VertexList[6].y = 2.2f;
+
+		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
+		Bullet_C4.m_VertexList[1].x = 1.5f; Bullet_C4.m_VertexList[1].y = 1.5f;
+		Bullet_C4.m_VertexList[2].x = 1.5f; Bullet_C4.m_VertexList[2].y = 1.5f;
+		Bullet_C4.m_VertexList[3].x = 1.5f; Bullet_C4.m_VertexList[3].y = 1.5f;
+		Bullet_C4.m_VertexList[4].x = 1.5f; Bullet_C4.m_VertexList[4].y = 1.5f;
+		Bullet_C4.m_VertexList[5].x = 1.5f; Bullet_C4.m_VertexList[5].y = 1.5f;
+		Bullet_C4.m_VertexList[6].x = 1.5f; Bullet_C4.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;  vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;  N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
+			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;  vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_1.m_vCenter.y;
+			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+
 	}
 
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_4.m_rtCollision))
+
+
+	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_C4.m_VertexList[0].x = 2.2f; Bullet_C4.m_VertexList[0].y = 2.2f;
-		Bullet_C4.m_VertexList[1].x = 2.2f; Bullet_C4.m_VertexList[1].y = 2.2f;
-		Bullet_C4.m_VertexList[2].x = 2.2f; Bullet_C4.m_VertexList[2].y = 2.2f;
-		Bullet_C4.m_VertexList[3].x = 2.2f; Bullet_C4.m_VertexList[3].y = 2.2f;
-		Bullet_C4.m_VertexList[4].x = 2.2f; Bullet_C4.m_VertexList[4].y = 2.2f;
-		Bullet_C4.m_VertexList[5].x = 2.2f; Bullet_C4.m_VertexList[5].y = 2.2f;
-		Bullet_C4.m_VertexList[6].x = 2.2f; Bullet_C4.m_VertexList[6].y = 2.2f;
-		Bullet_Ghost_4.m_VertexList[0].x = 2.2f; Bullet_Ghost_4.m_VertexList[0].y = 2.2f;
-		Bullet_Ghost_4.m_VertexList[1].x = 2.2f; Bullet_Ghost_4.m_VertexList[1].y = 2.2f;
-		Bullet_Ghost_4.m_VertexList[2].x = 2.2f; Bullet_Ghost_4.m_VertexList[2].y = 2.2f;
-		Bullet_Ghost_4.m_VertexList[3].x = 2.2f; Bullet_Ghost_4.m_VertexList[3].y = 2.2f;
-		Bullet_Ghost_4.m_VertexList[4].x = 2.2f; Bullet_Ghost_4.m_VertexList[4].y = 2.2f;
-		Bullet_Ghost_4.m_VertexList[5].x = 2.2f; Bullet_Ghost_4.m_VertexList[5].y = 2.2f;
-		Bullet_Ghost_4.m_VertexList[6].x = 2.2f; Bullet_Ghost_4.m_VertexList[6].y = 2.2f;
+		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
+		Bullet_C4.m_VertexList[1].x = 1.5f; Bullet_C4.m_VertexList[1].y = 1.5f;
+		Bullet_C4.m_VertexList[2].x = 1.5f; Bullet_C4.m_VertexList[2].y = 1.5f;
+		Bullet_C4.m_VertexList[3].x = 1.5f; Bullet_C4.m_VertexList[3].y = 1.5f;
+		Bullet_C4.m_VertexList[4].x = 1.5f; Bullet_C4.m_VertexList[4].y = 1.5f;
+		Bullet_C4.m_VertexList[5].x = 1.5f; Bullet_C4.m_VertexList[5].y = 1.5f;
+		Bullet_C4.m_VertexList[6].x = 1.5f; Bullet_C4.m_VertexList[6].y = 1.5f;
+
+		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
 		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;  vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;  N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
+			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
 		}
+
 		for (int iV = 0; iV < 6; iV++)
 		{
 			D3DVECTOR vertex;
 			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;  vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle); float C = cosf(fAngle);
+			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
 			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_1.m_vCenter.y;
+			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
 		}
+
+
 		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 	}
 
 
 
-
 }
-
 
 class TSceneEnd : public TScene
 {
@@ -2579,3 +2776,6 @@ TSceneEnd::TSceneEnd()
 
 TSceneEnd::~TSceneEnd()
 {}
+
+
+
