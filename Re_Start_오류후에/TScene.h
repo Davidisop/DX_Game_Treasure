@@ -137,7 +137,7 @@ class TSceneGame : public TScene
 public:
 
 	float fAngle;
-	float distance_direction_between_hero_boss;
+
 
 public:
 	Background				Game_Background;
@@ -461,7 +461,7 @@ TSceneGame::TSceneGame()
 	m_iSceneID = GAME_SCENE_PLAY;
 	m_bNextSceneStart = false;
 	fAngle = 0.0f;
-	distance_direction_between_hero_boss = 0;
+
 }
 
 TSceneGame::~TSceneGame()
@@ -472,13 +472,9 @@ TSceneGame::~TSceneGame()
 
 void TSceneGame::Boss_FSM()
 {
-	distance_direction_between_hero_boss = Robot.m_pos.x - m_Actor.m_pos.x;
-	
+	Robot.distance_direction_between_hero_boss = Robot.m_pos.x - m_Actor.m_pos.x;
+
 	Robot.basic_frame();
-
-	if (distance_direction_between_hero_boss > 200) { ÃÑ¾Ë¹ß»ç(); }
-	if (distance_direction_between_hero_boss < 200) { °ËÈÖµÎ¸¥´Ù(); }
-
 }
 
 

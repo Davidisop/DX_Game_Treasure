@@ -32,6 +32,7 @@ public:
 	bool sword_flag;
 	bool sword_left_right_go;
 
+	float distance_direction_between_hero_boss;
 
 public:
 
@@ -91,13 +92,13 @@ public:
 	{
 		if (state == Detection_0)
 		{
-			if (둘 사이의 거리, 방향 플래그에서 절대값< 10)
+			if (abs(distance_direction_between_hero_boss) < 100)
 			{
 				state = Detection_1_SWORD;
 				ATTACK_SWORD();
 			}
 
-			if (둘 사이의 거리, 방향 플래그에서 절대값 > 10)
+			if (abs(distance_direction_between_hero_boss) >= 100)
 			{
 				state = Detection_1_GUN;
 				ATTACK_SHOT();
@@ -108,12 +109,12 @@ public:
 
 	void walk()  // 이게 뭔가 이상해. 동그라미와 화살표를 햇갈린듯?
 	{
-		if (둘 사이의 거리, 방향 플래그에서 위치가 왼쪽에 있으면,)
+		if (distance_direction_between_hero_boss>0)
 		{
 			left_walk();
 		}
 
-		else if (둘 사이의 거리, 방향 플래그에서 위치가 오른쪽에 있으면, )
+		else if (distance_direction_between_hero_boss<0)
 		{
 			right_walk();
 		}
@@ -158,6 +159,7 @@ public:
 
 		sword_flag = false;
 		sword_left_right_go = false;
+		distance_direction_between_hero_boss = 0;
 
 	}
 	virtual ~BOSS_NPC() {}
