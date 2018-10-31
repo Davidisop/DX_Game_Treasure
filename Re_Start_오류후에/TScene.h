@@ -137,6 +137,7 @@ class TSceneGame : public TScene
 public:
 
 	float fAngle;
+	float distance_direction_between_hero_boss;
 
 public:
 	Background				Game_Background;
@@ -189,10 +190,16 @@ public:
 	void Hero_Actions();
 	void Boy_NPC_Action();
 	void Hero_bullets_basic_Action();
-	void Boss_bullets_basic_Action();
+
 	void Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
 	void Bullet_Ghost_collision();
-	void Boss_Action();
+
+	void Boss_FSM();
+	void Boss_Keyboard_Action();
+	void Boss_bullets_keyboard_basic_Action();
+	
+
+
 
 
 public:
@@ -392,8 +399,8 @@ bool    TSceneGame::Frame()
 	//Hero_bullets_basic_Action();
 	Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
 	Bullet_Ghost_collision();
-	Boss_Action();
-	Boss_bullets_basic_Action();
+	Boss_Keyboard_Action();
+	Boss_bullets_keyboard_basic_Action();
 
 	return true;
 }
@@ -454,6 +461,7 @@ TSceneGame::TSceneGame()
 	m_iSceneID = GAME_SCENE_PLAY;
 	m_bNextSceneStart = false;
 	fAngle = 0.0f;
+	distance_direction_between_hero_boss = 0;
 }
 
 TSceneGame::~TSceneGame()
@@ -462,7 +470,21 @@ TSceneGame::~TSceneGame()
 }
 
 
-void TSceneGame::Boss_Action()
+void TSceneGame::Boss_FSM()
+{
+	distance_direction_between_hero_boss = Robot.m_pos.x - m_Actor.m_pos.x;
+	
+	Robot.basic_frame();
+
+	if (distance_direction_between_hero_boss > 200) { ÃÑ¾Ë¹ß»ç(); }
+	if (distance_direction_between_hero_boss < 200) { °ËÈÖµÎ¸¥´Ù(); }
+
+}
+
+
+
+
+void TSceneGame::Boss_Keyboard_Action()
 {
 	if (I_Input.Key('A'))
 	{
@@ -640,7 +662,7 @@ void TSceneGame::Boy_NPC_Action()
 
 }
 
-void  TSceneGame::Boss_bullets_basic_Action()
+void  TSceneGame::Boss_bullets_keyboard_basic_Action()
 {
 	if (I_Input.Key('K') == KEY_PUSH || I_Input.Key('L') == KEY_PUSH)
 	{

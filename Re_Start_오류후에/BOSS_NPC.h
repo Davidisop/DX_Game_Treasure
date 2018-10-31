@@ -2,6 +2,8 @@
 #include "Character.h"
 
 
+enum { Detection_0 = 0, Detection_1_SWORD = 1, Detection_1_GUN = 2 };
+
 class BOSS_NPC : public Character
 {
 public:
@@ -17,6 +19,126 @@ public:
 	int	  sword_step;
 	int   slide_step;
 
+public:
+	int   state;
+	float detection_time;
+
+	bool  shoot_flag;
+	bool  Bullet_B1_Bullet_Go;
+	bool  Bullet_B2_Bullet_Go;
+	bool  Bullet_B3_Bullet_Go;
+	bool  Bullet_B4_Bullet_Go;
+
+	bool sword_flag;
+	bool sword_left_right_go;
+
+
+public:
+
+	void ATTACK_SHOT()   // 이걸 씬에 빼놔야.
+	{		
+		if (state == Detection_1_GUN)
+		{
+			shoot_flag = true;   	
+			if (shoot_flag == true)
+			{
+				static int count_K = 1;
+				if (count_K == 1) { Bullet_B1_Bullet_Go = true; }  // 씬에서 이거와 연동되서, 고스트 나간다.
+				if (count_K == 2) { Bullet_B2_Bullet_Go = true; }
+				if (count_K == 3) { Bullet_B3_Bullet_Go = true; }
+				if (count_K == 4) { Bullet_B4_Bullet_Go = true; }
+				count_K++;
+			}
+			shoot_flag = false;
+
+
+			detection_time += g_fSecPerFrame;
+			if (detection_time >1.0F)
+			{	
+				state = Detection_0;
+				detection_time = 0.0f;
+			}
+
+		}
+	}
+
+	void ATTACK_SWORD()  // 이걸 씬에 빼놔야.
+	{	
+		if (state == Detection_1_SWORD)
+		{
+			 	
+			sword_flag = true;
+
+			if (sword_flag == true)
+			{
+				sword_left_right_go = true;
+			}
+			sword_left_right_go = false;
+			sword_flag = false;
+			
+			
+			detection_time += g_fSecPerFrame;
+
+			if (detection_time > 1.0F)
+			{
+				state = Detection_0;
+				detection_time = 0.0f;
+			}
+		}
+	}
+
+	void Detction_FULL()
+	{
+		if (state == Detection_0)
+		{
+			if (둘 사이의 거리, 방향 플래그에서 절대값< 10)
+			{
+				state = Detection_1_SWORD;
+				ATTACK_SWORD();
+			}
+
+			if (둘 사이의 거리, 방향 플래그에서 절대값 > 10)
+			{
+				state = Detection_1_GUN;
+				ATTACK_SHOT();
+			}
+		}
+	}
+
+
+	void walk()  // 이게 뭔가 이상해. 동그라미와 화살표를 햇갈린듯?
+	{
+		if (둘 사이의 거리, 방향 플래그에서 위치가 왼쪽에 있으면,)
+		{
+			left_walk();
+		}
+
+		else if (둘 사이의 거리, 방향 플래그에서 위치가 오른쪽에 있으면, )
+		{
+			right_walk();
+		}
+	}
+
+
+	void basic_frame()
+	{
+			
+		if(state== Detection_0)
+		{
+			void walk();
+
+			detection_time += g_fSecPerFrame;
+		
+			if (detection_time >= 3.0f)
+			{
+				detection_time = 0;
+				Detction_FULL();
+			}
+		}
+	}
+
+
+
 
 
 public:
@@ -26,18 +148,27 @@ public:
 		m_Collision_down_side = false;
 		sword_step = 0;
 		slide_step = 0;
+		detection_time = 0;
+
+		shoot_flag = false;
+		Bullet_B1_Bullet_Go = false;
+		Bullet_B2_Bullet_Go = false;
+		Bullet_B3_Bullet_Go = false;
+		Bullet_B4_Bullet_Go = false;
+
+		sword_flag = false;
+		sword_left_right_go = false;
+
 	}
 	virtual ~BOSS_NPC() {}
 };
 
+
 void BOSS_NPC::left_walk()
 {
-
 	static float fAddTime = 0.0f;
 	fAddTime += g_fSecPerFrame;
-
 	{
-
 		if (fAddTime >= 0.1f)
 		{
 			switch (walk_step)
@@ -93,8 +224,6 @@ void BOSS_NPC::left_walk()
 					walk_step = 0;
 				}break;
 
-
-
 			}
 		}
 	}
@@ -109,13 +238,9 @@ void BOSS_NPC::left_walk()
 
 void BOSS_NPC::right_walk()
 {
-
 	static float fAddTime = 0.0f;
 	fAddTime += g_fSecPerFrame;
-
-
 	{
-
 		if (fAddTime >= 0.1f)
 		{
 
