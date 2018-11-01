@@ -138,12 +138,20 @@ public:
 
 	float fAngle;
 
-	int box_alive_live_or_dead;
-
+	int  box_alive_live_or_dead;
 	bool box_alive_Col_F1; bool box_alive_Col_C1;
 	bool box_alive_Col_F2; bool box_alive_Col_C2;
 	bool box_alive_Col_F3; bool box_alive_Col_C3;
 	bool box_alive_Col_F4; bool box_alive_Col_C4;
+
+	int  Hero_live_or_dead;
+	bool Hero_Col_G1;
+	bool Hero_Col_G2;
+	bool Hero_Col_G3;
+	bool Hero_Col_G4;
+
+
+
 
 
 public:
@@ -200,6 +208,7 @@ public:
 	void Hero_Actions();
 	void Boy_NPC_Action();
 	void Hero_bullets_basic_Action();
+	void Hero_Ghost_collision();
 
 	void Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
 	void Bullet_Ghost_collision();
@@ -484,6 +493,13 @@ TSceneGame::TSceneGame()
 	 box_alive_Col_F3 = false;   box_alive_Col_C3 = false; 
 	 box_alive_Col_F4 = false;   box_alive_Col_C4 = false; 
 	 box_alive_live_or_dead = false;
+
+	 int  Hero_live_or_dead = 0;
+	 bool Hero_Col_G1 = false;
+	 bool Hero_Col_G2 = false;
+	 bool Hero_Col_G3 = false;
+	 bool Hero_Col_G4 = false;
+
 }
 
 TSceneGame::~TSceneGame()
@@ -2024,6 +2040,19 @@ void TSceneGame::Bullet_Box_Alive_collision()
 
 
 
+	if (
+		box_alive_Col_F1 + box_alive_Col_C1 +
+		box_alive_Col_F2 + box_alive_Col_C2 +
+		box_alive_Col_F3 + box_alive_Col_C3 +
+		box_alive_Col_F4 + box_alive_Col_C4
+		== 1)
+	{
+		Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 90, 10, 90, 10);
+		Box_Alive_life_bar.m_for_update_Rects.x = g_rtClient.right / 10;    Box_Alive_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 25;
+		Box_Alive_life_bar.Window_SetData_factors(780, 265, Box_Alive_life_bar.m_for_update_Rects.x, Box_Alive_life_bar.m_for_update_Rects.y);
+		Box_Alive_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/half_bar.bmp");
+	}
+
 
 
 
@@ -2054,13 +2083,64 @@ void TSceneGame::Bullet_Box_Alive_collision()
 			N_VertexList_BA[iV].x += Box_Alive.m_vCenter.x;		 N_VertexList_BA[iV].y += Box_Alive.m_vCenter.y;
 		}
 		g_pContext->UpdateSubresource(Box_Alive.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA, 0, 0);
+
+
+
+
+		Box_Alive_life_bar.m_VertexList[0].x = 3.6f; Box_Alive_life_bar.m_VertexList[0].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[1].x = 3.6f; Box_Alive_life_bar.m_VertexList[1].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[2].x = 3.6f; Box_Alive_life_bar.m_VertexList[2].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[3].x = 3.6f; Box_Alive_life_bar.m_VertexList[3].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[4].x = 3.6f; Box_Alive_life_bar.m_VertexList[4].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[5].x = 3.6f; Box_Alive_life_bar.m_VertexList[5].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[6].x = 3.6f; Box_Alive_life_bar.m_VertexList[6].y = 3.6f;
+
+		memcpy(N_VertexList_BA_LB, Box_Alive_life_bar.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Box_Alive_life_bar.m_VertexList[iV].x; vertex.y = Box_Alive_life_bar.m_VertexList[iV].y;
+			vertex.x -= Box_Alive_life_bar.m_vCenter.x;		 vertex.y -= Box_Alive_life_bar.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_BA_LB[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA_LB[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_BA_LB[iV].x += Box_Alive_life_bar.m_vCenter.x;		 N_VertexList_BA_LB[iV].y += Box_Alive_life_bar.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Box_Alive_life_bar.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA_LB, 0, 0);
+
+
+
 	}
 
 }
 
 
+void TSceneGame::Hero_Ghost_collision()
+{
+	 
 
 
+	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+	{	Hero_Col_G1 = true;	}
+
+	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_2.m_rtCollision))
+	{	Hero_Col_G2 = true;	}
+
+	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_3.m_rtCollision))
+	{	Hero_Col_G3 = true;	}
+
+	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_4.m_rtCollision))
+	{	Hero_Col_G4 = true;}
+	
+
+	if (Hero_live_or_dead == 4)
+	{
+
+	}
+
+
+
+}
 
 
 
