@@ -22,7 +22,7 @@ public:
 		if (state == Detection_1)
 		{
 			state = Detection_0;
-			detection_time = 0;
+			
 		
 				static int count_K = 1;
 				if (count_K == 1) { Bullet_F1_Bullet_Go = true; }  // 씬에서 이거와 연동되서, 고스트 나간다.
@@ -49,9 +49,9 @@ public:
 
 		if (detection_time >= 3.0f)
 		{
-			
-			Detction_FULL();
 			detection_time = 0;
+			Detction_FULL();
+			
 		}
 
 	}
