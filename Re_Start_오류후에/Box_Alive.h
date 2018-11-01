@@ -10,10 +10,10 @@ public:
 	float detection_time;
 	bool  ghost_shoot_flag;
 	int   state;
-	bool  Bullet_F1_Bullet_Go;
-	bool  Bullet_F2_Bullet_Go;
-	bool  Bullet_F3_Bullet_Go;
-	bool  Bullet_F4_Bullet_Go;
+	bool  Bullet_G1_Bullet_Go;
+	bool  Bullet_G2_Bullet_Go;
+	bool  Bullet_G3_Bullet_Go;
+	bool  Bullet_G4_Bullet_Go;
 
 public:
 
@@ -25,10 +25,10 @@ public:
 			
 		
 				static int count_K = 1;
-				if (count_K == 1) { Bullet_F1_Bullet_Go = true; }  // 씬에서 이거와 연동되서, 고스트 나간다.
-				if (count_K == 2) { Bullet_F2_Bullet_Go = true; }
-				if (count_K == 3) { Bullet_F3_Bullet_Go = true; }
-				if (count_K == 4) { Bullet_F4_Bullet_Go = true; }
+				if (count_K == 1) { Bullet_G1_Bullet_Go = true; }  // 씬에서 이거와 연동되서, 고스트 나간다.
+				if (count_K == 2) { Bullet_G2_Bullet_Go = true; }
+				if (count_K == 3) { Bullet_G3_Bullet_Go = true; }
+				if (count_K == 4) { Bullet_G4_Bullet_Go = true; }
 				count_K++;	
 		}
 	}
@@ -61,10 +61,10 @@ public:
 		state = Detection_0;
 		detection_time = 0;
 		ghost_shoot_flag = false;
-		Bullet_F1_Bullet_Go = false;
-		Bullet_F2_Bullet_Go = false;
-		Bullet_F3_Bullet_Go = false;
-		Bullet_F4_Bullet_Go = false;
+		Bullet_G1_Bullet_Go = false;
+		Bullet_G2_Bullet_Go = false;
+		Bullet_G3_Bullet_Go = false;
+		Bullet_G4_Bullet_Go = false;
 	}
 	virtual ~Box_Alive() {}
 
