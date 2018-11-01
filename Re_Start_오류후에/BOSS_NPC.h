@@ -68,8 +68,6 @@ public:
 		if (state == Detection__1_SWORD)
 		{
 			 	
-			
-
 				static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
 				static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
 				DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
@@ -114,6 +112,7 @@ public:
 			if (abs(distance_direction_between_hero_boss) < 150)
 			{
 				state = Detection__1_SWORD;
+				sword_step = 1;
 				ATTACK_SWORD();
 			}
 
@@ -552,7 +551,7 @@ void BOSS_NPC::sword()
 				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
 
 
-				sword_step = 0;
+				sword_step = 0; state = Detection__0;
 			}break;
 
 
@@ -635,7 +634,7 @@ void BOSS_NPC::sword()
 				in_Texture_SetData_sprite_factors(sprite_ptr, 17, 7, 702, 1843);
 				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
 
-				sword_step = 0;
+				sword_step = 0; state = Detection__0;
 			}break;
 
 		}
