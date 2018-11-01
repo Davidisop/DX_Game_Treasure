@@ -2,6 +2,7 @@
 #include "Object_Handling.h"
 
 enum { Detection_0 = 0, Detection_1 = 1 };
+
 class Box_Alive : public Object_Handling
 {
 public:
@@ -52,6 +53,7 @@ public:
 
 		if (detection_time >= 3.0f)
 		{
+			
 			Detction_FULL();
 			detection_time = 0;
 		}

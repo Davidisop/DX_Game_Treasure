@@ -2,7 +2,7 @@
 #include "Character.h"
 
 
-enum { Detection_0 = 0, Detection_1_SWORD = 1, Detection_1_GUN = 2 };
+enum { Detection__0 = 0, Detection__1_SWORD = 1, Detection__1_GUN = 2 };
 
 class BOSS_NPC : public Character
 {
@@ -38,84 +38,105 @@ public:
 
 	void ATTACK_SHOT()   // 이걸 씬에 빼놔야.
 	{		
-		if (state == Detection_1_GUN)
+		if (state == Detection__1_GUN)
 		{
 			shoot_flag = true;   	
 			if (shoot_flag == true)
 			{
 				static int count_K = 1;
-				if (count_K == 1) { Bullet_B1_Bullet_Go = true; }  // 씬에서 이거와 연동되서, 고스트 나간다.
-				if (count_K == 2) { Bullet_B2_Bullet_Go = true; }
-				if (count_K == 3) { Bullet_B3_Bullet_Go = true; }
-				if (count_K == 4) { Bullet_B4_Bullet_Go = true; }
+				if (count_K == 1) { Bullet_B1_Bullet_Go = true; Gun_step = 1; shot(); }  // 씬에서 이거와 연동되서, 고스트 나간다.
+				if (count_K == 2) { Bullet_B2_Bullet_Go = true; Gun_step = 1; shot(); }
+				if (count_K == 3) { Bullet_B3_Bullet_Go = true; Gun_step = 1; shot(); }
+				if (count_K == 4) { Bullet_B4_Bullet_Go = true; Gun_step = 1; shot(); }
 				count_K++;
 			}
 			shoot_flag = false;
+			state = Detection__0;
 
-
-			detection_time += g_fSecPerFrame;
+		/*	detection_time += g_fSecPerFrame;
 			if (detection_time >1.0F)
 			{	
-				state = Detection_0;
+				
 				detection_time = 0.0f;
-			}
+			}*/
 
 		}
 	}
 
 	void ATTACK_SWORD()  // 이걸 씬에 빼놔야.
 	{	
-		if (state == Detection_1_SWORD)
+		if (state == Detection__1_SWORD)
 		{
 			 	
-			sword_flag = true;
-
-			if (sword_flag == true)
-			{
-				sword_left_right_go = true;
-			}
-			sword_left_right_go = false;
-			sword_flag = false;
 			
-			
-			detection_time += g_fSecPerFrame;
 
-			if (detection_time > 1.0F)
-			{
-				state = Detection_0;
-				detection_time = 0.0f;
-			}
+				static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
+				static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
+				DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
+
+
+				if (sword_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+				{
+					sword_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+				}
+
+				if (sword_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+				{
+					sword_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+				}
+
+				if (sword_step == 3 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+				{
+					sword_step = 4;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+				}
+
+				if (sword_step == 4 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+				{
+					sword_step = 5;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+				}
+
+				if (sword_step == 5 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+				{
+					sword_step = 6;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+				}
+
+				if (sword_step == 6 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+				{
+					sword_step = 7;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+				}	
 		}
 	}
 
 	void Detction_FULL()
 	{
-		if (state == Detection_0)
+		if (state == Detection__0)
 		{
-			if (abs(distance_direction_between_hero_boss) < 100)
+			if (abs(distance_direction_between_hero_boss) < 150)
 			{
-				state = Detection_1_SWORD;
+				state = Detection__1_SWORD;
 				ATTACK_SWORD();
 			}
 
-			if (abs(distance_direction_between_hero_boss) >= 100)
+			if (abs(distance_direction_between_hero_boss) >= 150)
 			{
-				state = Detection_1_GUN;
+				state = Detection__1_GUN;
 				ATTACK_SHOT();
 			}
 		}
 	}
 
 
-	void walk()  // 이게 뭔가 이상해. 동그라미와 화살표를 햇갈린듯?
+	void walk_T()  // 이게 뭔가 이상해. 동그라미와 화살표를 햇갈린듯?
 	{
 		if (distance_direction_between_hero_boss>0)
 		{
+			Face_Direction = 1;
 			left_walk();
 		}
 
 		else if (distance_direction_between_hero_boss<0)
 		{
+			Face_Direction = 2;
 			right_walk();
 		}
 	}
@@ -124,9 +145,9 @@ public:
 	void basic_frame()
 	{
 			
-		if(state== Detection_0)
+		if(state== Detection__0)
 		{
-			void walk();
+			walk_T();
 
 			detection_time += g_fSecPerFrame;
 		
@@ -417,40 +438,41 @@ void BOSS_NPC::shot()
 
 void BOSS_NPC::sword()
 {
-	static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
-
-
-	if (sword_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	{
-		sword_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	}
-
-	if (sword_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	{
-		sword_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	}
-
-	if (sword_step == 3 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	{
-		sword_step = 4;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	}
-
-	if (sword_step == 4 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	{
-		sword_step = 5;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	}
-
-	if (sword_step == 5 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	{
-		sword_step = 6;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	}
-
-	if (sword_step == 6 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	{
-		sword_step = 7;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	}
+//
+//	static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
+//	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
+//	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
+//
+//
+//	if (sword_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+//	{
+//		sword_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+//	}
+//
+//	if (sword_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+//	{
+//		sword_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+//	}
+//
+//	if (sword_step == 3 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+//	{
+//		sword_step = 4;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+//	}
+//
+//	if (sword_step == 4 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+//	{
+//		sword_step = 5;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+//	}
+//
+//	if (sword_step == 5 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+//	{
+//		sword_step = 6;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+//	}
+//
+//	if (sword_step == 6 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+//	{
+//		sword_step = 7;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+//	}
 
 
 

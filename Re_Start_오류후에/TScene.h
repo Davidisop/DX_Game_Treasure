@@ -199,9 +199,6 @@ public:
 	void Boss_bullets_keyboard_basic_Action();
 	
 
-
-
-
 public:
 	TSceneGame();
 
@@ -394,13 +391,17 @@ bool   TSceneGame::Init()
 
 bool    TSceneGame::Frame()
 {
-	//Hero_Actions();
+	Hero_Actions();
 	//Boy_NPC_Action();
-	//Hero_bullets_basic_Action();
+	Hero_bullets_basic_Action();
+	Boss_FSM();
 	Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
 	Bullet_Ghost_collision();
-	Boss_Keyboard_Action();
-	Boss_bullets_keyboard_basic_Action();
+
+
+//  *Boss_Keyboard_Action();
+//	Boss_bullets_keyboard_basic_Action();*/
+
 
 	return true;
 }
@@ -475,7 +476,267 @@ void TSceneGame::Boss_FSM()
 	Robot.distance_direction_between_hero_boss = Robot.m_pos.x - m_Actor.m_pos.x;
 
 	Robot.basic_frame();
+	Robot.ATTACK_SWORD(); Robot.sword();
+	Robot.ATTACK_SHOT();
+
+	///////////////////////
+	
+	
+	if(Robot.state == Detection__0)
+	{
+		if (Robot.Face_Direction == 2 )
+		{
+			if (Robot.walk_step == 0) { Robot.MoveX(g_fSecPerFrame*0.1f); }
+			if (Robot.walk_step == 1) { Robot.MoveX(g_fSecPerFrame*0.1f); }        if (Robot.walk_step == 2) { Robot.MoveX(g_fSecPerFrame*0.1f); }
+			if (Robot.walk_step == 3) { Robot.MoveX(g_fSecPerFrame*0.1f); }        if (Robot.walk_step == 4) { Robot.MoveX(g_fSecPerFrame*0.1f); }
+			if (Robot.walk_step == 5) { Robot.MoveX(g_fSecPerFrame*0.1f); }		   if (Robot.walk_step == 6) { Robot.MoveX(g_fSecPerFrame*0.1f); }
+			if (Robot.walk_step == 7) { Robot.MoveX(g_fSecPerFrame*0.1f); }
+		}
+
+		if (Robot.Face_Direction == 1 )
+		{
+			if (Robot.walk_step == 0) { Robot.MoveX(-g_fSecPerFrame*0.1f); }
+			if (Robot.walk_step == 1) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }     if (Robot.walk_step == 2) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
+			if (Robot.walk_step == 3) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }     if (Robot.walk_step == 4) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
+			if (Robot.walk_step == 5) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }     if (Robot.walk_step == 6) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
+			if (Robot.walk_step == 7) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
+		}
+	}
+
+	memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+
+	for (int iV = 0; iV < 6; iV++)
+	{
+		D3DVECTOR vertex;
+		vertex.x = Robot.m_VertexList[iV].x;
+		vertex.y = Robot.m_VertexList[iV].y;
+
+		vertex.x -= Robot.m_vCenter.x;
+		vertex.y -= Robot.m_vCenter.y;
+		float S = sinf(fAngle);
+		float C = cosf(fAngle);
+		N_VertexList[iV].x = vertex.x * C + vertex.y * S;
+		N_VertexList[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList[iV].x += Robot.m_vCenter.x;
+		N_VertexList[iV].y += Robot.m_vCenter.y;
+	}
+	g_pContext->UpdateSubresource(Robot.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_R, 0, 0);
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	if (Robot.Bullet_B1_Bullet_Go == true) 
+
+
+	//////////////     총알의 움직임   /////////////////////////////////////
+
+	if (Robot.Bullet_B1_Bullet_Go == true && Robot.Face_Direction == 1)
+	{
+		Robot.Bullet_B1_Bullet_Go = false; Bullet_B1.Face_Direction1_flag = true;
+		Bullet_B1.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B1.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
+		Bullet_B1.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B1.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
+		Bullet_B1.m_VertexList[2].x = Robot.m_VertexList[2].x - 30 / 900; Bullet_B1.m_VertexList[2].y = Robot.m_VertexList[2].y - 5 / 900;
+		Bullet_B1.m_VertexList[3].x = Robot.m_VertexList[3].x - 30 / 900; Bullet_B1.m_VertexList[3].y = Robot.m_VertexList[3].y - 5 / 900;
+		Bullet_B1.m_VertexList[4].x = Robot.m_VertexList[4].x - 30 / 900; Bullet_B1.m_VertexList[4].y = Robot.m_VertexList[4].y - 5 / 900;
+		Bullet_B1.m_VertexList[5].x = Robot.m_VertexList[5].x - 30 / 900; Bullet_B1.m_VertexList[5].y = Robot.m_VertexList[5].y - 5 / 900;
+		Bullet_B1.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B1.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
+	}
+
+	if (Robot.Bullet_B1_Bullet_Go == true && Robot.Face_Direction == 2)
+	{
+		Robot.Bullet_B1_Bullet_Go = false; Bullet_B1.Face_Direction2_flag = true;
+		Bullet_B1.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B1.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
+		Bullet_B1.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B1.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
+		Bullet_B1.m_VertexList[2].x = Robot.m_VertexList[2].x + 30 / 900; Bullet_B1.m_VertexList[2].y = Robot.m_VertexList[2].y + 5 / 900;
+		Bullet_B1.m_VertexList[3].x = Robot.m_VertexList[3].x + 30 / 900; Bullet_B1.m_VertexList[3].y = Robot.m_VertexList[3].y + 5 / 900;
+		Bullet_B1.m_VertexList[4].x = Robot.m_VertexList[4].x + 30 / 900; Bullet_B1.m_VertexList[4].y = Robot.m_VertexList[4].y + 5 / 900;
+		Bullet_B1.m_VertexList[5].x = Robot.m_VertexList[5].x + 30 / 900; Bullet_B1.m_VertexList[5].y = Robot.m_VertexList[5].y + 5 / 900;
+		Bullet_B1.m_VertexList[6].x = Robot.m_VertexList[6].x + 30 / 900; Bullet_B1.m_VertexList[6].y = Robot.m_VertexList[6].y + 5 / 900;
+	}
+
+	if (Bullet_B1.Face_Direction1_flag == true)
+	{
+		Bullet_B1.frame_B_L();
+		Bullet_B1.MoveX(-g_fSecPerFrame * 1.0f);
+	}
+
+	if (Bullet_B1.Face_Direction2_flag == true)
+	{
+		Bullet_B1.frame_B_R();
+		Bullet_B1.MoveX(g_fSecPerFrame*1.0f);
+	}
+
+	memcpy(N_VertexList_B1, Bullet_B1.m_VertexList, sizeof(SimpleVertex) * 6);
+	for (int iV = 0; iV < 6; iV++)
+	{
+		D3DVECTOR vertex;
+		vertex.x = Bullet_B1.m_VertexList[iV].x; vertex.y = Bullet_B1.m_VertexList[iV].y;
+		vertex.x -= Bullet_B1.m_vCenter.x;		 vertex.y -= Bullet_B1.m_vCenter.y;
+		float S = sinf(fAngle);	float C = cosf(fAngle);
+		N_VertexList_B1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B1[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList_B1[iV].x += Bullet_B1.m_vCenter.x;		 N_VertexList_B1[iV].y += Bullet_B1.m_vCenter.y;
+	}
+	g_pContext->UpdateSubresource(Bullet_B1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B1, 0, 0);
+
+	//////////////     총알의 움직임   /////////////////////////////////////
+
+	if (Robot.Bullet_B2_Bullet_Go == true && Robot.Face_Direction == 1)
+	{
+		Robot.Bullet_B2_Bullet_Go  = false; Bullet_B2.Face_Direction1_flag = true;
+		Bullet_B2.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B2.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
+		Bullet_B2.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B2.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
+		Bullet_B2.m_VertexList[2].x = Robot.m_VertexList[2].x - 30 / 900; Bullet_B2.m_VertexList[2].y = Robot.m_VertexList[2].y - 5 / 900;
+		Bullet_B2.m_VertexList[3].x = Robot.m_VertexList[3].x - 30 / 900; Bullet_B2.m_VertexList[3].y = Robot.m_VertexList[3].y - 5 / 900;
+		Bullet_B2.m_VertexList[4].x = Robot.m_VertexList[4].x - 30 / 900; Bullet_B2.m_VertexList[4].y = Robot.m_VertexList[4].y - 5 / 900;
+		Bullet_B2.m_VertexList[5].x = Robot.m_VertexList[5].x - 30 / 900; Bullet_B2.m_VertexList[5].y = Robot.m_VertexList[5].y - 5 / 900;
+		Bullet_B2.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B2.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
+	}
+
+	if (Robot.Bullet_B2_Bullet_Go == true && Robot.Face_Direction == 2)
+	{
+		Robot.Bullet_B2_Bullet_Go = false; Bullet_B2.Face_Direction2_flag = true;
+		Bullet_B2.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B2.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
+		Bullet_B2.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B2.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
+		Bullet_B2.m_VertexList[2].x = Robot.m_VertexList[2].x + 30 / 900; Bullet_B2.m_VertexList[2].y = Robot.m_VertexList[2].y + 5 / 900;
+		Bullet_B2.m_VertexList[3].x = Robot.m_VertexList[3].x + 30 / 900; Bullet_B2.m_VertexList[3].y = Robot.m_VertexList[3].y + 5 / 900;
+		Bullet_B2.m_VertexList[4].x = Robot.m_VertexList[4].x + 30 / 900; Bullet_B2.m_VertexList[4].y = Robot.m_VertexList[4].y + 5 / 900;
+		Bullet_B2.m_VertexList[5].x = Robot.m_VertexList[5].x + 30 / 900; Bullet_B2.m_VertexList[5].y = Robot.m_VertexList[5].y + 5 / 900;
+		Bullet_B2.m_VertexList[6].x = Robot.m_VertexList[6].x + 30 / 900; Bullet_B2.m_VertexList[6].y = Robot.m_VertexList[6].y + 5 / 900;
+	}
+
+	if (Bullet_B2.Face_Direction1_flag == true)
+	{
+		Bullet_B2.frame_B_L();
+		Bullet_B2.MoveX(-g_fSecPerFrame * 1.0f);
+	}
+
+	if (Bullet_B2.Face_Direction2_flag == true)
+	{
+		Bullet_B2.frame_B_R();
+		Bullet_B2.MoveX(g_fSecPerFrame*1.0f);
+	}
+
+	memcpy(N_VertexList_B2, Bullet_B2.m_VertexList, sizeof(SimpleVertex) * 6);
+	for (int iV = 0; iV < 6; iV++)
+	{
+		D3DVECTOR vertex;
+		vertex.x = Bullet_B2.m_VertexList[iV].x; vertex.y = Bullet_B2.m_VertexList[iV].y;
+		vertex.x -= Bullet_B2.m_vCenter.x;		 vertex.y -= Bullet_B2.m_vCenter.y;
+		float S = sinf(fAngle);	float C = cosf(fAngle);
+		N_VertexList_B2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B2[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList_B2[iV].x += Bullet_B2.m_vCenter.x;		 N_VertexList_B2[iV].y += Bullet_B2.m_vCenter.y;
+	}
+	g_pContext->UpdateSubresource(Bullet_B2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B2, 0, 0);
+
+	//////////////     총알의 움직임   /////////////////////////////////////
+
+
+	if (Robot.Bullet_B3_Bullet_Go == true && Robot.Face_Direction == 1)
+	{
+		Robot.Bullet_B3_Bullet_Go = false; Bullet_B3.Face_Direction1_flag = true;
+		Bullet_B3.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B3.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
+		Bullet_B3.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B3.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
+		Bullet_B3.m_VertexList[2].x = Robot.m_VertexList[2].x - 30 / 900; Bullet_B3.m_VertexList[2].y = Robot.m_VertexList[2].y - 5 / 900;
+		Bullet_B3.m_VertexList[3].x = Robot.m_VertexList[3].x - 30 / 900; Bullet_B3.m_VertexList[3].y = Robot.m_VertexList[3].y - 5 / 900;
+		Bullet_B3.m_VertexList[4].x = Robot.m_VertexList[4].x - 30 / 900; Bullet_B3.m_VertexList[4].y = Robot.m_VertexList[4].y - 5 / 900;
+		Bullet_B3.m_VertexList[5].x = Robot.m_VertexList[5].x - 30 / 900; Bullet_B3.m_VertexList[5].y = Robot.m_VertexList[5].y - 5 / 900;
+		Bullet_B3.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B3.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
+	}
+
+	if (Robot.Bullet_B3_Bullet_Go == true && Robot.Face_Direction == 2)
+	{
+		Robot.Bullet_B3_Bullet_Go = false; Bullet_B3.Face_Direction2_flag = true;
+		Bullet_B3.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B3.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
+		Bullet_B3.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B3.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
+		Bullet_B3.m_VertexList[2].x = Robot.m_VertexList[2].x + 30 / 900; Bullet_B3.m_VertexList[2].y = Robot.m_VertexList[2].y + 5 / 900;
+		Bullet_B3.m_VertexList[3].x = Robot.m_VertexList[3].x + 30 / 900; Bullet_B3.m_VertexList[3].y = Robot.m_VertexList[3].y + 5 / 900;
+		Bullet_B3.m_VertexList[4].x = Robot.m_VertexList[4].x + 30 / 900; Bullet_B3.m_VertexList[4].y = Robot.m_VertexList[4].y + 5 / 900;
+		Bullet_B3.m_VertexList[5].x = Robot.m_VertexList[5].x + 30 / 900; Bullet_B3.m_VertexList[5].y = Robot.m_VertexList[5].y + 5 / 900;
+		Bullet_B3.m_VertexList[6].x = Robot.m_VertexList[6].x + 30 / 900; Bullet_B3.m_VertexList[6].y = Robot.m_VertexList[6].y + 5 / 900;
+	}
+
+	if (Bullet_B3.Face_Direction1_flag == true)
+	{
+		Bullet_B3.frame_B_L();
+		Bullet_B3.MoveX(-g_fSecPerFrame * 1.0f);
+	}
+
+	if (Bullet_B3.Face_Direction2_flag == true)
+	{
+		Bullet_B3.frame_B_R();
+		Bullet_B3.MoveX(g_fSecPerFrame*1.0f);
+	}
+	memcpy(N_VertexList_B3, Bullet_B3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+	for (int iV = 0; iV < 6; iV++)
+	{
+		D3DVECTOR vertex;
+		vertex.x = Bullet_B3.m_VertexList[iV].x; vertex.y = Bullet_B3.m_VertexList[iV].y;
+		vertex.x -= Bullet_B3.m_vCenter.x;		 vertex.y -= Bullet_B3.m_vCenter.y;
+		float S = sinf(fAngle);	float C = cosf(fAngle);
+		N_VertexList_B3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B3[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList_B3[iV].x += Bullet_B3.m_vCenter.x;		 N_VertexList_B3[iV].y += Bullet_B3.m_vCenter.y;
+	}
+	g_pContext->UpdateSubresource(Bullet_B3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B3, 0, 0);
+
+	//////////////     총알의 움직임   /////////////////////////////////////
+
+	if (Robot.Bullet_B4_Bullet_Go == true && Robot.Face_Direction == 1)
+	{
+		Robot.Bullet_B4_Bullet_Go = false; Bullet_B4.Face_Direction1_flag = true;
+		Bullet_B4.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B4.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
+		Bullet_B4.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B4.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
+		Bullet_B4.m_VertexList[2].x = Robot.m_VertexList[2].x - 30 / 900; Bullet_B4.m_VertexList[2].y = Robot.m_VertexList[2].y - 5 / 900;
+		Bullet_B4.m_VertexList[3].x = Robot.m_VertexList[3].x - 30 / 900; Bullet_B4.m_VertexList[3].y = Robot.m_VertexList[3].y - 5 / 900;
+		Bullet_B4.m_VertexList[4].x = Robot.m_VertexList[4].x - 30 / 900; Bullet_B4.m_VertexList[4].y = Robot.m_VertexList[4].y - 5 / 900;
+		Bullet_B4.m_VertexList[5].x = Robot.m_VertexList[5].x - 30 / 900; Bullet_B4.m_VertexList[5].y = Robot.m_VertexList[5].y - 5 / 900;
+		Bullet_B4.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B4.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
+	}
+
+	if (Robot.Bullet_B4_Bullet_Go == true && Robot.Face_Direction == 2)
+	{
+		Robot.Bullet_B4_Bullet_Go = false; Bullet_B4.Face_Direction2_flag = true;
+		Bullet_B4.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B4.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
+		Bullet_B4.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B4.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
+		Bullet_B4.m_VertexList[2].x = Robot.m_VertexList[2].x + 30 / 900; Bullet_B4.m_VertexList[2].y = Robot.m_VertexList[2].y + 5 / 900;
+		Bullet_B4.m_VertexList[3].x = Robot.m_VertexList[3].x + 30 / 900; Bullet_B4.m_VertexList[3].y = Robot.m_VertexList[3].y + 5 / 900;
+		Bullet_B4.m_VertexList[4].x = Robot.m_VertexList[4].x + 30 / 900; Bullet_B4.m_VertexList[4].y = Robot.m_VertexList[4].y + 5 / 900;
+		Bullet_B4.m_VertexList[5].x = Robot.m_VertexList[5].x + 30 / 900; Bullet_B4.m_VertexList[5].y = Robot.m_VertexList[5].y + 5 / 900;
+		Bullet_B4.m_VertexList[6].x = Robot.m_VertexList[6].x + 30 / 900; Bullet_B4.m_VertexList[6].y = Robot.m_VertexList[6].y + 5 / 900;
+	}
+
+	if (Bullet_B4.Face_Direction1_flag == true)
+	{
+		Bullet_B4.frame_B_L();
+		Bullet_B4.MoveX(-g_fSecPerFrame * 1.0f);
+	}
+
+	if (Bullet_B4.Face_Direction2_flag == true)
+	{
+		Bullet_B4.frame_B_R();
+		Bullet_B4.MoveX(g_fSecPerFrame*1.0f);
+	}
+
+	memcpy(N_VertexList_B4, Bullet_B4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+	for (int iV = 0; iV < 6; iV++)
+	{
+		D3DVECTOR vertex;
+		vertex.x = Bullet_B4.m_VertexList[iV].x; vertex.y = Bullet_B4.m_VertexList[iV].y;
+		vertex.x -= Bullet_B4.m_vCenter.x;		 vertex.y -= Bullet_B4.m_vCenter.y;
+		float S = sinf(fAngle);	float C = cosf(fAngle);
+		N_VertexList_B4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B4[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList_B4[iV].x += Bullet_B4.m_vCenter.x;		 N_VertexList_B4[iV].y += Bullet_B4.m_vCenter.y;
+	}
+	g_pContext->UpdateSubresource(Bullet_B4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B4, 0, 0);
+
 }
+
+
+
 
 
 
