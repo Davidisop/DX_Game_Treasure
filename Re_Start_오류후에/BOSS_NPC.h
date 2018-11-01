@@ -43,7 +43,7 @@ public:
 
 		if (state == Detection__1_GUN)
 		{
-
+			
 			if (shoot_flag == 1) { Bullet_B1_Bullet_Go = true; shot(); }  // 씬에서 이거와 연동되서, 고스트 나간다.
 			if (shoot_flag == 2) { Bullet_B2_Bullet_Go = true; shot(); }
 			if (shoot_flag == 3) { Bullet_B3_Bullet_Go = true; shot(); }
@@ -337,22 +337,7 @@ void BOSS_NPC::right_walk()
 
 
 void BOSS_NPC::shot()
-//{
-//	static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-//	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-//	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
-//
-//
-//	if (Gun_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		Gun_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-//
-//	if (Gun_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		Gun_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-
+{
 
 	if (Face_Direction == 2)
 
