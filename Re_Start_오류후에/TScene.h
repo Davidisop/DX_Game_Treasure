@@ -3104,6 +3104,7 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
+
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
 		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
@@ -3151,9 +3152,11 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
+
+
+
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-
 		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
 		Bullet_C4.m_VertexList[1].x = 1.5f; Bullet_C4.m_VertexList[1].y = 1.5f;
 		Bullet_C4.m_VertexList[2].x = 1.5f; Bullet_C4.m_VertexList[2].y = 1.5f;
@@ -3197,8 +3200,8 @@ void TSceneGame::Bullet_Ghost_collision()
 
 		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
 		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
-
 	}
+
 
 
 
