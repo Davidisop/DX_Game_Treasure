@@ -23,7 +23,7 @@ public:
 	int   state;
 	float detection_time;
 
-	bool  shoot_flag;
+	int   shoot_flag;
 	bool  Bullet_B1_Bullet_Go;
 	bool  Bullet_B2_Bullet_Go;
 	bool  Bullet_B3_Bullet_Go;
@@ -36,32 +36,36 @@ public:
 
 public:
 
+
 	void ATTACK_SHOT()   // 이걸 씬에 빼놔야.
-	{		
+
+	{
+
 		if (state == Detection__1_GUN)
 		{
-			shoot_flag = true;   	
-			if (shoot_flag == true)
-			{
-				static int count_K = 1;
-				if (count_K == 1) { Bullet_B1_Bullet_Go = true; Gun_step = 1; shot(); }  // 씬에서 이거와 연동되서, 고스트 나간다.
-				if (count_K == 2) { Bullet_B2_Bullet_Go = true; Gun_step = 1; shot(); }
-				if (count_K == 3) { Bullet_B3_Bullet_Go = true; Gun_step = 1; shot(); }
-				if (count_K == 4) { Bullet_B4_Bullet_Go = true; Gun_step = 1; shot(); }
-				count_K++;
-			}
-			shoot_flag = false;
-			state = Detection__0;
 
-		/*	detection_time += g_fSecPerFrame;
-			if (detection_time >1.0F)
-			{	
-				
-				detection_time = 0.0f;
-			}*/
+			if (shoot_flag == 1) { Bullet_B1_Bullet_Go = true; shot(); }  // 씬에서 이거와 연동되서, 고스트 나간다.
+			if (shoot_flag == 2) { Bullet_B2_Bullet_Go = true; shot(); }
+			if (shoot_flag == 3) { Bullet_B3_Bullet_Go = true; shot(); }
+			if (shoot_flag == 4) { Bullet_B4_Bullet_Go = true; shot(); }
+			
+
+			static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
+			static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
+			DWORD dw_AutoUpdate_CurTime = GetTickCount(); //현재 시간을 얻습니다.
+
+			if (Gun_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+			{	Gun_step = 2; dw_NoUpdate_Time = dw_AutoUpdate_CurTime; dwEventTime = 200;	}
+
+			if (Gun_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+			   {Gun_step = 3; dw_NoUpdate_Time = dw_AutoUpdate_CurTime; dwEventTime = 200; }
+
 
 		}
+
 	}
+
+
 
 	void ATTACK_SWORD()  // 이걸 씬에 빼놔야.
 	{	
@@ -119,6 +123,8 @@ public:
 			if (abs(distance_direction_between_hero_boss) >= 150)
 			{
 				state = Detection__1_GUN;
+				shoot_flag++;
+				Gun_step = 1;
 				ATTACK_SHOT();
 			}
 		}
@@ -331,21 +337,21 @@ void BOSS_NPC::right_walk()
 
 
 void BOSS_NPC::shot()
-{
-	static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
-
-
-	if (Gun_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	{
-		Gun_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	}
-
-	if (Gun_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	{
-		Gun_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	}
+//{
+//	static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
+//	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
+//	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
+//
+//
+//	if (Gun_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+//	{
+//		Gun_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+//	}
+//
+//	if (Gun_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+//	{
+//		Gun_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+//	}
 
 
 	if (Face_Direction == 2)
@@ -384,7 +390,7 @@ void BOSS_NPC::shot()
 			{
 				in_Texture_SetData_sprite_factors(sprite_ptr, 20, 3, 702, 1843);
 				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
-				Gun_step = 0;
+				Gun_step = 0; state = Detection__0;
 			}break;
 
 
@@ -423,8 +429,8 @@ void BOSS_NPC::shot()
 			{
 				in_Texture_SetData_sprite_factors(sprite_ptr, 21, 3, 702, 1843);
 				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
-				Gun_step = 0;
-			}break;
+				Gun_step = 0; state = Detection__0;
+			}break; 
 
 		}
 
@@ -437,42 +443,6 @@ void BOSS_NPC::shot()
 
 void BOSS_NPC::sword()
 {
-//
-//	static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-//	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-//	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
-//
-//
-//	if (sword_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		sword_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-//
-//	if (sword_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		sword_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-//
-//	if (sword_step == 3 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		sword_step = 4;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-//
-//	if (sword_step == 4 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		sword_step = 5;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-//
-//	if (sword_step == 5 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		sword_step = 6;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-//
-//	if (sword_step == 6 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-//	{
-//		sword_step = 7;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-//	}
-
 
 
 	if (Face_Direction == 2)

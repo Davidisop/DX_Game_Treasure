@@ -477,7 +477,7 @@ void TSceneGame::Boss_FSM()
 
 	Robot.basic_frame();
 	Robot.ATTACK_SWORD(); Robot.sword();
-	Robot.ATTACK_SHOT();
+	Robot.ATTACK_SHOT(); Robot.shot();
 
 	///////////////////////
 	
