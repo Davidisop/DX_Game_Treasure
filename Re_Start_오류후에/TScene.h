@@ -164,7 +164,12 @@ public:
 	Box                     m_Actor_life_bar; SimpleVertex        N_VertexList_HLB[6];
 
 	Boy_NPC					m_Boy_NPC;    SimpleVertex        N_VertexList_2[6];
-	BOSS_NPC				Robot;		  SimpleVertex        N_VertexList_R[6];
+
+	BOSS_NPC				Robot;		    SimpleVertex        N_VertexList_R[6];
+	Box                     Robot_life_bar; SimpleVertex        N_VertexList_RLB[6];
+
+
+
 
 	Box                    UI_Bullet_1;
 	Box                    UI_Bullet_2;
@@ -220,6 +225,8 @@ public:
 	void Bullet_Box_Alive_collision();
 	void Bullet_Boss_collision();
 
+	
+	void Boss_life_bar_move();
 	void Boss_FSM();
 	void Boss_Keyboard_Action();
 	void Boss_bullets_keyboard_basic_Action();
@@ -2149,6 +2156,18 @@ void TSceneGame::Bullet_Boss_collision()
 
 }
 
+
+void TSceneGame::Boss_life_bar_move()
+{
+
+
+
+
+
+
+
+}
+
 void TSceneGame::Bullet_Box_Alive_collision()
 {
 
@@ -2156,8 +2175,6 @@ void TSceneGame::Bullet_Box_Alive_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Box_Alive.m_rtCollision))
 	{	
-		
-
 		Bullet_F1.m_VertexList[0].x = 2.4f; Bullet_F1.m_VertexList[0].y = 2.4f;
 		Bullet_F1.m_VertexList[1].x = 2.4f; Bullet_F1.m_VertexList[1].y = 2.4f;
 		Bullet_F1.m_VertexList[2].x = 2.4f; Bullet_F1.m_VertexList[2].y = 2.4f;
