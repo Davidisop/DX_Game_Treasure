@@ -55,8 +55,6 @@ public:
 
 bool	TSceneLobby::Init()
 {
-
-
 	Lobby_Background.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
 	Lobby_Background.m_for_update_Rects.x = g_rtClient.right;	Lobby_Background.m_for_update_Rects.y = g_rtClient.bottom;
 	Lobby_Background.Window_SetData_factors(0, 0, Lobby_Background.m_for_update_Rects.x, Lobby_Background.m_for_update_Rects.y);
@@ -151,13 +149,20 @@ public:
 	bool Hero_Col_G4;
 
 
+	int  Robot_live_or_dead;
+	bool Robot_Col_F1; bool Robot_Col_C1;
+	bool Robot_Col_F2; bool Robot_Col_C2;
+	bool Robot_Col_F3; bool Robot_Col_C3;
+	bool Robot_Col_F4; bool Robot_Col_C4;
 
 
 
 public:
 
 	Background				Game_Background;
-	THeroObj				m_Actor;      SimpleVertex        N_VertexList[6];
+	THeroObj				m_Actor;          SimpleVertex        N_VertexList[6];
+	Box                     m_Actor_life_bar; SimpleVertex        N_VertexList_HLB[6];
+
 	Boy_NPC					m_Boy_NPC;    SimpleVertex        N_VertexList_2[6];
 	BOSS_NPC				Robot;		  SimpleVertex        N_VertexList_R[6];
 
@@ -213,6 +218,7 @@ public:
 	void Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
 	void Bullet_Ghost_collision();
 	void Bullet_Box_Alive_collision();
+	void Bullet_Boss_collision();
 
 	void Boss_FSM();
 	void Boss_Keyboard_Action();
@@ -221,7 +227,6 @@ public:
 
 public:
 	TSceneGame();
-
 	virtual ~TSceneGame();
 };
 
@@ -402,6 +407,14 @@ bool   TSceneGame::Init()
 	m_Actor.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
 
 
+
+	m_Actor_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+	m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	m_Actor_life_bar.Window_SetData_factors(300, 10, m_Actor_life_bar.m_for_update_Rects.x, m_Actor_life_bar.m_for_update_Rects.y);
+	m_Actor_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Full_Bar.png");
+
+
+
 	Robot.m_for_update_Rects.x = g_rtClient.right / 9;    Robot.m_for_update_Rects.y = g_rtClient.bottom / 7;
 	Robot.in_Texture_SetData_factors(213, 1230, 65, 120, 702, 1843);
 	Robot.Window_SetData_factors(700, 350, Robot.m_for_update_Rects.x, Robot.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
@@ -415,13 +428,15 @@ bool   TSceneGame::Init()
 bool    TSceneGame::Frame()
 {
 	Hero_Actions();
-	//Boy_NPC_Action();
+	Boy_NPC_Action();
 	Hero_bullets_basic_Action();
+	Hero_Ghost_collision();
 	//Boss_FSM();
 	Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
 	Bullet_Box_Alive_collision();
 	Bullet_Ghost_collision();
-	
+	Bullet_Boss_collision();
+
 
 //  *Boss_Keyboard_Action();
 //	Boss_bullets_keyboard_basic_Action();*/
@@ -455,7 +470,7 @@ bool   TSceneGame::Render()
 	Box_Alive.Render(g_pContext);
 	Treasure_Box.Render(g_pContext);
 	Box_Alive_life_bar.Render(g_pContext);
-
+	m_Actor_life_bar.Render(g_pContext);
 
 	Bullet_Ghost_1.Render(g_pContext);
 	Bullet_Ghost_2.Render(g_pContext);
@@ -494,11 +509,17 @@ TSceneGame::TSceneGame()
 	 box_alive_Col_F4 = false;   box_alive_Col_C4 = false; 
 	 box_alive_live_or_dead = false;
 
-	 int  Hero_live_or_dead = 0;
-	 bool Hero_Col_G1 = false;
-	 bool Hero_Col_G2 = false;
-	 bool Hero_Col_G3 = false;
-	 bool Hero_Col_G4 = false;
+	  Hero_live_or_dead = 0;
+	  Hero_Col_G1 = false;
+	  Hero_Col_G2 = false;
+	  Hero_Col_G3 = false;
+	  Hero_Col_G4 = false;
+
+	  Robot_live_or_dead = 0;
+	  Robot_Col_F1 = false; Robot_Col_C1 = false; 
+	  Robot_Col_F2 = false; Robot_Col_C2 = false; 
+	  Robot_Col_F3 = false; Robot_Col_C3 = false; 
+	  Robot_Col_F4 = false; Robot_Col_C4 = false; 
 
 }
 
@@ -872,9 +893,6 @@ void TSceneGame::Hero_Actions()
 
 	if (I_Input.Key('I'))
 	{		m_Actor.slide_step = 1;}
-
-
-
 	if (m_Actor.Face_Direction == 2 && m_Actor.slide_step != 0)
 	{	if (m_Actor.slide_step == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }     if (m_Actor.slide_step == 2) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
 		if (m_Actor.slide_step == 3) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }        if (m_Actor.slide_step == 4) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
@@ -884,6 +902,12 @@ void TSceneGame::Hero_Actions()
 	{	if (m_Actor.slide_step == 1) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }     if (m_Actor.slide_step == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
 		if (m_Actor.slide_step == 3) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }     if (m_Actor.slide_step == 4) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
 		if (m_Actor.slide_step == 5) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }	}
+
+
+
+
+	memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
+
 
 	if (I_Input.Key('O'))
 	{	m_Actor.sword_step = 1;}
@@ -920,22 +944,43 @@ void TSceneGame::Hero_Actions()
 void TSceneGame::Boy_NPC_Action()
 {
 
-
-	if (I_Input.Key(VK_LBUTTON))
+	if (I_Input.Key('E'))
 	{
-		m_Boy_NPC.m_bDead = true;
-		m_Boy_NPC.m_Collision_number = 1;
+		m_Boy_NPC.walk_step = 1;
+		m_Boy_NPC.hurt_step = 0;
+		m_Boy_NPC.dead_step = 0;
 	}
 
-	if (m_Boy_NPC.m_bDead == true)
-	{
-		m_Boy_NPC.frame();
-		if (m_Boy_NPC.walk_step == 0) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+	
+		m_Boy_NPC.walk();
+		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-	}
+		if (m_Boy_NPC.walk_step == 10) {m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+	
+
+	if (I_Input.Key('Q'))
+	{	m_Boy_NPC.dead_step = 1;
+		m_Boy_NPC.walk_step = 0;
+		m_Boy_NPC.hurt_step = 0;
+	
+	}m_Boy_NPC.dead();
+
+
+
+	if (I_Input.Key('R'))
+	{
+		m_Boy_NPC.hurt_step = 1;
+		m_Boy_NPC.walk_step = 0;
+		m_Boy_NPC.dead_step = 0;
+
+	}m_Boy_NPC.hurt();
+
+
+
+
 	memcpy(N_VertexList_2, m_Boy_NPC.m_VertexList, sizeof(SimpleVertex) * 6);
 
 	for (int iV = 0; iV < 6; iV++)
@@ -1794,6 +1839,316 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
 }
 
+
+void TSceneGame::Bullet_Boss_collision()
+{
+	//////////////// Bullet_F1과  Robot 충돌
+
+	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Robot.m_rtCollision))
+	{
+
+		Bullet_F1.m_VertexList[0].x = 2.4f; Bullet_F1.m_VertexList[0].y = 2.4f;
+		Bullet_F1.m_VertexList[1].x = 2.4f; Bullet_F1.m_VertexList[1].y = 2.4f;
+		Bullet_F1.m_VertexList[2].x = 2.4f; Bullet_F1.m_VertexList[2].y = 2.4f;
+		Bullet_F1.m_VertexList[3].x = 2.4f; Bullet_F1.m_VertexList[3].y = 2.4f;
+		Bullet_F1.m_VertexList[4].x = 2.4f; Bullet_F1.m_VertexList[4].y = 2.4f;
+		Bullet_F1.m_VertexList[5].x = 2.4f; Bullet_F1.m_VertexList[5].y = 2.4f;
+		Bullet_F1.m_VertexList[6].x = 2.4f; Bullet_F1.m_VertexList[6].y = 2.4f;
+
+		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
+			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
+
+		Robot_Col_F1 = true;
+	}
+
+
+	//////////////// Bullet_F2과  Robot 충돌
+
+	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Robot.m_rtCollision))
+	{
+		Bullet_F2.m_VertexList[0].x = 2.5f; Bullet_F2.m_VertexList[0].y = 2.5f;
+		Bullet_F2.m_VertexList[1].x = 2.5f; Bullet_F2.m_VertexList[1].y = 2.5f;
+		Bullet_F2.m_VertexList[2].x = 2.5f; Bullet_F2.m_VertexList[2].y = 2.5f;
+		Bullet_F2.m_VertexList[3].x = 2.5f; Bullet_F2.m_VertexList[3].y = 2.5f;
+		Bullet_F2.m_VertexList[4].x = 2.5f; Bullet_F2.m_VertexList[4].y = 2.5f;
+		Bullet_F2.m_VertexList[5].x = 2.5f; Bullet_F2.m_VertexList[5].y = 2.5f;
+		Bullet_F2.m_VertexList[6].x = 2.5f; Bullet_F2.m_VertexList[6].y = 2.5f;
+
+		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
+			vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
+
+		Robot_Col_F2 = true;
+	}
+
+	/////////////////////////////////// Bullet_F3과  Robot 충돌
+
+	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Robot.m_rtCollision))
+	{
+		Bullet_F3.m_VertexList[0].x = 2.5f; Bullet_F3.m_VertexList[0].y = 2.5f;
+		Bullet_F3.m_VertexList[1].x = 2.5f; Bullet_F3.m_VertexList[1].y = 2.5f;
+		Bullet_F3.m_VertexList[2].x = 2.5f; Bullet_F3.m_VertexList[2].y = 2.5f;
+		Bullet_F3.m_VertexList[3].x = 2.5f; Bullet_F3.m_VertexList[3].y = 2.5f;
+		Bullet_F3.m_VertexList[4].x = 2.5f; Bullet_F3.m_VertexList[4].y = 2.5f;
+		Bullet_F3.m_VertexList[5].x = 2.5f; Bullet_F3.m_VertexList[5].y = 2.5f;
+		Bullet_F3.m_VertexList[6].x = 2.5f; Bullet_F3.m_VertexList[6].y = 2.5f;
+
+		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
+			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
+
+		Robot_Col_F3 = true;
+	}
+
+
+	/////////////////////////////////// Bullet_F4과  Robot 충돌
+
+	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Robot.m_rtCollision))
+	{
+		Bullet_F4.m_VertexList[0].x = 2.5f; Bullet_F4.m_VertexList[0].y = 2.5f;
+		Bullet_F4.m_VertexList[1].x = 2.5f; Bullet_F4.m_VertexList[1].y = 2.5f;
+		Bullet_F4.m_VertexList[2].x = 2.5f; Bullet_F4.m_VertexList[2].y = 2.5f;
+		Bullet_F4.m_VertexList[3].x = 2.5f; Bullet_F4.m_VertexList[3].y = 2.5f;
+		Bullet_F4.m_VertexList[4].x = 2.5f; Bullet_F4.m_VertexList[4].y = 2.5f;
+		Bullet_F4.m_VertexList[5].x = 2.5f; Bullet_F4.m_VertexList[5].y = 2.5f;
+		Bullet_F4.m_VertexList[6].x = 2.5f; Bullet_F4.m_VertexList[6].y = 2.5f;
+
+		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
+			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
+
+		Robot_Col_F4 = true;
+
+	}
+
+
+	//////////////// Bullet_C1과  Robot 충돌
+
+	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Robot.m_rtCollision))
+	{
+
+		Bullet_C1.m_VertexList[0].x = 2.4f; Bullet_C1.m_VertexList[0].y = 2.4f;
+		Bullet_C1.m_VertexList[1].x = 2.4f; Bullet_C1.m_VertexList[1].y = 2.4f;
+		Bullet_C1.m_VertexList[2].x = 2.4f; Bullet_C1.m_VertexList[2].y = 2.4f;
+		Bullet_C1.m_VertexList[3].x = 2.4f; Bullet_C1.m_VertexList[3].y = 2.4f;
+		Bullet_C1.m_VertexList[4].x = 2.4f; Bullet_C1.m_VertexList[4].y = 2.4f;
+		Bullet_C1.m_VertexList[5].x = 2.4f; Bullet_C1.m_VertexList[5].y = 2.4f;
+		Bullet_C1.m_VertexList[6].x = 2.4f; Bullet_C1.m_VertexList[6].y = 2.4f;
+
+		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
+			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
+
+		Robot_Col_C1 = true;
+	}
+
+
+	//////////////// Bullet_C2과  Robot 충돌
+
+	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Robot.m_rtCollision))
+	{
+		Bullet_C2.m_VertexList[0].x = 2.5f; Bullet_C2.m_VertexList[0].y = 2.5f;
+		Bullet_C2.m_VertexList[1].x = 2.5f; Bullet_C2.m_VertexList[1].y = 2.5f;
+		Bullet_C2.m_VertexList[2].x = 2.5f; Bullet_C2.m_VertexList[2].y = 2.5f;
+		Bullet_C2.m_VertexList[3].x = 2.5f; Bullet_C2.m_VertexList[3].y = 2.5f;
+		Bullet_C2.m_VertexList[4].x = 2.5f; Bullet_C2.m_VertexList[4].y = 2.5f;
+		Bullet_C2.m_VertexList[5].x = 2.5f; Bullet_C2.m_VertexList[5].y = 2.5f;
+		Bullet_C2.m_VertexList[6].x = 2.5f; Bullet_C2.m_VertexList[6].y = 2.5f;
+
+		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
+			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
+
+		Robot_Col_C2 = true;
+	}
+
+
+
+	/////////////////////////////////// Bullet_C3과  Robot 충돌
+
+	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Robot.m_rtCollision))
+	{
+		Bullet_C3.m_VertexList[0].x = 2.5f; Bullet_C3.m_VertexList[0].y = 2.5f;
+		Bullet_C3.m_VertexList[1].x = 2.5f; Bullet_C3.m_VertexList[1].y = 2.5f;
+		Bullet_C3.m_VertexList[2].x = 2.5f; Bullet_C3.m_VertexList[2].y = 2.5f;
+		Bullet_C3.m_VertexList[3].x = 2.5f; Bullet_C3.m_VertexList[3].y = 2.5f;
+		Bullet_C3.m_VertexList[4].x = 2.5f; Bullet_C3.m_VertexList[4].y = 2.5f;
+		Bullet_C3.m_VertexList[5].x = 2.5f; Bullet_C3.m_VertexList[5].y = 2.5f;
+		Bullet_C3.m_VertexList[6].x = 2.5f; Bullet_C3.m_VertexList[6].y = 2.5f;
+
+		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
+			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
+
+		Robot_Col_C3 = true;
+	}
+
+
+
+	/////////////////////////////////// Bullet_C4과  Robot 충돌
+
+	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Robot.m_rtCollision))
+	{
+		Bullet_C4.m_VertexList[0].x = 2.5f; Bullet_C4.m_VertexList[0].y = 2.5f;
+		Bullet_C4.m_VertexList[1].x = 2.5f; Bullet_C4.m_VertexList[1].y = 2.5f;
+		Bullet_C4.m_VertexList[2].x = 2.5f; Bullet_C4.m_VertexList[2].y = 2.5f;
+		Bullet_C4.m_VertexList[3].x = 2.5f; Bullet_C4.m_VertexList[3].y = 2.5f;
+		Bullet_C4.m_VertexList[4].x = 2.5f; Bullet_C4.m_VertexList[4].y = 2.5f;
+		Bullet_C4.m_VertexList[5].x = 2.5f; Bullet_C4.m_VertexList[5].y = 2.5f;
+		Bullet_C4.m_VertexList[6].x = 2.5f; Bullet_C4.m_VertexList[6].y = 2.5f;
+
+		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
+			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
+
+		Robot_Col_C4 = true;
+	}
+
+
+
+	//if (
+	//	box_alive_Col_F1 + box_alive_Col_C1 +
+	//	box_alive_Col_F2 + box_alive_Col_C2 +
+	//	box_alive_Col_F3 + box_alive_Col_C3 +
+	//	box_alive_Col_F4 + box_alive_Col_C4
+	//	== 1)
+	//{
+	//	Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 90, 10, 90, 10);
+	//	Box_Alive_life_bar.m_for_update_Rects.x = g_rtClient.right / 10;    Box_Alive_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 25;
+	//	Box_Alive_life_bar.Window_SetData_factors(780, 265, Box_Alive_life_bar.m_for_update_Rects.x, Box_Alive_life_bar.m_for_update_Rects.y);
+	//	Box_Alive_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/half_bar.bmp");
+	//}
+
+
+	if (
+		Robot_Col_F1 + Robot_Col_C1 +
+		Robot_Col_F2 + Robot_Col_C2 +
+		Robot_Col_F3 + Robot_Col_C3 +
+		Robot_Col_F4 + Robot_Col_C4
+		== 2)
+	{
+		Robot.m_VertexList[0].x = 3.5f; Robot.m_VertexList[0].y = 3.5f;
+		Robot.m_VertexList[1].x = 3.5f; Robot.m_VertexList[1].y = 3.5f;
+		Robot.m_VertexList[2].x = 3.5f; Robot.m_VertexList[2].y = 3.5f;
+		Robot.m_VertexList[3].x = 3.5f; Robot.m_VertexList[3].y = 3.5f;
+		Robot.m_VertexList[4].x = 3.5f; Robot.m_VertexList[4].y = 3.5f;
+		Robot.m_VertexList[5].x = 3.5f; Robot.m_VertexList[5].y = 3.5f;
+		Robot.m_VertexList[6].x = 3.5f; Robot.m_VertexList[6].y = 3.5f;
+
+		memcpy(N_VertexList_BA, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Robot.m_VertexList[iV].x; vertex.y = Robot.m_VertexList[iV].y;
+			vertex.x -= Robot.m_vCenter.x;		 vertex.y -= Robot.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_BA[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_BA[iV].x += Robot.m_vCenter.x;		 N_VertexList_BA[iV].y += Robot.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Robot.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_R, 0, 0);
+	}
+
+/*
+
+		Box_Alive_life_bar.m_VertexList[0].x = 3.6f; Box_Alive_life_bar.m_VertexList[0].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[1].x = 3.6f; Box_Alive_life_bar.m_VertexList[1].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[2].x = 3.6f; Box_Alive_life_bar.m_VertexList[2].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[3].x = 3.6f; Box_Alive_life_bar.m_VertexList[3].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[4].x = 3.6f; Box_Alive_life_bar.m_VertexList[4].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[5].x = 3.6f; Box_Alive_life_bar.m_VertexList[5].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[6].x = 3.6f; Box_Alive_life_bar.m_VertexList[6].y = 3.6f;
+
+		memcpy(N_VertexList_BA_LB, Box_Alive_life_bar.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Box_Alive_life_bar.m_VertexList[iV].x; vertex.y = Box_Alive_life_bar.m_VertexList[iV].y;
+			vertex.x -= Box_Alive_life_bar.m_vCenter.x;		 vertex.y -= Box_Alive_life_bar.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_BA_LB[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA_LB[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_BA_LB[iV].x += Box_Alive_life_bar.m_vCenter.x;		 N_VertexList_BA_LB[iV].y += Box_Alive_life_bar.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Box_Alive_life_bar.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA_LB, 0, 0);*/
+	
+
+
+}
+
 void TSceneGame::Bullet_Box_Alive_collision()
 {
 
@@ -2117,9 +2472,9 @@ void TSceneGame::Bullet_Box_Alive_collision()
 
 void TSceneGame::Hero_Ghost_collision()
 {
+
+
 	 
-
-
 	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{	Hero_Col_G1 = true;	}
 
@@ -2132,15 +2487,71 @@ void TSceneGame::Hero_Ghost_collision()
 	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_4.m_rtCollision))
 	{	Hero_Col_G4 = true;}
 	
+	////////////////////////////////////////////
 
-	if (Hero_live_or_dead == 4)
+
+	Hero_live_or_dead = Hero_Col_G1 + Hero_Col_G2 + Hero_Col_G3 + Hero_Col_G4;
+	
+
+
+	//////////////////////////////////////////////////
+	
+	if (Hero_live_or_dead == 1)
 	{
-
+		m_Actor_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+		m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+		m_Actor_life_bar.Window_SetData_factors(300, 10, m_Actor_life_bar.m_for_update_Rects.x, m_Actor_life_bar.m_for_update_Rects.y);
+		m_Actor_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/3_4_Bar.png");
 	}
 
 
 
+	/////////////////////////////////////////////////////////
+
+	if (Hero_live_or_dead == 2)
+	{
+		m_Actor_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+		m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+		m_Actor_life_bar.Window_SetData_factors(300, 10, m_Actor_life_bar.m_for_update_Rects.x, m_Actor_life_bar.m_for_update_Rects.y);
+		m_Actor_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/half_bar.bmp");
+	}
+
+	///////////////////////////////////////////////////////
+
+	if (Hero_live_or_dead == 3)
+	{
+		m_Actor_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+		m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+		m_Actor_life_bar.Window_SetData_factors(300, 10, m_Actor_life_bar.m_for_update_Rects.x, m_Actor_life_bar.m_for_update_Rects.y);
+		m_Actor_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/1_4_Bar.png");
+	}
+
+
+	/////////////////////////////////////////////////
+
+	if (Hero_live_or_dead == 4)
+	{
+		m_Actor_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+		m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+		m_Actor_life_bar.Window_SetData_factors(300, 10, m_Actor_life_bar.m_for_update_Rects.x, m_Actor_life_bar.m_for_update_Rects.y);
+		m_Actor_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/0_Bar.png");
+	}
+	///////////////////////////////////////////////////
+
+		memcpy(N_VertexList_HLB, m_Actor_life_bar.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{	D3DVECTOR vertex;
+			vertex.x = m_Actor_life_bar.m_VertexList[iV].x; vertex.y = m_Actor_life_bar.m_VertexList[iV].y;
+			vertex.x -= m_Actor_life_bar.m_vCenter.x;		 vertex.y -= m_Actor_life_bar.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_HLB[iV].x = vertex.x * C + vertex.y * S; N_VertexList_HLB[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_HLB[iV].x += m_Actor_life_bar.m_vCenter.x;		 N_VertexList_HLB[iV].y += m_Actor_life_bar.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(m_Actor_life_bar.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_HLB, 0, 0);
+
 }
+
 
 
 
