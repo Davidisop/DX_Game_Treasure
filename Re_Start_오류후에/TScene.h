@@ -155,8 +155,6 @@ public:
 	bool Robot_Col_F3; bool Robot_Col_C3;
 	bool Robot_Col_F4; bool Robot_Col_C4;
 
-
-
 public:
 
 	Background				Game_Background;
@@ -428,6 +426,14 @@ bool   TSceneGame::Init()
 	Robot.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
 
 
+
+	Robot_life_bar.in_Texture_SetData_factors(0, 0, 90, 10, 90, 10);
+	Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 10;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 25;
+	Robot_life_bar.Window_SetData_factors(850, 265, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
+	Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/full_bar.bmp");
+
+
+
 	return true;
 
 };
@@ -486,7 +492,9 @@ bool   TSceneGame::Render()
 
 	m_Boy_NPC.Render(g_pContext);
 	m_Actor.Render(g_pContext);
+
 	Robot.Render(g_pContext);
+	Robot_life_bar.Render(g_pContext);
 
 	Bullet_B1.Render(g_pContext);
 	Bullet_B2.Render(g_pContext);
