@@ -429,7 +429,7 @@ bool   TSceneGame::Init()
 
 	Robot_life_bar.in_Texture_SetData_factors(0, 0, 90, 10, 90, 10);
 	Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 10;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 25;
-	Robot_life_bar.Window_SetData_factors(850, 265, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
+	Robot_life_bar.Window_SetData_factors(850, 230, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
 	Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/full_bar.bmp");
 
 
@@ -440,15 +440,22 @@ bool   TSceneGame::Init()
 
 bool    TSceneGame::Frame()
 {
+	
 	Hero_Actions();
 	Boy_NPC_Action();
 	Hero_bullets_basic_Action();
 	Hero_Ghost_collision();
+	
 	//Boss_FSM();
+
 	Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
-	Bullet_Box_Alive_collision();
+	
+	//Bullet_Box_Alive_collision();
+
 	Bullet_Ghost_collision();
 	Bullet_Boss_collision();
+	Boss_life_bar_move();
+	
 
 
 //  *Boss_Keyboard_Action();
@@ -482,6 +489,7 @@ bool   TSceneGame::Render()
 
 	Box_Alive.Render(g_pContext);
 	Treasure_Box.Render(g_pContext);
+
 	Box_Alive_life_bar.Render(g_pContext);
 	m_Actor_life_bar.Render(g_pContext);
 
@@ -2168,10 +2176,32 @@ void TSceneGame::Bullet_Boss_collision()
 void TSceneGame::Boss_life_bar_move()
 {
 
+//	BOSS_NPC				Robot;		    SimpleVertex        N_VertexList_R[6];
+//	Box                     Robot_life_bar; SimpleVertex        N_VertexList_RLB[6];
+		
+	Robot_life_bar.m_VertexList[0].x = Robot.m_VertexList[0].x; Robot_life_bar.m_VertexList[0].y = Robot.m_VertexList[0].y - 200 / 900;
+	Robot_life_bar.m_VertexList[1].x = Robot.m_VertexList[1].x; Robot_life_bar.m_VertexList[1].y = Robot.m_VertexList[1].y - 200 / 900;
+	Robot_life_bar.m_VertexList[2].x = Robot.m_VertexList[2].x; Robot_life_bar.m_VertexList[2].y = Robot.m_VertexList[2].y - 200 / 900;
+	Robot_life_bar.m_VertexList[3].x = Robot.m_VertexList[3].x; Robot_life_bar.m_VertexList[3].y = Robot.m_VertexList[3].y - 200 / 900;
+	Robot_life_bar.m_VertexList[4].x = Robot.m_VertexList[4].x; Robot_life_bar.m_VertexList[4].y = Robot.m_VertexList[4].y - 200 / 900;
+	Robot_life_bar.m_VertexList[5].x = Robot.m_VertexList[5].x; Robot_life_bar.m_VertexList[5].y = Robot.m_VertexList[5].y - 200 / 900;
+	Robot_life_bar.m_VertexList[6].x = Robot.m_VertexList[6].x; Robot_life_bar.m_VertexList[6].y = Robot.m_VertexList[6].y - 200 / 900;
+	
+	memcpy(N_VertexList_RLB, Robot_life_bar.m_VertexList, sizeof(SimpleVertex) * 6);
 
-
-
-
+	for (int iV = 0; iV < 6; iV++)
+	{
+		D3DVECTOR vertex;
+		vertex.x = Robot_life_bar.m_VertexList[iV].x;
+		vertex.y = Robot_life_bar.m_VertexList[iV].y;
+		vertex.x -= Robot_life_bar.m_vCenter.x;		
+		vertex.y -= Robot_life_bar.m_vCenter.y;
+		
+		float S = sinf(fAngle);	float C = cosf(fAngle);
+		N_VertexList_RLB[iV].x = vertex.x * C + vertex.y * S; N_VertexList_RLB[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList_RLB[iV].x += Robot_life_bar.m_vCenter.x;		 N_VertexList_RLB[iV].y += Robot_life_bar.m_vCenter.y;
+	}
+	g_pContext->UpdateSubresource(Robot_life_bar.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_RLB, 0, 0);
 
 
 }
