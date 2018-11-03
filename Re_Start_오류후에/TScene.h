@@ -2091,7 +2091,7 @@ void TSceneGame::Boss_Canon_hero_collision()
 	}
 
 
-	//////////////// Bullet_B2과  Robot 충돌
+	//////////////// Bullet_B2과  m_Actor 충돌
 
 	if (TCollision::SphereInSphere(Bullet_B2.m_rtCollision, m_Actor.m_rtCollision))
 	{
@@ -2121,7 +2121,7 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	
 
-	/////////////////////////////////// Bullet_B3과  Robot 충돌
+	/////////////////////////////////// Bullet_B3과  m_Actor 충돌
 
 	if (TCollision::SphereInSphere(Bullet_B3.m_rtCollision, m_Actor.m_rtCollision))
 	{
@@ -2150,7 +2150,7 @@ void TSceneGame::Boss_Canon_hero_collision()
 	}
 
 
-	/////////////////////////////////// Bullet_B4과  Robot 충돌
+	/////////////////////////////////// Bullet_B4과  m_Actor 충돌
 
 	if (TCollision::SphereInSphere(Bullet_B4.m_rtCollision, m_Actor.m_rtCollision))
 	{
