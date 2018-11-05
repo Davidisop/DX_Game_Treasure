@@ -227,12 +227,12 @@ public:
 	Gun_Bullet            Bullet_B4; SimpleVertex        N_VertexList_B4[6];
 
 
-	Box_Alive			Box_Alive;			 SimpleVertex        N_VertexList_BA[6];
-	Box					Box_Alive_life_bar;; SimpleVertex        N_VertexList_BA_LB[6];
+	Box_Alive			Box_Alive;			SimpleVertex        N_VertexList_BA[6];
+	Box					Box_Alive_life_bar; SimpleVertex        N_VertexList_BA_LB[6];
 
 	Box					Treasure_Box;
 
-	Box					Message;
+	Box					Message;      SimpleVertex     N_VertexList_M[6];
 
 
 public:
@@ -240,7 +240,6 @@ public:
 	bool    Frame();
 	bool    Render();
 	bool    Release();
-
 public:
 
 	void Hero_Actions();
@@ -266,8 +265,7 @@ public:
 	void Boss_sword_hero_collsion();
 
 	void Boss_FSM();
-	void Boss_Keyboard_Action();
-	void Boss_bullets_keyboard_basic_Action();
+
 	void Boss_collision_final_decision();
 
 public:
@@ -506,10 +504,7 @@ bool    TSceneGame::Frame()
 		 Boss_Canon_hero_collision();
 		 Boss_sword_hero_collsion();
 	 
-
-   /*Boss_Keyboard_Action();
-	Boss_bullets_keyboard_basic_Action();*/
-
+		 
 
 	Bullet_Boss_collision();
 	Herosword_boss_collision();
@@ -647,7 +642,7 @@ void TSceneGame::Boss_FSM()
 		Robot.ATTACK_SWORD(); Robot.sword();
 		Robot.ATTACK_SHOT(); Robot.shot();
 	}
-	///////////////////////
+	
 	
 	
 	if(Robot.state == Detection__0)
@@ -694,9 +689,6 @@ void TSceneGame::Boss_FSM()
 	g_pContext->UpdateSubresource(Robot.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_R, 0, 0);
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	if (Robot.Bullet_B1_Bullet_Go == true) 
 
 
 	//////////////     총알의 움직임   /////////////////////////////////////
@@ -908,71 +900,6 @@ void TSceneGame::Boss_FSM()
 
 
 
-
-void TSceneGame::Boss_Keyboard_Action()
-{
-	if (I_Input.Key('A'))
-	{
-		Robot.Face_Direction = 1;
-		Robot.left_walk();
-		memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
-		Robot.MoveX(-g_fSecPerFrame * 0.3f);
-	}
-
-	if (I_Input.Key('D'))
-	{
-		Robot.Face_Direction = 2;
-		Robot.right_walk();
-		memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
-		Robot.MoveX(g_fSecPerFrame*0.3f);
-	}
-
-	if (I_Input.Key('W'))
-	{
-		Robot.MoveY(g_fSecPerFrame * 0.3f);
-	}
-
-	if (I_Input.Key('S'))
-	{
-		Robot.MoveY(-g_fSecPerFrame * 0.3f);
-	}
-
-	if (I_Input.Key('O'))
-	{
-		Robot.sword_step = 1;
-	}Robot.sword();
-
-
-
-	if (I_Input.Key('K') || I_Input.Key('L'))
-	{
-		Robot.Gun_step = 1;
-
-		if (Robot.Face_Direction == 1) { Robot.MoveX(g_fSecPerFrame*0.3f); }
-		else if (Robot.Face_Direction == 2) { Robot.MoveX(-g_fSecPerFrame * 0.3f); }
-	}
-	Robot.shot();     memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
-
-
-	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
-		vertex.x = Robot.m_VertexList[iV].x;
-		vertex.y = Robot.m_VertexList[iV].y;
-
-		vertex.x -= Robot.m_vCenter.x;
-		vertex.y -= Robot.m_vCenter.y;
-		float S = sinf(fAngle);
-		float C = cosf(fAngle);
-		N_VertexList[iV].x = vertex.x * C + vertex.y * S;
-		N_VertexList[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList[iV].x += Robot.m_vCenter.x;
-		N_VertexList[iV].y += Robot.m_vCenter.y;
-	}
-	g_pContext->UpdateSubresource(Robot.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_R, 0, 0);
-
-}
-
 void TSceneGame::Hero_Actions()
 {
 	if (I_Input.Key('A'))
@@ -1049,21 +976,17 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 
 
 	if (m_Boy_NPC.initial_start == true)
-	{
-		m_Boy_NPC.initial_start = false;
-		m_Boy_NPC.walk_step = 1;
-	}
+	{	m_Boy_NPC.initial_start = false;
+		m_Boy_NPC.walk_step = 1;}
 
 	if (m_Boy_NPC.walk_step == 1)
-	{
-		m_Boy_NPC.walk_flag = true;
-	}
+	{	m_Boy_NPC.walk_flag = true;}
 
 
-	//////////////////////////////////////// 200m 가서 일어나는 일
+	//////////////////////////////////////// 150m 가서 일어나는 일
 
 
-	if (m_Boy_NPC.m_pos.x > 200)
+	if (m_Boy_NPC.m_pos.x > 150)
 	{
 		m_Boy_NPC.initial_start = false;
 		m_Boy_NPC.walk_step = 0;
@@ -1071,22 +994,50 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 		m_Boy_NPC.hurt_flag = true;
 	}
 	
-	if (m_Boy_NPC.hurt_flag == 1)
+	if (m_Boy_NPC.hurt_flag == 1 && m_Boy_NPC.Enter_hurt_flag == false)
 	{
 		m_Boy_NPC.hurt();
+		
 
 		Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
 		Message.m_for_update_Rects.x = g_rtClient.right / 2;    Message.m_for_update_Rects.y = g_rtClient.bottom / 2;
 		Message.Window_SetData_factors(200, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
 		Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Board_UI.png");
-
 	}
+
+	//ENTER KEY 누르면, 원래대로 서고, 해야 한다.
+	
+	
+		if (I_Input.Key(VK_RETURN))
+		{
+			m_Boy_NPC.Enter_hurt_flag = true;
+
+
+			m_Boy_NPC.hurt_flag = 0;
+
+			m_Boy_NPC.initial_start = false;
+			m_Boy_NPC.walk_step = 0;
+			m_Boy_NPC.walk_flag = false;
+			m_Boy_NPC.hurt_flag = false;
+
+			m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;    m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 6;
+			m_Boy_NPC.in_Texture_SetData_factors(568, 327, 76, 61, 757, 1274);
+			m_Boy_NPC.Window_SetData_factors(100, 330, m_Boy_NPC.m_for_update_Rects.x, m_Boy_NPC.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+			m_Boy_NPC.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
+
+			
+			Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
+			Message.m_for_update_Rects.x = g_rtClient.right / 100;    Message.m_for_update_Rects.y = g_rtClient.bottom / 100;
+			Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
+			Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Board_UI.png");
+		}
 
 
 	/////////////////////////////////////////////////////////////////////////   기본 걷는 동작
 
 	if (m_Boy_NPC.walk_flag == true)
 	{
+
 		m_Boy_NPC.walk();
 		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
@@ -1097,42 +1048,6 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 	}
 
 
-
-
-/*
-
-	if (I_Input.Key('E') )
-	{
-		m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;    m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 9;
-		m_Boy_NPC.in_Texture_SetData_factors(91, 2, 57, 92, 753, 532);
-		m_Boy_NPC.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/AD_Boy.png");
-
-		m_Boy_NPC.walk_step = 1;
-		m_Boy_NPC.hurt_step = 0;
-		m_Boy_NPC.dead_step = 0;
-		m_Boy_NPC.walk_flag = true;
-	}*/
-
-
-/*
-
-
-	if (I_Input.Key('Q'))
-	{	m_Boy_NPC.dead_step = 1;
-		m_Boy_NPC.walk_step = 0;
-		m_Boy_NPC.hurt_step = 0;
-		m_Boy_NPC.walk_flag = false;
-	}m_Boy_NPC.dead();
-*/
-
-
-	//if (I_Input.Key('R'))
-	//{
-	//	m_Boy_NPC.hurt_step = 1;
-	//	m_Boy_NPC.walk_step = 0;
-	//	m_Boy_NPC.dead_step = 0;
-	//	m_Boy_NPC.walk_flag = false;
-	//}m_Boy_NPC.hurt();
 
 
 
@@ -1155,213 +1070,6 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 	}
 	g_pContext->UpdateSubresource(m_Boy_NPC.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_2, 0, 0);
 
-}
-
-void  TSceneGame::Boss_bullets_keyboard_basic_Action()
-{
-	if (I_Input.Key('K') == KEY_PUSH || I_Input.Key('L') == KEY_PUSH)
-	{
-		static int count_J = 1;
-		if (count_J == 1) { Bullet_B1.Bullet_Go = true; }
-		if (count_J == 2) { Bullet_B2.Bullet_Go = true; }
-		if (count_J == 3) { Bullet_B3.Bullet_Go = true; }
-		if (count_J == 4) { Bullet_B4.Bullet_Go = true; }
-		count_J++;
-	}
-
-	//////////////     총알의 움직임   /////////////////////////////////////
-
-	if (Bullet_B1.Bullet_Go == true && Robot.Face_Direction == 1)
-	{
-		Bullet_B1.Bullet_Go = false; Bullet_B1.Face_Direction1_flag = true;
-		Bullet_B1.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B1.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
-		Bullet_B1.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B1.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
-		Bullet_B1.m_VertexList[2].x = Robot.m_VertexList[2].x - 30 / 900; Bullet_B1.m_VertexList[2].y = Robot.m_VertexList[2].y - 5 / 900;
-		Bullet_B1.m_VertexList[3].x = Robot.m_VertexList[3].x - 30 / 900; Bullet_B1.m_VertexList[3].y = Robot.m_VertexList[3].y - 5 / 900;
-		Bullet_B1.m_VertexList[4].x = Robot.m_VertexList[4].x - 30 / 900; Bullet_B1.m_VertexList[4].y = Robot.m_VertexList[4].y - 5 / 900;
-		Bullet_B1.m_VertexList[5].x = Robot.m_VertexList[5].x - 30 / 900; Bullet_B1.m_VertexList[5].y = Robot.m_VertexList[5].y - 5 / 900;
-		Bullet_B1.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B1.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
-	}
-
-	if (Bullet_B1.Bullet_Go == true && Robot.Face_Direction == 2)
-	{
-		Bullet_B1.Bullet_Go = false; Bullet_B1.Face_Direction2_flag = true;
-		Bullet_B1.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B1.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
-		Bullet_B1.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B1.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
-		Bullet_B1.m_VertexList[2].x = Robot.m_VertexList[2].x + 30 / 900; Bullet_B1.m_VertexList[2].y = Robot.m_VertexList[2].y + 5 / 900;
-		Bullet_B1.m_VertexList[3].x = Robot.m_VertexList[3].x + 30 / 900; Bullet_B1.m_VertexList[3].y = Robot.m_VertexList[3].y + 5 / 900;
-		Bullet_B1.m_VertexList[4].x = Robot.m_VertexList[4].x + 30 / 900; Bullet_B1.m_VertexList[4].y = Robot.m_VertexList[4].y + 5 / 900;
-		Bullet_B1.m_VertexList[5].x = Robot.m_VertexList[5].x + 30 / 900; Bullet_B1.m_VertexList[5].y = Robot.m_VertexList[5].y + 5 / 900;
-		Bullet_B1.m_VertexList[6].x = Robot.m_VertexList[6].x + 30 / 900; Bullet_B1.m_VertexList[6].y = Robot.m_VertexList[6].y + 5 / 900;
-	}
-
-	if (Bullet_B1.Face_Direction1_flag == true)
-	{	Bullet_B1.frame_B_L();
-		Bullet_B1.MoveX(-g_fSecPerFrame * 1.0f);}
-
-	if (Bullet_B1.Face_Direction2_flag == true)
-	{	Bullet_B1.frame_B_R();
-		Bullet_B1.MoveX(g_fSecPerFrame*1.0f);}
-
-	memcpy(N_VertexList_B1, Bullet_B1.m_VertexList, sizeof(SimpleVertex) * 6);
-	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
-		vertex.x = Bullet_B1.m_VertexList[iV].x; vertex.y = Bullet_B1.m_VertexList[iV].y;
-		vertex.x -= Bullet_B1.m_vCenter.x;		 vertex.y -= Bullet_B1.m_vCenter.y;
-		float S = sinf(fAngle);	float C = cosf(fAngle);
-		N_VertexList_B1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B1[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList_B1[iV].x += Bullet_B1.m_vCenter.x;		 N_VertexList_B1[iV].y += Bullet_B1.m_vCenter.y;
-	}
-	g_pContext->UpdateSubresource(Bullet_B1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B1, 0, 0);
-
-	//////////////     총알의 움직임   /////////////////////////////////////
-
-	if (Bullet_B2.Bullet_Go == true && Robot.Face_Direction == 1)
-	{
-		Bullet_B2.Bullet_Go = false; Bullet_B2.Face_Direction1_flag = true;
-		Bullet_B2.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B2.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
-		Bullet_B2.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B2.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
-		Bullet_B2.m_VertexList[2].x = Robot.m_VertexList[2].x - 30 / 900; Bullet_B2.m_VertexList[2].y = Robot.m_VertexList[2].y - 5 / 900;
-		Bullet_B2.m_VertexList[3].x = Robot.m_VertexList[3].x - 30 / 900; Bullet_B2.m_VertexList[3].y = Robot.m_VertexList[3].y - 5 / 900;
-		Bullet_B2.m_VertexList[4].x = Robot.m_VertexList[4].x - 30 / 900; Bullet_B2.m_VertexList[4].y = Robot.m_VertexList[4].y - 5 / 900;
-		Bullet_B2.m_VertexList[5].x = Robot.m_VertexList[5].x - 30 / 900; Bullet_B2.m_VertexList[5].y = Robot.m_VertexList[5].y - 5 / 900;
-		Bullet_B2.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B2.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
-	}
-
-	if (Bullet_B2.Bullet_Go == true && Robot.Face_Direction == 2)
-	{
-		Bullet_B2.Bullet_Go = false; Bullet_B2.Face_Direction2_flag = true;
-		Bullet_B2.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B2.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
-		Bullet_B2.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B2.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
-		Bullet_B2.m_VertexList[2].x = Robot.m_VertexList[2].x + 30 / 900; Bullet_B2.m_VertexList[2].y = Robot.m_VertexList[2].y + 5 / 900;
-		Bullet_B2.m_VertexList[3].x = Robot.m_VertexList[3].x + 30 / 900; Bullet_B2.m_VertexList[3].y = Robot.m_VertexList[3].y + 5 / 900;
-		Bullet_B2.m_VertexList[4].x = Robot.m_VertexList[4].x + 30 / 900; Bullet_B2.m_VertexList[4].y = Robot.m_VertexList[4].y + 5 / 900;
-		Bullet_B2.m_VertexList[5].x = Robot.m_VertexList[5].x + 30 / 900; Bullet_B2.m_VertexList[5].y = Robot.m_VertexList[5].y + 5 / 900;
-		Bullet_B2.m_VertexList[6].x = Robot.m_VertexList[6].x + 30 / 900; Bullet_B2.m_VertexList[6].y = Robot.m_VertexList[6].y + 5 / 900;
-	}
-
-	if (Bullet_B2.Face_Direction1_flag == true)
-	{	Bullet_B2.frame_B_L();
-		Bullet_B2.MoveX(-g_fSecPerFrame * 1.0f);}
-
-	if (Bullet_B2.Face_Direction2_flag == true)
-	{	Bullet_B2.frame_B_R();
-		Bullet_B2.MoveX(g_fSecPerFrame*1.0f);}
-
-	memcpy(N_VertexList_B2, Bullet_B2.m_VertexList, sizeof(SimpleVertex) * 6);
-	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
-		vertex.x = Bullet_B2.m_VertexList[iV].x; vertex.y = Bullet_B2.m_VertexList[iV].y;
-		vertex.x -= Bullet_B2.m_vCenter.x;		 vertex.y -= Bullet_B2.m_vCenter.y;
-		float S = sinf(fAngle);	float C = cosf(fAngle);
-		N_VertexList_B2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B2[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList_B2[iV].x += Bullet_B2.m_vCenter.x;		 N_VertexList_B2[iV].y += Bullet_B2.m_vCenter.y;
-	}
-	g_pContext->UpdateSubresource(Bullet_B2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B2, 0, 0);
-
-	//////////////     총알의 움직임   /////////////////////////////////////
-
-
-	if (Bullet_B3.Bullet_Go == true && Robot.Face_Direction == 1)
-	{
-		Bullet_B3.Bullet_Go = false; Bullet_B3.Face_Direction1_flag = true;
-		Bullet_B3.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B3.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
-		Bullet_B3.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B3.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
-		Bullet_B3.m_VertexList[2].x = Robot.m_VertexList[2].x - 30 / 900; Bullet_B3.m_VertexList[2].y = Robot.m_VertexList[2].y - 5 / 900;
-		Bullet_B3.m_VertexList[3].x = Robot.m_VertexList[3].x - 30 / 900; Bullet_B3.m_VertexList[3].y = Robot.m_VertexList[3].y - 5 / 900;
-		Bullet_B3.m_VertexList[4].x = Robot.m_VertexList[4].x - 30 / 900; Bullet_B3.m_VertexList[4].y = Robot.m_VertexList[4].y - 5 / 900;
-		Bullet_B3.m_VertexList[5].x = Robot.m_VertexList[5].x - 30 / 900; Bullet_B3.m_VertexList[5].y = Robot.m_VertexList[5].y - 5 / 900;
-		Bullet_B3.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B3.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
-	}
-
-	if (Bullet_B3.Bullet_Go == true && Robot.Face_Direction == 2)
-	{
-		Bullet_B3.Bullet_Go = false; Bullet_B3.Face_Direction2_flag = true;
-		Bullet_B3.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B3.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
-		Bullet_B3.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B3.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
-		Bullet_B3.m_VertexList[2].x = Robot.m_VertexList[2].x + 30 / 900; Bullet_B3.m_VertexList[2].y = Robot.m_VertexList[2].y + 5 / 900;
-		Bullet_B3.m_VertexList[3].x = Robot.m_VertexList[3].x + 30 / 900; Bullet_B3.m_VertexList[3].y = Robot.m_VertexList[3].y + 5 / 900;
-		Bullet_B3.m_VertexList[4].x = Robot.m_VertexList[4].x + 30 / 900; Bullet_B3.m_VertexList[4].y = Robot.m_VertexList[4].y + 5 / 900;
-		Bullet_B3.m_VertexList[5].x = Robot.m_VertexList[5].x + 30 / 900; Bullet_B3.m_VertexList[5].y = Robot.m_VertexList[5].y + 5 / 900;
-		Bullet_B3.m_VertexList[6].x = Robot.m_VertexList[6].x + 30 / 900; Bullet_B3.m_VertexList[6].y = Robot.m_VertexList[6].y + 5 / 900;
-	}
-
-	if (Bullet_B3.Face_Direction1_flag == true)
-	{
-		Bullet_B3.frame_B_L();
-		Bullet_B3.MoveX(-g_fSecPerFrame * 1.0f);
-	}
-
-	if (Bullet_B3.Face_Direction2_flag == true)
-	{
-		Bullet_B3.frame_B_R();
-		Bullet_B3.MoveX(g_fSecPerFrame*1.0f);
-	}
-	memcpy(N_VertexList_B3, Bullet_B3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
-		vertex.x = Bullet_B3.m_VertexList[iV].x; vertex.y = Bullet_B3.m_VertexList[iV].y;
-		vertex.x -= Bullet_B3.m_vCenter.x;		 vertex.y -= Bullet_B3.m_vCenter.y;
-		float S = sinf(fAngle);	float C = cosf(fAngle);
-		N_VertexList_B3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B3[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList_B3[iV].x += Bullet_B3.m_vCenter.x;		 N_VertexList_B3[iV].y += Bullet_B3.m_vCenter.y;
-	}
-	g_pContext->UpdateSubresource(Bullet_B3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B3, 0, 0);
-
-	//////////////     총알의 움직임   /////////////////////////////////////
-
-	if (Bullet_B4.Bullet_Go == true && Robot.Face_Direction == 1)
-	{
-		Bullet_B4.Bullet_Go = false; Bullet_B4.Face_Direction1_flag = true;
-		Bullet_B4.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B4.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
-		Bullet_B4.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B4.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
-		Bullet_B4.m_VertexList[2].x = Robot.m_VertexList[2].x - 30 / 900; Bullet_B4.m_VertexList[2].y = Robot.m_VertexList[2].y - 5 / 900;
-		Bullet_B4.m_VertexList[3].x = Robot.m_VertexList[3].x - 30 / 900; Bullet_B4.m_VertexList[3].y = Robot.m_VertexList[3].y - 5 / 900;
-		Bullet_B4.m_VertexList[4].x = Robot.m_VertexList[4].x - 30 / 900; Bullet_B4.m_VertexList[4].y = Robot.m_VertexList[4].y - 5 / 900;
-		Bullet_B4.m_VertexList[5].x = Robot.m_VertexList[5].x - 30 / 900; Bullet_B4.m_VertexList[5].y = Robot.m_VertexList[5].y - 5 / 900;
-		Bullet_B4.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B4.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
-	}
-
-	if (Bullet_B4.Bullet_Go == true && Robot.Face_Direction == 2)
-	{
-		Bullet_B4.Bullet_Go = false; Bullet_B4.Face_Direction2_flag = true;
-		Bullet_B4.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B4.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
-		Bullet_B4.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B4.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
-		Bullet_B4.m_VertexList[2].x = Robot.m_VertexList[2].x + 30 / 900; Bullet_B4.m_VertexList[2].y = Robot.m_VertexList[2].y + 5 / 900;
-		Bullet_B4.m_VertexList[3].x = Robot.m_VertexList[3].x + 30 / 900; Bullet_B4.m_VertexList[3].y = Robot.m_VertexList[3].y + 5 / 900;
-		Bullet_B4.m_VertexList[4].x = Robot.m_VertexList[4].x + 30 / 900; Bullet_B4.m_VertexList[4].y = Robot.m_VertexList[4].y + 5 / 900;
-		Bullet_B4.m_VertexList[5].x = Robot.m_VertexList[5].x + 30 / 900; Bullet_B4.m_VertexList[5].y = Robot.m_VertexList[5].y + 5 / 900;
-		Bullet_B4.m_VertexList[6].x = Robot.m_VertexList[6].x + 30 / 900; Bullet_B4.m_VertexList[6].y = Robot.m_VertexList[6].y + 5 / 900;
-	}
-
-	if (Bullet_B4.Face_Direction1_flag == true)
-	{
-		Bullet_B4.frame_B_L();
-		Bullet_B4.MoveX(-g_fSecPerFrame * 1.0f);
-	}
-
-	if (Bullet_B4.Face_Direction2_flag == true)
-	{
-		Bullet_B4.frame_B_R();
-		Bullet_B4.MoveX(g_fSecPerFrame*1.0f);
-	}
-
-	memcpy(N_VertexList_B4, Bullet_B4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
-		vertex.x = Bullet_B4.m_VertexList[iV].x; vertex.y = Bullet_B4.m_VertexList[iV].y;
-		vertex.x -= Bullet_B4.m_vCenter.x;		 vertex.y -= Bullet_B4.m_vCenter.y;
-		float S = sinf(fAngle);	float C = cosf(fAngle);
-		N_VertexList_B4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B4[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList_B4[iV].x += Bullet_B4.m_vCenter.x;		 N_VertexList_B4[iV].y += Bullet_B4.m_vCenter.y;
-	}
-	g_pContext->UpdateSubresource(Bullet_B4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B4, 0, 0);
 }
 
 
@@ -2194,10 +1902,6 @@ void TSceneGame::Boy_NPC_collision_from_hero_attack()
 
 		NPC_Col_C4 = true;
 	}
-
-
-
-
 }
 
 
@@ -2281,13 +1985,13 @@ void TSceneGame::Boss_Canon_hero_collision()
 	if (TCollision::SphereInSphere(Bullet_B1.m_rtCollision, m_Actor.m_rtCollision))
 	{
 
-		Bullet_B1.m_VertexList[0].x = 2.4f; Bullet_B1.m_VertexList[0].y = 2.4f;
-		Bullet_B1.m_VertexList[1].x = 2.4f; Bullet_B1.m_VertexList[1].y = 2.4f;
-		Bullet_B1.m_VertexList[2].x = 2.4f; Bullet_B1.m_VertexList[2].y = 2.4f;
-		Bullet_B1.m_VertexList[3].x = 2.4f; Bullet_B1.m_VertexList[3].y = 2.4f;
-		Bullet_B1.m_VertexList[4].x = 2.4f; Bullet_B1.m_VertexList[4].y = 2.4f;
-		Bullet_B1.m_VertexList[5].x = 2.4f; Bullet_B1.m_VertexList[5].y = 2.4f;
-		Bullet_B1.m_VertexList[6].x = 2.4f; Bullet_B1.m_VertexList[6].y = 2.4f;
+		Bullet_B1.m_VertexList[0].x = 2.321f; Bullet_B1.m_VertexList[0].y = 2.321f;
+		Bullet_B1.m_VertexList[1].x = 2.321f; Bullet_B1.m_VertexList[1].y = 2.321f;
+		Bullet_B1.m_VertexList[2].x = 2.321f; Bullet_B1.m_VertexList[2].y = 2.321f;
+		Bullet_B1.m_VertexList[3].x = 2.321f; Bullet_B1.m_VertexList[3].y = 2.321f;
+		Bullet_B1.m_VertexList[4].x = 2.321f; Bullet_B1.m_VertexList[4].y = 2.321f;
+		Bullet_B1.m_VertexList[5].x = 2.321f; Bullet_B1.m_VertexList[5].y = 2.321f;
+		Bullet_B1.m_VertexList[6].x = 2.321f; Bullet_B1.m_VertexList[6].y = 2.321f;
 
 		memcpy(N_VertexList_B1, Bullet_B1.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2310,13 +2014,13 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	if (TCollision::SphereInSphere(Bullet_B2.m_rtCollision, m_Actor.m_rtCollision))
 	{
-		Bullet_B2.m_VertexList[0].x = 2.5f; Bullet_B2.m_VertexList[0].y = 2.5f;
-		Bullet_B2.m_VertexList[1].x = 2.5f; Bullet_B2.m_VertexList[1].y = 2.5f;
-		Bullet_B2.m_VertexList[2].x = 2.5f; Bullet_B2.m_VertexList[2].y = 2.5f;
-		Bullet_B2.m_VertexList[3].x = 2.5f; Bullet_B2.m_VertexList[3].y = 2.5f;
-		Bullet_B2.m_VertexList[4].x = 2.5f; Bullet_B2.m_VertexList[4].y = 2.5f;
-		Bullet_B2.m_VertexList[5].x = 2.5f; Bullet_B2.m_VertexList[5].y = 2.5f;
-		Bullet_B2.m_VertexList[6].x = 2.5f; Bullet_B2.m_VertexList[6].y = 2.5f;
+		Bullet_B2.m_VertexList[0].x = 5.521f; Bullet_B2.m_VertexList[0].y = 5.521f;
+		Bullet_B2.m_VertexList[1].x = 5.521f; Bullet_B2.m_VertexList[1].y = 5.521f;
+		Bullet_B2.m_VertexList[2].x = 5.521f; Bullet_B2.m_VertexList[2].y = 5.521f;
+		Bullet_B2.m_VertexList[3].x = 5.521f; Bullet_B2.m_VertexList[3].y = 5.521f;
+		Bullet_B2.m_VertexList[4].x = 5.521f; Bullet_B2.m_VertexList[4].y = 5.521f;
+		Bullet_B2.m_VertexList[5].x = 5.521f; Bullet_B2.m_VertexList[5].y = 5.521f;
+		Bullet_B2.m_VertexList[6].x = 5.521f; Bullet_B2.m_VertexList[6].y = 5.521f;
 
 		memcpy(N_VertexList_B2, Bullet_B2.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2340,13 +2044,13 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	if (TCollision::SphereInSphere(Bullet_B3.m_rtCollision, m_Actor.m_rtCollision))
 	{
-		Bullet_B3.m_VertexList[0].x = 2.5f; Bullet_B3.m_VertexList[0].y = 2.5f;
-		Bullet_B3.m_VertexList[1].x = 2.5f; Bullet_B3.m_VertexList[1].y = 2.5f;
-		Bullet_B3.m_VertexList[2].x = 2.5f; Bullet_B3.m_VertexList[2].y = 2.5f;
-		Bullet_B3.m_VertexList[3].x = 2.5f; Bullet_B3.m_VertexList[3].y = 2.5f;
-		Bullet_B3.m_VertexList[4].x = 2.5f; Bullet_B3.m_VertexList[4].y = 2.5f;
-		Bullet_B3.m_VertexList[5].x = 2.5f; Bullet_B3.m_VertexList[5].y = 2.5f;
-		Bullet_B3.m_VertexList[6].x = 2.5f; Bullet_B3.m_VertexList[6].y = 2.5f;
+		Bullet_B3.m_VertexList[0].x = 4.555f; Bullet_B3.m_VertexList[0].y = 4.555f;
+		Bullet_B3.m_VertexList[1].x = 4.555f; Bullet_B3.m_VertexList[1].y = 4.555f;
+		Bullet_B3.m_VertexList[2].x = 4.555f; Bullet_B3.m_VertexList[2].y = 4.555f;
+		Bullet_B3.m_VertexList[3].x = 4.555f; Bullet_B3.m_VertexList[3].y = 4.555f;
+		Bullet_B3.m_VertexList[4].x = 4.555f; Bullet_B3.m_VertexList[4].y = 4.555f;
+		Bullet_B3.m_VertexList[5].x = 4.555f; Bullet_B3.m_VertexList[5].y = 4.555f;
+		Bullet_B3.m_VertexList[6].x = 4.555f; Bullet_B3.m_VertexList[6].y = 4.555f;
 
 		memcpy(N_VertexList_B3, Bullet_B3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2369,13 +2073,13 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	if (TCollision::SphereInSphere(Bullet_B4.m_rtCollision, m_Actor.m_rtCollision))
 	{
-		Bullet_B4.m_VertexList[0].x = 2.5f; Bullet_B4.m_VertexList[0].y = 2.5f;
-		Bullet_B4.m_VertexList[1].x = 2.5f; Bullet_B4.m_VertexList[1].y = 2.5f;
-		Bullet_B4.m_VertexList[2].x = 2.5f; Bullet_B4.m_VertexList[2].y = 2.5f;
-		Bullet_B4.m_VertexList[3].x = 2.5f; Bullet_B4.m_VertexList[3].y = 2.5f;
-		Bullet_B4.m_VertexList[4].x = 2.5f; Bullet_B4.m_VertexList[4].y = 2.5f;
-		Bullet_B4.m_VertexList[5].x = 2.5f; Bullet_B4.m_VertexList[5].y = 2.5f;
-		Bullet_B4.m_VertexList[6].x = 2.5f; Bullet_B4.m_VertexList[6].y = 2.5f;
+		Bullet_B4.m_VertexList[0].x = 6.523f; Bullet_B4.m_VertexList[0].y = 6.523f;
+		Bullet_B4.m_VertexList[1].x = 6.523f; Bullet_B4.m_VertexList[1].y = 6.523f;
+		Bullet_B4.m_VertexList[2].x = 6.523f; Bullet_B4.m_VertexList[2].y = 6.523f;
+		Bullet_B4.m_VertexList[3].x = 6.523f; Bullet_B4.m_VertexList[3].y = 6.523f;
+		Bullet_B4.m_VertexList[4].x = 6.523f; Bullet_B4.m_VertexList[4].y = 6.523f;
+		Bullet_B4.m_VertexList[5].x = 6.523f; Bullet_B4.m_VertexList[5].y = 6.523f;
+		Bullet_B4.m_VertexList[6].x = 6.523f; Bullet_B4.m_VertexList[6].y = 6.523f;
 
 		memcpy(N_VertexList_B4, Bullet_B4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2407,13 +2111,13 @@ void TSceneGame::Bullet_Boss_collision()
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Robot.m_rtCollision))
 	{
 
-		Bullet_F1.m_VertexList[0].x = 2.4f; Bullet_F1.m_VertexList[0].y = 2.4f;
-		Bullet_F1.m_VertexList[1].x = 2.4f; Bullet_F1.m_VertexList[1].y = 2.4f;
-		Bullet_F1.m_VertexList[2].x = 2.4f; Bullet_F1.m_VertexList[2].y = 2.4f;
-		Bullet_F1.m_VertexList[3].x = 2.4f; Bullet_F1.m_VertexList[3].y = 2.4f;
-		Bullet_F1.m_VertexList[4].x = 2.4f; Bullet_F1.m_VertexList[4].y = 2.4f;
-		Bullet_F1.m_VertexList[5].x = 2.4f; Bullet_F1.m_VertexList[5].y = 2.4f;
-		Bullet_F1.m_VertexList[6].x = 2.4f; Bullet_F1.m_VertexList[6].y = 2.4f;
+		Bullet_F1.m_VertexList[0].x = 2.542f; Bullet_F1.m_VertexList[0].y = 2.542f;
+		Bullet_F1.m_VertexList[1].x = 2.542f; Bullet_F1.m_VertexList[1].y = 2.542f;
+		Bullet_F1.m_VertexList[2].x = 2.542f; Bullet_F1.m_VertexList[2].y = 2.542f;
+		Bullet_F1.m_VertexList[3].x = 2.542f; Bullet_F1.m_VertexList[3].y = 2.542f;
+		Bullet_F1.m_VertexList[4].x = 2.542f; Bullet_F1.m_VertexList[4].y = 2.542f;
+		Bullet_F1.m_VertexList[5].x = 2.542f; Bullet_F1.m_VertexList[5].y = 2.542f;
+		Bullet_F1.m_VertexList[6].x = 2.542f; Bullet_F1.m_VertexList[6].y = 2.542f;
 
 		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2436,13 +2140,13 @@ void TSceneGame::Bullet_Boss_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_F2.m_VertexList[0].x = 2.5f; Bullet_F2.m_VertexList[0].y = 2.5f;
-		Bullet_F2.m_VertexList[1].x = 2.5f; Bullet_F2.m_VertexList[1].y = 2.5f;
-		Bullet_F2.m_VertexList[2].x = 2.5f; Bullet_F2.m_VertexList[2].y = 2.5f;
-		Bullet_F2.m_VertexList[3].x = 2.5f; Bullet_F2.m_VertexList[3].y = 2.5f;
-		Bullet_F2.m_VertexList[4].x = 2.5f; Bullet_F2.m_VertexList[4].y = 2.5f;
-		Bullet_F2.m_VertexList[5].x = 2.5f; Bullet_F2.m_VertexList[5].y = 2.5f;
-		Bullet_F2.m_VertexList[6].x = 2.5f; Bullet_F2.m_VertexList[6].y = 2.5f;
+		Bullet_F2.m_VertexList[0].x = 2.723f; Bullet_F2.m_VertexList[0].y = 2.723f;
+		Bullet_F2.m_VertexList[1].x = 2.723f; Bullet_F2.m_VertexList[1].y = 2.723f;
+		Bullet_F2.m_VertexList[2].x = 2.723f; Bullet_F2.m_VertexList[2].y = 2.723f;
+		Bullet_F2.m_VertexList[3].x = 2.723f; Bullet_F2.m_VertexList[3].y = 2.723f;
+		Bullet_F2.m_VertexList[4].x = 2.723f; Bullet_F2.m_VertexList[4].y = 2.723f;
+		Bullet_F2.m_VertexList[5].x = 2.723f; Bullet_F2.m_VertexList[5].y = 2.723f;
+		Bullet_F2.m_VertexList[6].x = 2.723f; Bullet_F2.m_VertexList[6].y = 2.723f;
 
 		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2464,13 +2168,13 @@ void TSceneGame::Bullet_Boss_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_F3.m_VertexList[0].x = 2.5f; Bullet_F3.m_VertexList[0].y = 2.5f;
-		Bullet_F3.m_VertexList[1].x = 2.5f; Bullet_F3.m_VertexList[1].y = 2.5f;
-		Bullet_F3.m_VertexList[2].x = 2.5f; Bullet_F3.m_VertexList[2].y = 2.5f;
-		Bullet_F3.m_VertexList[3].x = 2.5f; Bullet_F3.m_VertexList[3].y = 2.5f;
-		Bullet_F3.m_VertexList[4].x = 2.5f; Bullet_F3.m_VertexList[4].y = 2.5f;
-		Bullet_F3.m_VertexList[5].x = 2.5f; Bullet_F3.m_VertexList[5].y = 2.5f;
-		Bullet_F3.m_VertexList[6].x = 2.5f; Bullet_F3.m_VertexList[6].y = 2.5f;
+		Bullet_F3.m_VertexList[0].x = 4.211f; Bullet_F3.m_VertexList[0].y = 4.211f;
+		Bullet_F3.m_VertexList[1].x = 4.211f; Bullet_F3.m_VertexList[1].y = 4.211f;
+		Bullet_F3.m_VertexList[2].x = 4.211f; Bullet_F3.m_VertexList[2].y = 4.211f;
+		Bullet_F3.m_VertexList[3].x = 4.211f; Bullet_F3.m_VertexList[3].y = 4.211f;
+		Bullet_F3.m_VertexList[4].x = 4.211f; Bullet_F3.m_VertexList[4].y = 4.211f;
+		Bullet_F3.m_VertexList[5].x = 4.211f; Bullet_F3.m_VertexList[5].y = 4.211f;
+		Bullet_F3.m_VertexList[6].x = 4.211f; Bullet_F3.m_VertexList[6].y = 4.211f;
 
 		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2493,13 +2197,13 @@ void TSceneGame::Bullet_Boss_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_F4.m_VertexList[0].x = 2.5f; Bullet_F4.m_VertexList[0].y = 2.5f;
-		Bullet_F4.m_VertexList[1].x = 2.5f; Bullet_F4.m_VertexList[1].y = 2.5f;
-		Bullet_F4.m_VertexList[2].x = 2.5f; Bullet_F4.m_VertexList[2].y = 2.5f;
-		Bullet_F4.m_VertexList[3].x = 2.5f; Bullet_F4.m_VertexList[3].y = 2.5f;
-		Bullet_F4.m_VertexList[4].x = 2.5f; Bullet_F4.m_VertexList[4].y = 2.5f;
-		Bullet_F4.m_VertexList[5].x = 2.5f; Bullet_F4.m_VertexList[5].y = 2.5f;
-		Bullet_F4.m_VertexList[6].x = 2.5f; Bullet_F4.m_VertexList[6].y = 2.5f;
+		Bullet_F4.m_VertexList[0].x = 5.044f; Bullet_F4.m_VertexList[0].y = 5.044f;
+		Bullet_F4.m_VertexList[1].x = 5.044f; Bullet_F4.m_VertexList[1].y = 5.044f;
+		Bullet_F4.m_VertexList[2].x = 5.044f; Bullet_F4.m_VertexList[2].y = 5.044f;
+		Bullet_F4.m_VertexList[3].x = 5.044f; Bullet_F4.m_VertexList[3].y = 5.044f;
+		Bullet_F4.m_VertexList[4].x = 5.044f; Bullet_F4.m_VertexList[4].y = 5.044f;
+		Bullet_F4.m_VertexList[5].x = 5.044f; Bullet_F4.m_VertexList[5].y = 5.044f;
+		Bullet_F4.m_VertexList[6].x = 5.044f; Bullet_F4.m_VertexList[6].y = 5.044f;
 
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2524,13 +2228,13 @@ void TSceneGame::Bullet_Boss_collision()
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Robot.m_rtCollision))
 	{
 
-		Bullet_C1.m_VertexList[0].x = 2.4f; Bullet_C1.m_VertexList[0].y = 2.4f;
-		Bullet_C1.m_VertexList[1].x = 2.4f; Bullet_C1.m_VertexList[1].y = 2.4f;
-		Bullet_C1.m_VertexList[2].x = 2.4f; Bullet_C1.m_VertexList[2].y = 2.4f;
-		Bullet_C1.m_VertexList[3].x = 2.4f; Bullet_C1.m_VertexList[3].y = 2.4f;
-		Bullet_C1.m_VertexList[4].x = 2.4f; Bullet_C1.m_VertexList[4].y = 2.4f;
-		Bullet_C1.m_VertexList[5].x = 2.4f; Bullet_C1.m_VertexList[5].y = 2.4f;
-		Bullet_C1.m_VertexList[6].x = 2.4f; Bullet_C1.m_VertexList[6].y = 2.4f;
+		Bullet_C1.m_VertexList[0].x = 5.372f; Bullet_C1.m_VertexList[0].y = 5.372f;
+		Bullet_C1.m_VertexList[1].x = 5.372f; Bullet_C1.m_VertexList[1].y = 5.372f;
+		Bullet_C1.m_VertexList[2].x = 5.372f; Bullet_C1.m_VertexList[2].y = 5.372f;
+		Bullet_C1.m_VertexList[3].x = 5.372f; Bullet_C1.m_VertexList[3].y = 5.372f;
+		Bullet_C1.m_VertexList[4].x = 5.372f; Bullet_C1.m_VertexList[4].y = 5.372f;
+		Bullet_C1.m_VertexList[5].x = 5.372f; Bullet_C1.m_VertexList[5].y = 5.372f;
+		Bullet_C1.m_VertexList[6].x = 5.372f; Bullet_C1.m_VertexList[6].y = 5.372f;
 
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2553,13 +2257,13 @@ void TSceneGame::Bullet_Boss_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_C2.m_VertexList[0].x = 2.5f; Bullet_C2.m_VertexList[0].y = 2.5f;
-		Bullet_C2.m_VertexList[1].x = 2.5f; Bullet_C2.m_VertexList[1].y = 2.5f;
-		Bullet_C2.m_VertexList[2].x = 2.5f; Bullet_C2.m_VertexList[2].y = 2.5f;
-		Bullet_C2.m_VertexList[3].x = 2.5f; Bullet_C2.m_VertexList[3].y = 2.5f;
-		Bullet_C2.m_VertexList[4].x = 2.5f; Bullet_C2.m_VertexList[4].y = 2.5f;
-		Bullet_C2.m_VertexList[5].x = 2.5f; Bullet_C2.m_VertexList[5].y = 2.5f;
-		Bullet_C2.m_VertexList[6].x = 2.5f; Bullet_C2.m_VertexList[6].y = 2.5f;
+		Bullet_C2.m_VertexList[0].x = 6.231f; Bullet_C2.m_VertexList[0].y = 6.231f;
+		Bullet_C2.m_VertexList[1].x = 6.231f; Bullet_C2.m_VertexList[1].y = 6.231f;
+		Bullet_C2.m_VertexList[2].x = 6.231f; Bullet_C2.m_VertexList[2].y = 6.231f;
+		Bullet_C2.m_VertexList[3].x = 6.231f; Bullet_C2.m_VertexList[3].y = 6.231f;
+		Bullet_C2.m_VertexList[4].x = 6.231f; Bullet_C2.m_VertexList[4].y = 6.231f;
+		Bullet_C2.m_VertexList[5].x = 6.231f; Bullet_C2.m_VertexList[5].y = 6.231f;
+		Bullet_C2.m_VertexList[6].x = 6.231f; Bullet_C2.m_VertexList[6].y = 6.231f;
 
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2583,13 +2287,13 @@ void TSceneGame::Bullet_Boss_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_C3.m_VertexList[0].x = 2.5f; Bullet_C3.m_VertexList[0].y = 2.5f;
-		Bullet_C3.m_VertexList[1].x = 2.5f; Bullet_C3.m_VertexList[1].y = 2.5f;
-		Bullet_C3.m_VertexList[2].x = 2.5f; Bullet_C3.m_VertexList[2].y = 2.5f;
-		Bullet_C3.m_VertexList[3].x = 2.5f; Bullet_C3.m_VertexList[3].y = 2.5f;
-		Bullet_C3.m_VertexList[4].x = 2.5f; Bullet_C3.m_VertexList[4].y = 2.5f;
-		Bullet_C3.m_VertexList[5].x = 2.5f; Bullet_C3.m_VertexList[5].y = 2.5f;
-		Bullet_C3.m_VertexList[6].x = 2.5f; Bullet_C3.m_VertexList[6].y = 2.5f;
+		Bullet_C3.m_VertexList[0].x = 5.223f; Bullet_C3.m_VertexList[0].y = 5.223f;
+		Bullet_C3.m_VertexList[1].x = 5.223f; Bullet_C3.m_VertexList[1].y = 5.223f;
+		Bullet_C3.m_VertexList[2].x = 5.223f; Bullet_C3.m_VertexList[2].y = 5.223f;
+		Bullet_C3.m_VertexList[3].x = 5.223f; Bullet_C3.m_VertexList[3].y = 5.223f;
+		Bullet_C3.m_VertexList[4].x = 5.223f; Bullet_C3.m_VertexList[4].y = 5.223f;
+		Bullet_C3.m_VertexList[5].x = 5.223f; Bullet_C3.m_VertexList[5].y = 5.223f;
+		Bullet_C3.m_VertexList[6].x = 5.223f; Bullet_C3.m_VertexList[6].y = 5.223f;
 
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2613,13 +2317,13 @@ void TSceneGame::Bullet_Boss_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_C4.m_VertexList[0].x = 2.5f; Bullet_C4.m_VertexList[0].y = 2.5f;
-		Bullet_C4.m_VertexList[1].x = 2.5f; Bullet_C4.m_VertexList[1].y = 2.5f;
-		Bullet_C4.m_VertexList[2].x = 2.5f; Bullet_C4.m_VertexList[2].y = 2.5f;
-		Bullet_C4.m_VertexList[3].x = 2.5f; Bullet_C4.m_VertexList[3].y = 2.5f;
-		Bullet_C4.m_VertexList[4].x = 2.5f; Bullet_C4.m_VertexList[4].y = 2.5f;
-		Bullet_C4.m_VertexList[5].x = 2.5f; Bullet_C4.m_VertexList[5].y = 2.5f;
-		Bullet_C4.m_VertexList[6].x = 2.5f; Bullet_C4.m_VertexList[6].y = 2.5f;
+		Bullet_C4.m_VertexList[0].x = 4.079f; Bullet_C4.m_VertexList[0].y = 4.079f;
+		Bullet_C4.m_VertexList[1].x = 4.079f; Bullet_C4.m_VertexList[1].y = 4.079f;
+		Bullet_C4.m_VertexList[2].x = 4.079f; Bullet_C4.m_VertexList[2].y = 4.079f;
+		Bullet_C4.m_VertexList[3].x = 4.079f; Bullet_C4.m_VertexList[3].y = 4.079f;
+		Bullet_C4.m_VertexList[4].x = 4.079f; Bullet_C4.m_VertexList[4].y = 4.079f;
+		Bullet_C4.m_VertexList[5].x = 4.079f; Bullet_C4.m_VertexList[5].y = 4.079f;
+		Bullet_C4.m_VertexList[6].x = 4.079f; Bullet_C4.m_VertexList[6].y = 4.079f;
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2659,7 +2363,24 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 
 	}
 
-							
+	memcpy(N_VertexList_BA, Box_Alive.m_VertexList, sizeof(SimpleVertex) * 6);
+
+	for (int iV = 0; iV < 6; iV++)
+	{
+		D3DVECTOR vertex;
+		vertex.x = Box_Alive.m_VertexList[iV].x; vertex.y = Box_Alive.m_VertexList[iV].y;
+		vertex.x -= Box_Alive.m_vCenter.x;		 vertex.y -= Box_Alive.m_vCenter.y;
+		float S = sinf(fAngle);	float C = cosf(fAngle);
+		N_VertexList_BA[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA[iV].y = vertex.x * -S + vertex.y * C;
+		N_VertexList_BA[iV].x += Box_Alive.m_vCenter.x;		 N_VertexList_BA[iV].y += Box_Alive.m_vCenter.y;
+	}
+	g_pContext->UpdateSubresource(Box_Alive.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA, 0, 0);
+
+
+
+
+
+
 }
 
 
@@ -2686,13 +2407,13 @@ void TSceneGame::Box_Alive_collision_final_decision()
 
 	if (box_alive_live_or_dead == 2)
 	{
-		Box_Alive.m_VertexList[0].x = 3.5f; Box_Alive.m_VertexList[0].y = 3.5f;
-		Box_Alive.m_VertexList[1].x = 3.5f; Box_Alive.m_VertexList[1].y = 3.5f;
-		Box_Alive.m_VertexList[2].x = 3.5f; Box_Alive.m_VertexList[2].y = 3.5f;
-		Box_Alive.m_VertexList[3].x = 3.5f; Box_Alive.m_VertexList[3].y = 3.5f;
-		Box_Alive.m_VertexList[4].x = 3.5f; Box_Alive.m_VertexList[4].y = 3.5f;
-		Box_Alive.m_VertexList[5].x = 3.5f; Box_Alive.m_VertexList[5].y = 3.5f;
-		Box_Alive.m_VertexList[6].x = 3.5f; Box_Alive.m_VertexList[6].y = 3.5f;
+		Box_Alive.m_VertexList[0].x = 3.225f; Box_Alive.m_VertexList[0].y = 3.225f;
+		Box_Alive.m_VertexList[1].x = 3.225f; Box_Alive.m_VertexList[1].y = 3.225f;
+		Box_Alive.m_VertexList[2].x = 3.225f; Box_Alive.m_VertexList[2].y = 3.225f;
+		Box_Alive.m_VertexList[3].x = 3.225f; Box_Alive.m_VertexList[3].y = 3.225f;
+		Box_Alive.m_VertexList[4].x = 3.225f; Box_Alive.m_VertexList[4].y = 3.225f;
+		Box_Alive.m_VertexList[5].x = 3.225f; Box_Alive.m_VertexList[5].y = 3.225f;
+		Box_Alive.m_VertexList[6].x = 3.225f; Box_Alive.m_VertexList[6].y = 3.225f;
 
 		memcpy(N_VertexList_BA, Box_Alive.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2710,13 +2431,13 @@ void TSceneGame::Box_Alive_collision_final_decision()
 
 
 
-		Box_Alive_life_bar.m_VertexList[0].x = 3.6f; Box_Alive_life_bar.m_VertexList[0].y = 3.6f;
-		Box_Alive_life_bar.m_VertexList[1].x = 3.6f; Box_Alive_life_bar.m_VertexList[1].y = 3.6f;
-		Box_Alive_life_bar.m_VertexList[2].x = 3.6f; Box_Alive_life_bar.m_VertexList[2].y = 3.6f;
-		Box_Alive_life_bar.m_VertexList[3].x = 3.6f; Box_Alive_life_bar.m_VertexList[3].y = 3.6f;
-		Box_Alive_life_bar.m_VertexList[4].x = 3.6f; Box_Alive_life_bar.m_VertexList[4].y = 3.6f;
-		Box_Alive_life_bar.m_VertexList[5].x = 3.6f; Box_Alive_life_bar.m_VertexList[5].y = 3.6f;
-		Box_Alive_life_bar.m_VertexList[6].x = 3.6f; Box_Alive_life_bar.m_VertexList[6].y = 3.6f;
+		Box_Alive_life_bar.m_VertexList[0].x = 3.446f; Box_Alive_life_bar.m_VertexList[0].y = 3.446f;
+		Box_Alive_life_bar.m_VertexList[1].x = 3.446f; Box_Alive_life_bar.m_VertexList[1].y = 3.446f;
+		Box_Alive_life_bar.m_VertexList[2].x = 3.446f; Box_Alive_life_bar.m_VertexList[2].y = 3.446f;
+		Box_Alive_life_bar.m_VertexList[3].x = 3.446f; Box_Alive_life_bar.m_VertexList[3].y = 3.446f;
+		Box_Alive_life_bar.m_VertexList[4].x = 3.446f; Box_Alive_life_bar.m_VertexList[4].y = 3.446f;
+		Box_Alive_life_bar.m_VertexList[5].x = 3.446f; Box_Alive_life_bar.m_VertexList[5].y = 3.446f;
+		Box_Alive_life_bar.m_VertexList[6].x = 3.446f; Box_Alive_life_bar.m_VertexList[6].y = 3.446f;
 
 		memcpy(N_VertexList_BA_LB, Box_Alive_life_bar.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2745,13 +2466,13 @@ void TSceneGame::Bullet_Box_Alive_collision()
 	//////////////// Bullet_F1과  Box_Alive 충돌
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Box_Alive.m_rtCollision))
 	{	
-		Bullet_F1.m_VertexList[0].x = 2.4f; Bullet_F1.m_VertexList[0].y = 2.4f;
-		Bullet_F1.m_VertexList[1].x = 2.4f; Bullet_F1.m_VertexList[1].y = 2.4f;
-		Bullet_F1.m_VertexList[2].x = 2.4f; Bullet_F1.m_VertexList[2].y = 2.4f;
-		Bullet_F1.m_VertexList[3].x = 2.4f; Bullet_F1.m_VertexList[3].y = 2.4f;
-		Bullet_F1.m_VertexList[4].x = 2.4f; Bullet_F1.m_VertexList[4].y = 2.4f;
-		Bullet_F1.m_VertexList[5].x = 2.4f; Bullet_F1.m_VertexList[5].y = 2.4f;
-		Bullet_F1.m_VertexList[6].x = 2.4f; Bullet_F1.m_VertexList[6].y = 2.4f;
+		Bullet_F1.m_VertexList[0].x = 2.265f; Bullet_F1.m_VertexList[0].y = 2.265f;
+		Bullet_F1.m_VertexList[1].x = 2.265f; Bullet_F1.m_VertexList[1].y = 2.265f;
+		Bullet_F1.m_VertexList[2].x = 2.265f; Bullet_F1.m_VertexList[2].y = 2.265f;
+		Bullet_F1.m_VertexList[3].x = 2.265f; Bullet_F1.m_VertexList[3].y = 2.265f;
+		Bullet_F1.m_VertexList[4].x = 2.265f; Bullet_F1.m_VertexList[4].y = 2.265f;
+		Bullet_F1.m_VertexList[5].x = 2.265f; Bullet_F1.m_VertexList[5].y = 2.265f;
+		Bullet_F1.m_VertexList[6].x = 2.265f; Bullet_F1.m_VertexList[6].y = 2.265f;
 
 		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
 	
@@ -2774,13 +2495,13 @@ void TSceneGame::Bullet_Box_Alive_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_F2.m_VertexList[0].x = 2.5f; Bullet_F2.m_VertexList[0].y = 2.5f;
-		Bullet_F2.m_VertexList[1].x = 2.5f; Bullet_F2.m_VertexList[1].y = 2.5f;
-		Bullet_F2.m_VertexList[2].x = 2.5f; Bullet_F2.m_VertexList[2].y = 2.5f;
-		Bullet_F2.m_VertexList[3].x = 2.5f; Bullet_F2.m_VertexList[3].y = 2.5f;
-		Bullet_F2.m_VertexList[4].x = 2.5f; Bullet_F2.m_VertexList[4].y = 2.5f;
-		Bullet_F2.m_VertexList[5].x = 2.5f; Bullet_F2.m_VertexList[5].y = 2.5f;
-		Bullet_F2.m_VertexList[6].x = 2.5f; Bullet_F2.m_VertexList[6].y = 2.5f;
+		Bullet_F2.m_VertexList[0].x = 2.63f; Bullet_F2.m_VertexList[0].y = 2.63f;
+		Bullet_F2.m_VertexList[1].x = 2.63f; Bullet_F2.m_VertexList[1].y = 2.63f;
+		Bullet_F2.m_VertexList[2].x = 2.63f; Bullet_F2.m_VertexList[2].y = 2.63f;
+		Bullet_F2.m_VertexList[3].x = 2.63f; Bullet_F2.m_VertexList[3].y = 2.63f;
+		Bullet_F2.m_VertexList[4].x = 2.63f; Bullet_F2.m_VertexList[4].y = 2.63f;
+		Bullet_F2.m_VertexList[5].x = 2.63f; Bullet_F2.m_VertexList[5].y = 2.63f;
+		Bullet_F2.m_VertexList[6].x = 2.63f; Bullet_F2.m_VertexList[6].y = 2.63f;
 
 		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2802,13 +2523,13 @@ void TSceneGame::Bullet_Box_Alive_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_F3.m_VertexList[0].x = 2.5f; Bullet_F3.m_VertexList[0].y = 2.5f;
-		Bullet_F3.m_VertexList[1].x = 2.5f; Bullet_F3.m_VertexList[1].y = 2.5f;
-		Bullet_F3.m_VertexList[2].x = 2.5f; Bullet_F3.m_VertexList[2].y = 2.5f;
-		Bullet_F3.m_VertexList[3].x = 2.5f; Bullet_F3.m_VertexList[3].y = 2.5f;
-		Bullet_F3.m_VertexList[4].x = 2.5f; Bullet_F3.m_VertexList[4].y = 2.5f;
-		Bullet_F3.m_VertexList[5].x = 2.5f; Bullet_F3.m_VertexList[5].y = 2.5f;
-		Bullet_F3.m_VertexList[6].x = 2.5f; Bullet_F3.m_VertexList[6].y = 2.5f;
+		Bullet_F3.m_VertexList[0].x = 4.266f; Bullet_F3.m_VertexList[0].y = 4.266f;
+		Bullet_F3.m_VertexList[1].x = 4.266f; Bullet_F3.m_VertexList[1].y = 4.266f;
+		Bullet_F3.m_VertexList[2].x = 4.266f; Bullet_F3.m_VertexList[2].y = 4.266f;
+		Bullet_F3.m_VertexList[3].x = 4.266f; Bullet_F3.m_VertexList[3].y = 4.266f;
+		Bullet_F3.m_VertexList[4].x = 4.266f; Bullet_F3.m_VertexList[4].y = 4.266f;
+		Bullet_F3.m_VertexList[5].x = 4.266f; Bullet_F3.m_VertexList[5].y = 4.266f;
+		Bullet_F3.m_VertexList[6].x = 4.266f; Bullet_F3.m_VertexList[6].y = 4.266f;
 
 		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2831,13 +2552,13 @@ void TSceneGame::Bullet_Box_Alive_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_F4.m_VertexList[0].x = 2.5f; Bullet_F4.m_VertexList[0].y = 2.5f;
-		Bullet_F4.m_VertexList[1].x = 2.5f; Bullet_F4.m_VertexList[1].y = 2.5f;
-		Bullet_F4.m_VertexList[2].x = 2.5f; Bullet_F4.m_VertexList[2].y = 2.5f;
-		Bullet_F4.m_VertexList[3].x = 2.5f; Bullet_F4.m_VertexList[3].y = 2.5f;
-		Bullet_F4.m_VertexList[4].x = 2.5f; Bullet_F4.m_VertexList[4].y = 2.5f;
-		Bullet_F4.m_VertexList[5].x = 2.5f; Bullet_F4.m_VertexList[5].y = 2.5f;
-		Bullet_F4.m_VertexList[6].x = 2.5f; Bullet_F4.m_VertexList[6].y = 2.5f;
+		Bullet_F4.m_VertexList[0].x = 3.71f; Bullet_F4.m_VertexList[0].y = 3.71f;
+		Bullet_F4.m_VertexList[1].x = 3.71f; Bullet_F4.m_VertexList[1].y = 3.71f;
+		Bullet_F4.m_VertexList[2].x = 3.71f; Bullet_F4.m_VertexList[2].y = 3.71f;
+		Bullet_F4.m_VertexList[3].x = 3.71f; Bullet_F4.m_VertexList[3].y = 3.71f;
+		Bullet_F4.m_VertexList[4].x = 3.71f; Bullet_F4.m_VertexList[4].y = 3.71f;
+		Bullet_F4.m_VertexList[5].x = 3.71f; Bullet_F4.m_VertexList[5].y = 3.71f;
+		Bullet_F4.m_VertexList[6].x = 3.71f; Bullet_F4.m_VertexList[6].y = 3.71f;
 
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2864,13 +2585,13 @@ void TSceneGame::Bullet_Box_Alive_collision()
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Box_Alive.m_rtCollision))
 	{
 
-		Bullet_C1.m_VertexList[0].x = 2.4f; Bullet_C1.m_VertexList[0].y = 2.4f;
-		Bullet_C1.m_VertexList[1].x = 2.4f; Bullet_C1.m_VertexList[1].y = 2.4f;
-		Bullet_C1.m_VertexList[2].x = 2.4f; Bullet_C1.m_VertexList[2].y = 2.4f;
-		Bullet_C1.m_VertexList[3].x = 2.4f; Bullet_C1.m_VertexList[3].y = 2.4f;
-		Bullet_C1.m_VertexList[4].x = 2.4f; Bullet_C1.m_VertexList[4].y = 2.4f;
-		Bullet_C1.m_VertexList[5].x = 2.4f; Bullet_C1.m_VertexList[5].y = 2.4f;
-		Bullet_C1.m_VertexList[6].x = 2.4f; Bullet_C1.m_VertexList[6].y = 2.4f;
+		Bullet_C1.m_VertexList[0].x = 3.276f; Bullet_C1.m_VertexList[0].y = 3.276f;
+		Bullet_C1.m_VertexList[1].x = 3.276f; Bullet_C1.m_VertexList[1].y = 3.276f;
+		Bullet_C1.m_VertexList[2].x = 3.276f; Bullet_C1.m_VertexList[2].y = 3.276f;
+		Bullet_C1.m_VertexList[3].x = 3.276f; Bullet_C1.m_VertexList[3].y = 3.276f;
+		Bullet_C1.m_VertexList[4].x = 3.276f; Bullet_C1.m_VertexList[4].y = 3.276f;
+		Bullet_C1.m_VertexList[5].x = 3.276f; Bullet_C1.m_VertexList[5].y = 3.276f;
+		Bullet_C1.m_VertexList[6].x = 3.276f; Bullet_C1.m_VertexList[6].y = 3.276f;
 
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2895,13 +2616,13 @@ void TSceneGame::Bullet_Box_Alive_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_C2.m_VertexList[0].x = 2.5f; Bullet_C2.m_VertexList[0].y = 2.5f;
-		Bullet_C2.m_VertexList[1].x = 2.5f; Bullet_C2.m_VertexList[1].y = 2.5f;
-		Bullet_C2.m_VertexList[2].x = 2.5f; Bullet_C2.m_VertexList[2].y = 2.5f;
-		Bullet_C2.m_VertexList[3].x = 2.5f; Bullet_C2.m_VertexList[3].y = 2.5f;
-		Bullet_C2.m_VertexList[4].x = 2.5f; Bullet_C2.m_VertexList[4].y = 2.5f;
-		Bullet_C2.m_VertexList[5].x = 2.5f; Bullet_C2.m_VertexList[5].y = 2.5f;
-		Bullet_C2.m_VertexList[6].x = 2.5f; Bullet_C2.m_VertexList[6].y = 2.5f;
+		Bullet_C2.m_VertexList[0].x = 3.834f; Bullet_C2.m_VertexList[0].y = 3.834f;
+		Bullet_C2.m_VertexList[1].x = 3.834f; Bullet_C2.m_VertexList[1].y = 3.834f;
+		Bullet_C2.m_VertexList[2].x = 3.834f; Bullet_C2.m_VertexList[2].y = 3.834f;
+		Bullet_C2.m_VertexList[3].x = 3.834f; Bullet_C2.m_VertexList[3].y = 3.834f;
+		Bullet_C2.m_VertexList[4].x = 3.834f; Bullet_C2.m_VertexList[4].y = 3.834f;
+		Bullet_C2.m_VertexList[5].x = 3.834f; Bullet_C2.m_VertexList[5].y = 3.834f;
+		Bullet_C2.m_VertexList[6].x = 3.834f; Bullet_C2.m_VertexList[6].y = 3.834f;
 
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2925,13 +2646,13 @@ void TSceneGame::Bullet_Box_Alive_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_C3.m_VertexList[0].x = 2.5f; Bullet_C3.m_VertexList[0].y = 2.5f;
-		Bullet_C3.m_VertexList[1].x = 2.5f; Bullet_C3.m_VertexList[1].y = 2.5f;
-		Bullet_C3.m_VertexList[2].x = 2.5f; Bullet_C3.m_VertexList[2].y = 2.5f;
-		Bullet_C3.m_VertexList[3].x = 2.5f; Bullet_C3.m_VertexList[3].y = 2.5f;
-		Bullet_C3.m_VertexList[4].x = 2.5f; Bullet_C3.m_VertexList[4].y = 2.5f;
-		Bullet_C3.m_VertexList[5].x = 2.5f; Bullet_C3.m_VertexList[5].y = 2.5f;
-		Bullet_C3.m_VertexList[6].x = 2.5f; Bullet_C3.m_VertexList[6].y = 2.5f;
+		Bullet_C3.m_VertexList[0].x = 2.636f; Bullet_C3.m_VertexList[0].y = 2.636f;
+		Bullet_C3.m_VertexList[1].x = 2.636f; Bullet_C3.m_VertexList[1].y = 2.636f;
+		Bullet_C3.m_VertexList[2].x = 2.636f; Bullet_C3.m_VertexList[2].y = 2.636f;
+		Bullet_C3.m_VertexList[3].x = 2.636f; Bullet_C3.m_VertexList[3].y = 2.636f;
+		Bullet_C3.m_VertexList[4].x = 2.636f; Bullet_C3.m_VertexList[4].y = 2.636f;
+		Bullet_C3.m_VertexList[5].x = 2.636f; Bullet_C3.m_VertexList[5].y = 2.636f;
+		Bullet_C3.m_VertexList[6].x = 2.636f; Bullet_C3.m_VertexList[6].y = 2.636f;
 
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2956,13 +2677,13 @@ void TSceneGame::Bullet_Box_Alive_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_C4.m_VertexList[0].x = 2.5f; Bullet_C4.m_VertexList[0].y = 2.5f;
-		Bullet_C4.m_VertexList[1].x = 2.5f; Bullet_C4.m_VertexList[1].y = 2.5f;
-		Bullet_C4.m_VertexList[2].x = 2.5f; Bullet_C4.m_VertexList[2].y = 2.5f;
-		Bullet_C4.m_VertexList[3].x = 2.5f; Bullet_C4.m_VertexList[3].y = 2.5f;
-		Bullet_C4.m_VertexList[4].x = 2.5f; Bullet_C4.m_VertexList[4].y = 2.5f;
-		Bullet_C4.m_VertexList[5].x = 2.5f; Bullet_C4.m_VertexList[5].y = 2.5f;
-		Bullet_C4.m_VertexList[6].x = 2.5f; Bullet_C4.m_VertexList[6].y = 2.5f;
+		Bullet_C4.m_VertexList[0].x = 4.786f; Bullet_C4.m_VertexList[0].y = 4.786f;
+		Bullet_C4.m_VertexList[1].x = 4.786f; Bullet_C4.m_VertexList[1].y = 4.786f;
+		Bullet_C4.m_VertexList[2].x = 4.786f; Bullet_C4.m_VertexList[2].y = 4.786f;
+		Bullet_C4.m_VertexList[3].x = 4.786f; Bullet_C4.m_VertexList[3].y = 4.786f;
+		Bullet_C4.m_VertexList[4].x = 4.786f; Bullet_C4.m_VertexList[4].y = 4.786f;
+		Bullet_C4.m_VertexList[5].x = 4.786f; Bullet_C4.m_VertexList[5].y = 4.786f;
+		Bullet_C4.m_VertexList[6].x = 4.786f; Bullet_C4.m_VertexList[6].y = 4.786f;
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -3080,13 +2801,13 @@ void TSceneGame::Herosword_ghost_collsion()
 {
 	if (I_Input.Key('O')  && TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[0].x = 2.33f; Bullet_Ghost_1.m_VertexList[0].y = 2.33f;
+		Bullet_Ghost_1.m_VertexList[1].x = 2.33f; Bullet_Ghost_1.m_VertexList[1].y = 2.33f;
+		Bullet_Ghost_1.m_VertexList[2].x = 2.33f; Bullet_Ghost_1.m_VertexList[2].y = 2.33f;
+		Bullet_Ghost_1.m_VertexList[3].x = 2.33f; Bullet_Ghost_1.m_VertexList[3].y = 2.33f;
+		Bullet_Ghost_1.m_VertexList[4].x = 2.33f; Bullet_Ghost_1.m_VertexList[4].y = 2.33f;
+		Bullet_Ghost_1.m_VertexList[5].x = 2.33f; Bullet_Ghost_1.m_VertexList[5].y = 2.33f;
+		Bullet_Ghost_1.m_VertexList[6].x = 2.33f; Bullet_Ghost_1.m_VertexList[6].y = 2.33f;
 	
 		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -3107,13 +2828,13 @@ void TSceneGame::Herosword_ghost_collsion()
 
 	if (I_Input.Key('O')&& TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_2.m_rtCollision))
 	{
-		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[0].x = 2.24f; Bullet_Ghost_2.m_VertexList[0].y = 2.24f;
+		Bullet_Ghost_2.m_VertexList[1].x = 2.24f; Bullet_Ghost_2.m_VertexList[1].y = 2.24f;
+		Bullet_Ghost_2.m_VertexList[2].x = 2.24f; Bullet_Ghost_2.m_VertexList[2].y = 2.24f;
+		Bullet_Ghost_2.m_VertexList[3].x = 2.24f; Bullet_Ghost_2.m_VertexList[3].y = 2.24f;
+		Bullet_Ghost_2.m_VertexList[4].x = 2.24f; Bullet_Ghost_2.m_VertexList[4].y = 2.24f;
+		Bullet_Ghost_2.m_VertexList[5].x = 2.24f; Bullet_Ghost_2.m_VertexList[5].y = 2.24f;
+		Bullet_Ghost_2.m_VertexList[6].x = 2.24f; Bullet_Ghost_2.m_VertexList[6].y = 2.24f;
 
 		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -3134,13 +2855,13 @@ void TSceneGame::Herosword_ghost_collsion()
 
 	if (I_Input.Key('O') && TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_3.m_rtCollision))
 	{
-		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[0].x = 2.37f; Bullet_Ghost_3.m_VertexList[0].y = 2.37f;
+		Bullet_Ghost_3.m_VertexList[1].x = 2.37f; Bullet_Ghost_3.m_VertexList[1].y = 2.37f;
+		Bullet_Ghost_3.m_VertexList[2].x = 2.37f; Bullet_Ghost_3.m_VertexList[2].y = 2.37f;
+		Bullet_Ghost_3.m_VertexList[3].x = 2.37f; Bullet_Ghost_3.m_VertexList[3].y = 2.37f;
+		Bullet_Ghost_3.m_VertexList[4].x = 2.37f; Bullet_Ghost_3.m_VertexList[4].y = 2.37f;
+		Bullet_Ghost_3.m_VertexList[5].x = 2.37f; Bullet_Ghost_3.m_VertexList[5].y = 2.37f;
+		Bullet_Ghost_3.m_VertexList[6].x = 2.37f; Bullet_Ghost_3.m_VertexList[6].y = 2.37f;
 
 		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -3161,13 +2882,13 @@ void TSceneGame::Herosword_ghost_collsion()
 
 	if (I_Input.Key('O') && TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_4.m_rtCollision))
 	{
-		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[0].x = 2.96f; Bullet_Ghost_4.m_VertexList[0].y = 2.96f;
+		Bullet_Ghost_4.m_VertexList[1].x = 2.96f; Bullet_Ghost_4.m_VertexList[1].y = 2.96f;
+		Bullet_Ghost_4.m_VertexList[2].x = 2.96f; Bullet_Ghost_4.m_VertexList[2].y = 2.96f;
+		Bullet_Ghost_4.m_VertexList[3].x = 2.96f; Bullet_Ghost_4.m_VertexList[3].y = 2.96f;
+		Bullet_Ghost_4.m_VertexList[4].x = 2.96f; Bullet_Ghost_4.m_VertexList[4].y = 2.96f;
+		Bullet_Ghost_4.m_VertexList[5].x = 2.96f; Bullet_Ghost_4.m_VertexList[5].y = 2.96f;
+		Bullet_Ghost_4.m_VertexList[6].x = 2.96f; Bullet_Ghost_4.m_VertexList[6].y = 2.96f;
 
 		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -3196,21 +2917,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
-		Bullet_F1.m_VertexList[1].x = 1.5f; Bullet_F1.m_VertexList[1].y = 1.5f;
-		Bullet_F1.m_VertexList[2].x = 1.5f; Bullet_F1.m_VertexList[2].y = 1.5f;
-		Bullet_F1.m_VertexList[3].x = 1.5f; Bullet_F1.m_VertexList[3].y = 1.5f;
-		Bullet_F1.m_VertexList[4].x = 1.5f; Bullet_F1.m_VertexList[4].y = 1.5f;
-		Bullet_F1.m_VertexList[5].x = 1.5f; Bullet_F1.m_VertexList[5].y = 1.5f;
-		Bullet_F1.m_VertexList[6].x = 1.5f; Bullet_F1.m_VertexList[6].y = 1.5f;
+		Bullet_F1.m_VertexList[0].x = 5.41f; Bullet_F1.m_VertexList[0].y = 5.41f;
+		Bullet_F1.m_VertexList[1].x = 5.41f; Bullet_F1.m_VertexList[1].y = 5.41f;
+		Bullet_F1.m_VertexList[2].x = 5.41f; Bullet_F1.m_VertexList[2].y = 5.41f;
+		Bullet_F1.m_VertexList[3].x = 5.41f; Bullet_F1.m_VertexList[3].y = 5.41f;
+		Bullet_F1.m_VertexList[4].x = 5.41f; Bullet_F1.m_VertexList[4].y = 5.41f;
+		Bullet_F1.m_VertexList[5].x = 5.41f; Bullet_F1.m_VertexList[5].y = 5.41f;
+		Bullet_F1.m_VertexList[6].x = 5.41f; Bullet_F1.m_VertexList[6].y = 5.41f;
 
-		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[0].x = 5.02f; Bullet_Ghost_1.m_VertexList[0].y = 5.02f;
+		Bullet_Ghost_1.m_VertexList[1].x = 5.02f; Bullet_Ghost_1.m_VertexList[1].y = 5.02f;
+		Bullet_Ghost_1.m_VertexList[2].x = 5.02f; Bullet_Ghost_1.m_VertexList[2].y = 5.02f;
+		Bullet_Ghost_1.m_VertexList[3].x = 5.02f; Bullet_Ghost_1.m_VertexList[3].y = 5.02f;
+		Bullet_Ghost_1.m_VertexList[4].x = 5.02f; Bullet_Ghost_1.m_VertexList[4].y = 5.02f;
+		Bullet_Ghost_1.m_VertexList[5].x = 5.02f; Bullet_Ghost_1.m_VertexList[5].y = 5.02f;
+		Bullet_Ghost_1.m_VertexList[6].x = 5.02f; Bullet_Ghost_1.m_VertexList[6].y = 5.02f;
 
 
 		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3244,21 +2965,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
-		Bullet_F1.m_VertexList[1].x = 1.5f; Bullet_F1.m_VertexList[1].y = 1.5f;
-		Bullet_F1.m_VertexList[2].x = 1.5f; Bullet_F1.m_VertexList[2].y = 1.5f;
-		Bullet_F1.m_VertexList[3].x = 1.5f; Bullet_F1.m_VertexList[3].y = 1.5f;
-		Bullet_F1.m_VertexList[4].x = 1.5f; Bullet_F1.m_VertexList[4].y = 1.5f;
-		Bullet_F1.m_VertexList[5].x = 1.5f; Bullet_F1.m_VertexList[5].y = 1.5f;
-		Bullet_F1.m_VertexList[6].x = 1.5f; Bullet_F1.m_VertexList[6].y = 1.5f;
+		Bullet_F1.m_VertexList[0].x = 4.89f; Bullet_F1.m_VertexList[0].y = 4.89f;
+		Bullet_F1.m_VertexList[1].x = 4.89f; Bullet_F1.m_VertexList[1].y = 4.89f;
+		Bullet_F1.m_VertexList[2].x = 4.89f; Bullet_F1.m_VertexList[2].y = 4.89f;
+		Bullet_F1.m_VertexList[3].x = 4.89f; Bullet_F1.m_VertexList[3].y = 4.89f;
+		Bullet_F1.m_VertexList[4].x = 4.89f; Bullet_F1.m_VertexList[4].y = 4.89f;
+		Bullet_F1.m_VertexList[5].x = 4.89f; Bullet_F1.m_VertexList[5].y = 4.89f;
+		Bullet_F1.m_VertexList[6].x = 4.89f; Bullet_F1.m_VertexList[6].y = 4.89f;
 
-		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[0].x = 3.49f; Bullet_Ghost_2.m_VertexList[0].y = 3.49f;
+		Bullet_Ghost_2.m_VertexList[1].x = 3.49f; Bullet_Ghost_2.m_VertexList[1].y = 3.49f;
+		Bullet_Ghost_2.m_VertexList[2].x = 3.49f; Bullet_Ghost_2.m_VertexList[2].y = 3.49f;
+		Bullet_Ghost_2.m_VertexList[3].x = 3.49f; Bullet_Ghost_2.m_VertexList[3].y = 3.49f;
+		Bullet_Ghost_2.m_VertexList[4].x = 3.49f; Bullet_Ghost_2.m_VertexList[4].y = 3.49f;
+		Bullet_Ghost_2.m_VertexList[5].x = 3.49f; Bullet_Ghost_2.m_VertexList[5].y = 3.49f;
+		Bullet_Ghost_2.m_VertexList[6].x = 3.49f; Bullet_Ghost_2.m_VertexList[6].y = 3.49f;
 
 
 		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3292,21 +3013,21 @@ void TSceneGame::Bullet_Ghost_collision()
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
 
-		Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
-		Bullet_F1.m_VertexList[1].x = 1.5f; Bullet_F1.m_VertexList[1].y = 1.5f;
-		Bullet_F1.m_VertexList[2].x = 1.5f; Bullet_F1.m_VertexList[2].y = 1.5f;
-		Bullet_F1.m_VertexList[3].x = 1.5f; Bullet_F1.m_VertexList[3].y = 1.5f;
-		Bullet_F1.m_VertexList[4].x = 1.5f; Bullet_F1.m_VertexList[4].y = 1.5f;
-		Bullet_F1.m_VertexList[5].x = 1.5f; Bullet_F1.m_VertexList[5].y = 1.5f;
-		Bullet_F1.m_VertexList[6].x = 1.5f; Bullet_F1.m_VertexList[6].y = 1.5f;
+		Bullet_F1.m_VertexList[0].x = 3.68f; Bullet_F1.m_VertexList[0].y = 3.68f;
+		Bullet_F1.m_VertexList[1].x = 3.68f; Bullet_F1.m_VertexList[1].y = 3.68f;
+		Bullet_F1.m_VertexList[2].x = 3.68f; Bullet_F1.m_VertexList[2].y = 3.68f;
+		Bullet_F1.m_VertexList[3].x = 3.68f; Bullet_F1.m_VertexList[3].y = 3.68f;
+		Bullet_F1.m_VertexList[4].x = 3.68f; Bullet_F1.m_VertexList[4].y = 3.68f;
+		Bullet_F1.m_VertexList[5].x = 3.68f; Bullet_F1.m_VertexList[5].y = 3.68f;
+		Bullet_F1.m_VertexList[6].x = 3.68f; Bullet_F1.m_VertexList[6].y = 3.68f;
 
-		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[0].x = 3.241f; Bullet_Ghost_3.m_VertexList[0].y = 3.241f;
+		Bullet_Ghost_3.m_VertexList[1].x = 3.241f; Bullet_Ghost_3.m_VertexList[1].y = 3.241f;
+		Bullet_Ghost_3.m_VertexList[2].x = 3.241f; Bullet_Ghost_3.m_VertexList[2].y = 3.241f;
+		Bullet_Ghost_3.m_VertexList[3].x = 3.241f; Bullet_Ghost_3.m_VertexList[3].y = 3.241f;
+		Bullet_Ghost_3.m_VertexList[4].x = 3.241f; Bullet_Ghost_3.m_VertexList[4].y = 3.241f;
+		Bullet_Ghost_3.m_VertexList[5].x = 3.241f; Bullet_Ghost_3.m_VertexList[5].y = 3.241f;
+		Bullet_Ghost_3.m_VertexList[6].x = 3.241f; Bullet_Ghost_3.m_VertexList[6].y = 3.241f;
 
 
 		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3341,21 +3062,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_F1.m_VertexList[0].x = 1.5f; Bullet_F1.m_VertexList[0].y = 1.5f;
-		Bullet_F1.m_VertexList[1].x = 1.5f; Bullet_F1.m_VertexList[1].y = 1.5f;
-		Bullet_F1.m_VertexList[2].x = 1.5f; Bullet_F1.m_VertexList[2].y = 1.5f;
-		Bullet_F1.m_VertexList[3].x = 1.5f; Bullet_F1.m_VertexList[3].y = 1.5f;
-		Bullet_F1.m_VertexList[4].x = 1.5f; Bullet_F1.m_VertexList[4].y = 1.5f;
-		Bullet_F1.m_VertexList[5].x = 1.5f; Bullet_F1.m_VertexList[5].y = 1.5f;
-		Bullet_F1.m_VertexList[6].x = 1.5f; Bullet_F1.m_VertexList[6].y = 1.5f;
+		Bullet_F1.m_VertexList[0].x = 3.282f; Bullet_F1.m_VertexList[0].y = 3.282f;
+		Bullet_F1.m_VertexList[1].x = 3.282f; Bullet_F1.m_VertexList[1].y = 3.282f;
+		Bullet_F1.m_VertexList[2].x = 3.282f; Bullet_F1.m_VertexList[2].y = 3.282f;
+		Bullet_F1.m_VertexList[3].x = 3.282f; Bullet_F1.m_VertexList[3].y = 3.282f;
+		Bullet_F1.m_VertexList[4].x = 3.282f; Bullet_F1.m_VertexList[4].y = 3.282f;
+		Bullet_F1.m_VertexList[5].x = 3.282f; Bullet_F1.m_VertexList[5].y = 3.282f;
+		Bullet_F1.m_VertexList[6].x = 3.282f; Bullet_F1.m_VertexList[6].y = 3.282f;
 
-		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[0].x = 3.29f; Bullet_Ghost_4.m_VertexList[0].y = 3.29f;
+		Bullet_Ghost_4.m_VertexList[1].x = 3.29f; Bullet_Ghost_4.m_VertexList[1].y = 3.29f;
+		Bullet_Ghost_4.m_VertexList[2].x = 3.29f; Bullet_Ghost_4.m_VertexList[2].y = 3.29f;
+		Bullet_Ghost_4.m_VertexList[3].x = 3.29f; Bullet_Ghost_4.m_VertexList[3].y = 3.29f;
+		Bullet_Ghost_4.m_VertexList[4].x = 3.29f; Bullet_Ghost_4.m_VertexList[4].y = 3.29f;
+		Bullet_Ghost_4.m_VertexList[5].x = 3.29f; Bullet_Ghost_4.m_VertexList[5].y = 3.29f;
+		Bullet_Ghost_4.m_VertexList[6].x = 3.29f; Bullet_Ghost_4.m_VertexList[6].y = 3.29f;
 
 
 		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3389,21 +3110,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_F2.m_VertexList[0].x = 1.5f; Bullet_F2.m_VertexList[0].y = 1.5f;
-		Bullet_F2.m_VertexList[1].x = 1.5f; Bullet_F2.m_VertexList[1].y = 1.5f;
-		Bullet_F2.m_VertexList[2].x = 1.5f; Bullet_F2.m_VertexList[2].y = 1.5f;
-		Bullet_F2.m_VertexList[3].x = 1.5f; Bullet_F2.m_VertexList[3].y = 1.5f;
-		Bullet_F2.m_VertexList[4].x = 1.5f; Bullet_F2.m_VertexList[4].y = 1.5f;
-		Bullet_F2.m_VertexList[5].x = 1.5f; Bullet_F2.m_VertexList[5].y = 1.5f;
-		Bullet_F2.m_VertexList[6].x = 1.5f; Bullet_F2.m_VertexList[6].y = 1.5f;
+		Bullet_F2.m_VertexList[0].x = 3.33f; Bullet_F2.m_VertexList[0].y = 3.33f;
+		Bullet_F2.m_VertexList[1].x = 3.33f; Bullet_F2.m_VertexList[1].y = 3.33f;
+		Bullet_F2.m_VertexList[2].x = 3.33f; Bullet_F2.m_VertexList[2].y = 3.33f;
+		Bullet_F2.m_VertexList[3].x = 3.33f; Bullet_F2.m_VertexList[3].y = 3.33f;
+		Bullet_F2.m_VertexList[4].x = 3.33f; Bullet_F2.m_VertexList[4].y = 3.33f;
+		Bullet_F2.m_VertexList[5].x = 3.33f; Bullet_F2.m_VertexList[5].y = 3.33f;
+		Bullet_F2.m_VertexList[6].x = 3.33f; Bullet_F2.m_VertexList[6].y = 3.33f;
 
-		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[0].x = 3.538f; Bullet_Ghost_1.m_VertexList[0].y = 3.538f;
+		Bullet_Ghost_1.m_VertexList[1].x = 3.538f; Bullet_Ghost_1.m_VertexList[1].y = 3.538f;
+		Bullet_Ghost_1.m_VertexList[2].x = 3.538f; Bullet_Ghost_1.m_VertexList[2].y = 3.538f;
+		Bullet_Ghost_1.m_VertexList[3].x = 3.538f; Bullet_Ghost_1.m_VertexList[3].y = 3.538f;
+		Bullet_Ghost_1.m_VertexList[4].x = 3.538f; Bullet_Ghost_1.m_VertexList[4].y = 3.538f;
+		Bullet_Ghost_1.m_VertexList[5].x = 3.538f; Bullet_Ghost_1.m_VertexList[5].y = 3.538f;
+		Bullet_Ghost_1.m_VertexList[6].x = 3.338f; Bullet_Ghost_1.m_VertexList[6].y = 3.538f;
 
 
 		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3437,21 +3158,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_F2.m_VertexList[0].x = 1.5f; Bullet_F2.m_VertexList[0].y = 1.5f;
-		Bullet_F2.m_VertexList[1].x = 1.5f; Bullet_F2.m_VertexList[1].y = 1.5f;
-		Bullet_F2.m_VertexList[2].x = 1.5f; Bullet_F2.m_VertexList[2].y = 1.5f;
-		Bullet_F2.m_VertexList[3].x = 1.5f; Bullet_F2.m_VertexList[3].y = 1.5f;
-		Bullet_F2.m_VertexList[4].x = 1.5f; Bullet_F2.m_VertexList[4].y = 1.5f;
-		Bullet_F2.m_VertexList[5].x = 1.5f; Bullet_F2.m_VertexList[5].y = 1.5f;
-		Bullet_F2.m_VertexList[6].x = 1.5f; Bullet_F2.m_VertexList[6].y = 1.5f;
+		Bullet_F2.m_VertexList[0].x = 3.378f; Bullet_F2.m_VertexList[0].y = 3.378f;
+		Bullet_F2.m_VertexList[1].x = 3.378f; Bullet_F2.m_VertexList[1].y = 3.378f;
+		Bullet_F2.m_VertexList[2].x = 3.378f; Bullet_F2.m_VertexList[2].y = 3.378f;
+		Bullet_F2.m_VertexList[3].x = 3.378f; Bullet_F2.m_VertexList[3].y = 3.378f;
+		Bullet_F2.m_VertexList[4].x = 3.378f; Bullet_F2.m_VertexList[4].y = 3.378f;
+		Bullet_F2.m_VertexList[5].x = 3.378f; Bullet_F2.m_VertexList[5].y = 3.378f;
+		Bullet_F2.m_VertexList[6].x = 3.378f; Bullet_F2.m_VertexList[6].y = 3.378f;
 
-		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[0].x = 8.72f; Bullet_Ghost_2.m_VertexList[0].y = 8.72f;
+		Bullet_Ghost_2.m_VertexList[1].x = 8.72f; Bullet_Ghost_2.m_VertexList[1].y = 8.72f;
+		Bullet_Ghost_2.m_VertexList[2].x = 8.72f; Bullet_Ghost_2.m_VertexList[2].y = 8.72f;
+		Bullet_Ghost_2.m_VertexList[3].x = 8.72f; Bullet_Ghost_2.m_VertexList[3].y = 8.72f;
+		Bullet_Ghost_2.m_VertexList[4].x = 8.72f; Bullet_Ghost_2.m_VertexList[4].y = 8.72f;
+		Bullet_Ghost_2.m_VertexList[5].x = 8.72f; Bullet_Ghost_2.m_VertexList[5].y = 8.72f;
+		Bullet_Ghost_2.m_VertexList[6].x = 8.72f; Bullet_Ghost_2.m_VertexList[6].y = 8.72f;
 
 
 		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3485,21 +3206,21 @@ void TSceneGame::Bullet_Ghost_collision()
 	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
 
-		Bullet_F2.m_VertexList[0].x = 1.5f; Bullet_F2.m_VertexList[0].y = 1.5f;
-		Bullet_F2.m_VertexList[1].x = 1.5f; Bullet_F2.m_VertexList[1].y = 1.5f;
-		Bullet_F2.m_VertexList[2].x = 1.5f; Bullet_F2.m_VertexList[2].y = 1.5f;
-		Bullet_F2.m_VertexList[3].x = 1.5f; Bullet_F2.m_VertexList[3].y = 1.5f;
-		Bullet_F2.m_VertexList[4].x = 1.5f; Bullet_F2.m_VertexList[4].y = 1.5f;
-		Bullet_F2.m_VertexList[5].x = 1.5f; Bullet_F2.m_VertexList[5].y = 1.5f;
-		Bullet_F2.m_VertexList[6].x = 1.5f; Bullet_F2.m_VertexList[6].y = 1.5f;
+		Bullet_F2.m_VertexList[0].x = 3.426f; Bullet_F2.m_VertexList[0].y = 3.426f;
+		Bullet_F2.m_VertexList[1].x = 3.426f; Bullet_F2.m_VertexList[1].y = 3.426f;
+		Bullet_F2.m_VertexList[2].x = 3.426f; Bullet_F2.m_VertexList[2].y = 3.426f;
+		Bullet_F2.m_VertexList[3].x = 3.426f; Bullet_F2.m_VertexList[3].y = 3.426f;
+		Bullet_F2.m_VertexList[4].x = 3.426f; Bullet_F2.m_VertexList[4].y = 3.426f;
+		Bullet_F2.m_VertexList[5].x = 3.426f; Bullet_F2.m_VertexList[5].y = 3.426f;
+		Bullet_F2.m_VertexList[6].x = 3.426f; Bullet_F2.m_VertexList[6].y = 3.426f;
 
-		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[0].x = 3.434f; Bullet_Ghost_3.m_VertexList[0].y = 3.434f;
+		Bullet_Ghost_3.m_VertexList[1].x = 3.434f; Bullet_Ghost_3.m_VertexList[1].y = 3.434f;
+		Bullet_Ghost_3.m_VertexList[2].x = 3.434f; Bullet_Ghost_3.m_VertexList[2].y = 3.434f;
+		Bullet_Ghost_3.m_VertexList[3].x = 3.434f; Bullet_Ghost_3.m_VertexList[3].y = 3.434f;
+		Bullet_Ghost_3.m_VertexList[4].x = 3.434f; Bullet_Ghost_3.m_VertexList[4].y = 3.434f;
+		Bullet_Ghost_3.m_VertexList[5].x = 3.434f; Bullet_Ghost_3.m_VertexList[5].y = 3.434f;
+		Bullet_Ghost_3.m_VertexList[6].x = 3.434f; Bullet_Ghost_3.m_VertexList[6].y = 3.434f;
 
 
 		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3533,21 +3254,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_F2.m_VertexList[0].x = 1.5f; Bullet_F2.m_VertexList[0].y = 1.5f;
-		Bullet_F2.m_VertexList[1].x = 1.5f; Bullet_F2.m_VertexList[1].y = 1.5f;
-		Bullet_F2.m_VertexList[2].x = 1.5f; Bullet_F2.m_VertexList[2].y = 1.5f;
-		Bullet_F2.m_VertexList[3].x = 1.5f; Bullet_F2.m_VertexList[3].y = 1.5f;
-		Bullet_F2.m_VertexList[4].x = 1.5f; Bullet_F2.m_VertexList[4].y = 1.5f;
-		Bullet_F2.m_VertexList[5].x = 1.5f; Bullet_F2.m_VertexList[5].y = 1.5f;
-		Bullet_F2.m_VertexList[6].x = 1.5f; Bullet_F2.m_VertexList[6].y = 1.5f;
+		Bullet_F2.m_VertexList[0].x = 4.236f; Bullet_F2.m_VertexList[0].y = 4.236f;
+		Bullet_F2.m_VertexList[1].x = 4.236f; Bullet_F2.m_VertexList[1].y = 4.236f;
+		Bullet_F2.m_VertexList[2].x = 4.236f; Bullet_F2.m_VertexList[2].y = 4.236f;
+		Bullet_F2.m_VertexList[3].x = 4.236f; Bullet_F2.m_VertexList[3].y = 4.236f;
+		Bullet_F2.m_VertexList[4].x = 4.236f; Bullet_F2.m_VertexList[4].y = 4.236f;
+		Bullet_F2.m_VertexList[5].x = 4.236f; Bullet_F2.m_VertexList[5].y = 4.236f;
+		Bullet_F2.m_VertexList[6].x = 4.236f; Bullet_F2.m_VertexList[6].y = 4.236f;
 
-		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[0].x = 4.741f; Bullet_Ghost_4.m_VertexList[0].y = 4.741f;
+		Bullet_Ghost_4.m_VertexList[1].x = 4.741f; Bullet_Ghost_4.m_VertexList[1].y = 4.741f;
+		Bullet_Ghost_4.m_VertexList[2].x = 4.741f; Bullet_Ghost_4.m_VertexList[2].y = 4.741f;
+		Bullet_Ghost_4.m_VertexList[3].x = 4.741f; Bullet_Ghost_4.m_VertexList[3].y = 4.741f;
+		Bullet_Ghost_4.m_VertexList[4].x = 4.741f; Bullet_Ghost_4.m_VertexList[4].y = 4.741f;
+		Bullet_Ghost_4.m_VertexList[5].x = 4.741f; Bullet_Ghost_4.m_VertexList[5].y = 4.741f;
+		Bullet_Ghost_4.m_VertexList[6].x = 4.741f; Bullet_Ghost_4.m_VertexList[6].y = 4.741f;
 
 
 		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3584,21 +3305,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_F3.m_VertexList[0].x = 1.5f; Bullet_F3.m_VertexList[0].y = 1.5f;
-		Bullet_F3.m_VertexList[1].x = 1.5f; Bullet_F3.m_VertexList[1].y = 1.5f;
-		Bullet_F3.m_VertexList[2].x = 1.5f; Bullet_F3.m_VertexList[2].y = 1.5f;
-		Bullet_F3.m_VertexList[3].x = 1.5f; Bullet_F3.m_VertexList[3].y = 1.5f;
-		Bullet_F3.m_VertexList[4].x = 1.5f; Bullet_F3.m_VertexList[4].y = 1.5f;
-		Bullet_F3.m_VertexList[5].x = 1.5f; Bullet_F3.m_VertexList[5].y = 1.5f;
-		Bullet_F3.m_VertexList[6].x = 1.5f; Bullet_F3.m_VertexList[6].y = 1.5f;
+		Bullet_F3.m_VertexList[0].x = 3.125f; Bullet_F3.m_VertexList[0].y = 3.125f;
+		Bullet_F3.m_VertexList[1].x = 3.125f; Bullet_F3.m_VertexList[1].y = 3.125f;
+		Bullet_F3.m_VertexList[2].x = 3.125f; Bullet_F3.m_VertexList[2].y = 3.125f;
+		Bullet_F3.m_VertexList[3].x = 3.125f; Bullet_F3.m_VertexList[3].y = 3.125f;
+		Bullet_F3.m_VertexList[4].x = 3.125f; Bullet_F3.m_VertexList[4].y = 3.125f;
+		Bullet_F3.m_VertexList[5].x = 3.125f; Bullet_F3.m_VertexList[5].y = 3.125f;
+		Bullet_F3.m_VertexList[6].x = 3.125f; Bullet_F3.m_VertexList[6].y = 3.125f;
 
-		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[0].x = 4.31f; Bullet_Ghost_1.m_VertexList[0].y = 4.31f;
+		Bullet_Ghost_1.m_VertexList[1].x = 4.31f; Bullet_Ghost_1.m_VertexList[1].y = 4.31f;
+		Bullet_Ghost_1.m_VertexList[2].x = 4.31f; Bullet_Ghost_1.m_VertexList[2].y = 4.31f;
+		Bullet_Ghost_1.m_VertexList[3].x = 4.31f; Bullet_Ghost_1.m_VertexList[3].y = 4.31f;
+		Bullet_Ghost_1.m_VertexList[4].x = 4.31f; Bullet_Ghost_1.m_VertexList[4].y = 4.31f;
+		Bullet_Ghost_1.m_VertexList[5].x = 4.31f; Bullet_Ghost_1.m_VertexList[5].y = 4.31f;
+		Bullet_Ghost_1.m_VertexList[6].x = 4.31f; Bullet_Ghost_1.m_VertexList[6].y = 4.31f;
 
 
 		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3632,21 +3353,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_F3.m_VertexList[0].x = 1.5f; Bullet_F3.m_VertexList[0].y = 1.5f;
-		Bullet_F3.m_VertexList[1].x = 1.5f; Bullet_F3.m_VertexList[1].y = 1.5f;
-		Bullet_F3.m_VertexList[2].x = 1.5f; Bullet_F3.m_VertexList[2].y = 1.5f;
-		Bullet_F3.m_VertexList[3].x = 1.5f; Bullet_F3.m_VertexList[3].y = 1.5f;
-		Bullet_F3.m_VertexList[4].x = 1.5f; Bullet_F3.m_VertexList[4].y = 1.5f;
-		Bullet_F3.m_VertexList[5].x = 1.5f; Bullet_F3.m_VertexList[5].y = 1.5f;
-		Bullet_F3.m_VertexList[6].x = 1.5f; Bullet_F3.m_VertexList[6].y = 1.5f;
+		Bullet_F3.m_VertexList[0].x = 3.73f; Bullet_F3.m_VertexList[0].y = 3.73f;
+		Bullet_F3.m_VertexList[1].x = 3.73f; Bullet_F3.m_VertexList[1].y = 3.73f;
+		Bullet_F3.m_VertexList[2].x = 3.73f; Bullet_F3.m_VertexList[2].y = 3.73f;
+		Bullet_F3.m_VertexList[3].x = 3.73f; Bullet_F3.m_VertexList[3].y = 3.73f;
+		Bullet_F3.m_VertexList[4].x = 3.73f; Bullet_F3.m_VertexList[4].y = 3.73f;
+		Bullet_F3.m_VertexList[5].x = 3.73f; Bullet_F3.m_VertexList[5].y = 3.73f;
+		Bullet_F3.m_VertexList[6].x = 3.73f; Bullet_F3.m_VertexList[6].y = 3.73f;
 
-		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[0].x = 3.44f; Bullet_Ghost_2.m_VertexList[0].y = 3.44f;
+		Bullet_Ghost_2.m_VertexList[1].x = 3.44f; Bullet_Ghost_2.m_VertexList[1].y = 3.44f;
+		Bullet_Ghost_2.m_VertexList[2].x = 3.44f; Bullet_Ghost_2.m_VertexList[2].y = 3.44f;
+		Bullet_Ghost_2.m_VertexList[3].x = 3.44f; Bullet_Ghost_2.m_VertexList[3].y = 3.44f;
+		Bullet_Ghost_2.m_VertexList[4].x = 3.44f; Bullet_Ghost_2.m_VertexList[4].y = 3.44f;
+		Bullet_Ghost_2.m_VertexList[5].x = 3.44f; Bullet_Ghost_2.m_VertexList[5].y = 3.44f;
+		Bullet_Ghost_2.m_VertexList[6].x = 3.44f; Bullet_Ghost_2.m_VertexList[6].y = 3.44f;
 
 
 		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3679,21 +3400,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_F3.m_VertexList[0].x = 1.5f; Bullet_F3.m_VertexList[0].y = 1.5f;
-		Bullet_F3.m_VertexList[1].x = 1.5f; Bullet_F3.m_VertexList[1].y = 1.5f;
-		Bullet_F3.m_VertexList[2].x = 1.5f; Bullet_F3.m_VertexList[2].y = 1.5f;
-		Bullet_F3.m_VertexList[3].x = 1.5f; Bullet_F3.m_VertexList[3].y = 1.5f;
-		Bullet_F3.m_VertexList[4].x = 1.5f; Bullet_F3.m_VertexList[4].y = 1.5f;
-		Bullet_F3.m_VertexList[5].x = 1.5f; Bullet_F3.m_VertexList[5].y = 1.5f;
-		Bullet_F3.m_VertexList[6].x = 1.5f; Bullet_F3.m_VertexList[6].y = 1.5f;
+		Bullet_F3.m_VertexList[0].x = 3.35f; Bullet_F3.m_VertexList[0].y = 3.35f;
+		Bullet_F3.m_VertexList[1].x = 3.35f; Bullet_F3.m_VertexList[1].y = 3.35f;
+		Bullet_F3.m_VertexList[2].x = 3.35f; Bullet_F3.m_VertexList[2].y = 3.35f;
+		Bullet_F3.m_VertexList[3].x = 3.35f; Bullet_F3.m_VertexList[3].y = 3.35f;
+		Bullet_F3.m_VertexList[4].x = 3.35f; Bullet_F3.m_VertexList[4].y = 3.35f;
+		Bullet_F3.m_VertexList[5].x = 3.35f; Bullet_F3.m_VertexList[5].y = 3.35f;
+		Bullet_F3.m_VertexList[6].x = 3.35f; Bullet_F3.m_VertexList[6].y = 3.35f;
 
-		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[0].x = 3.16f; Bullet_Ghost_3.m_VertexList[0].y = 3.16f;
+		Bullet_Ghost_3.m_VertexList[1].x = 3.16f; Bullet_Ghost_3.m_VertexList[1].y = 3.16f;
+		Bullet_Ghost_3.m_VertexList[2].x = 3.16f; Bullet_Ghost_3.m_VertexList[2].y = 3.16f;
+		Bullet_Ghost_3.m_VertexList[3].x = 3.16f; Bullet_Ghost_3.m_VertexList[3].y = 3.16f;
+		Bullet_Ghost_3.m_VertexList[4].x = 3.16f; Bullet_Ghost_3.m_VertexList[4].y = 3.16f;
+		Bullet_Ghost_3.m_VertexList[5].x = 3.16f; Bullet_Ghost_3.m_VertexList[5].y = 3.16f;
+		Bullet_Ghost_3.m_VertexList[6].x = 3.16f; Bullet_Ghost_3.m_VertexList[6].y = 3.16f;
 
 
 		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3726,21 +3447,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_F3.m_VertexList[0].x = 1.5f; Bullet_F3.m_VertexList[0].y = 1.5f;
-		Bullet_F3.m_VertexList[1].x = 1.5f; Bullet_F3.m_VertexList[1].y = 1.5f;
-		Bullet_F3.m_VertexList[2].x = 1.5f; Bullet_F3.m_VertexList[2].y = 1.5f;
-		Bullet_F3.m_VertexList[3].x = 1.5f; Bullet_F3.m_VertexList[3].y = 1.5f;
-		Bullet_F3.m_VertexList[4].x = 1.5f; Bullet_F3.m_VertexList[4].y = 1.5f;
-		Bullet_F3.m_VertexList[5].x = 1.5f; Bullet_F3.m_VertexList[5].y = 1.5f;
-		Bullet_F3.m_VertexList[6].x = 1.5f; Bullet_F3.m_VertexList[6].y = 1.5f;
+		Bullet_F3.m_VertexList[0].x = 4.47f; Bullet_F3.m_VertexList[0].y = 4.47f;
+		Bullet_F3.m_VertexList[1].x = 4.47f; Bullet_F3.m_VertexList[1].y = 4.47f;
+		Bullet_F3.m_VertexList[2].x = 4.47f; Bullet_F3.m_VertexList[2].y = 4.47f;
+		Bullet_F3.m_VertexList[3].x = 4.47f; Bullet_F3.m_VertexList[3].y = 4.47f;
+		Bullet_F3.m_VertexList[4].x = 4.47f; Bullet_F3.m_VertexList[4].y = 4.47f;
+		Bullet_F3.m_VertexList[5].x = 4.47f; Bullet_F3.m_VertexList[5].y = 4.47f;
+		Bullet_F3.m_VertexList[6].x = 4.47f; Bullet_F3.m_VertexList[6].y = 4.47f;
 
-		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[0].x = 4.675f; Bullet_Ghost_4.m_VertexList[0].y = 4.675f;
+		Bullet_Ghost_4.m_VertexList[1].x = 4.675f; Bullet_Ghost_4.m_VertexList[1].y = 4.675f;
+		Bullet_Ghost_4.m_VertexList[2].x = 4.675f; Bullet_Ghost_4.m_VertexList[2].y = 4.675f;
+		Bullet_Ghost_4.m_VertexList[3].x = 4.675f; Bullet_Ghost_4.m_VertexList[3].y = 4.675f;
+		Bullet_Ghost_4.m_VertexList[4].x = 4.675f; Bullet_Ghost_4.m_VertexList[4].y = 4.675f;
+		Bullet_Ghost_4.m_VertexList[5].x = 4.675f; Bullet_Ghost_4.m_VertexList[5].y = 4.675f;
+		Bullet_Ghost_4.m_VertexList[6].x = 4.675f; Bullet_Ghost_4.m_VertexList[6].y = 4.675f;
 
 
 		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3776,21 +3497,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_F4.m_VertexList[0].x = 1.5f; Bullet_F4.m_VertexList[0].y = 1.5f;
-		Bullet_F4.m_VertexList[1].x = 1.5f; Bullet_F4.m_VertexList[1].y = 1.5f;
-		Bullet_F4.m_VertexList[2].x = 1.5f; Bullet_F4.m_VertexList[2].y = 1.5f;
-		Bullet_F4.m_VertexList[3].x = 1.5f; Bullet_F4.m_VertexList[3].y = 1.5f;
-		Bullet_F4.m_VertexList[4].x = 1.5f; Bullet_F4.m_VertexList[4].y = 1.5f;
-		Bullet_F4.m_VertexList[5].x = 1.5f; Bullet_F4.m_VertexList[5].y = 1.5f;
-		Bullet_F4.m_VertexList[6].x = 1.5f; Bullet_F4.m_VertexList[6].y = 1.5f;
+		Bullet_F4.m_VertexList[0].x = 4.322f; Bullet_F4.m_VertexList[0].y = 4.322f;
+		Bullet_F4.m_VertexList[1].x = 4.322f; Bullet_F4.m_VertexList[1].y = 4.322f;
+		Bullet_F4.m_VertexList[2].x = 4.322f; Bullet_F4.m_VertexList[2].y = 4.322f;
+		Bullet_F4.m_VertexList[3].x = 4.322f; Bullet_F4.m_VertexList[3].y = 4.322f;
+		Bullet_F4.m_VertexList[4].x = 4.322f; Bullet_F4.m_VertexList[4].y = 4.322f;
+		Bullet_F4.m_VertexList[5].x = 4.322f; Bullet_F4.m_VertexList[5].y = 4.322f;
+		Bullet_F4.m_VertexList[6].x = 4.322f; Bullet_F4.m_VertexList[6].y = 4.322f;
 
-		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[0].x = 3.204f; Bullet_Ghost_1.m_VertexList[0].y = 3.204f;
+		Bullet_Ghost_1.m_VertexList[1].x = 3.204f; Bullet_Ghost_1.m_VertexList[1].y = 3.204f;
+		Bullet_Ghost_1.m_VertexList[2].x = 3.204f; Bullet_Ghost_1.m_VertexList[2].y = 3.204f;
+		Bullet_Ghost_1.m_VertexList[3].x = 3.204f; Bullet_Ghost_1.m_VertexList[3].y = 3.204f;
+		Bullet_Ghost_1.m_VertexList[4].x = 3.204f; Bullet_Ghost_1.m_VertexList[4].y = 3.204f;
+		Bullet_Ghost_1.m_VertexList[5].x = 3.204f; Bullet_Ghost_1.m_VertexList[5].y = 3.204f;
+		Bullet_Ghost_1.m_VertexList[6].x = 3.204f; Bullet_Ghost_1.m_VertexList[6].y = 3.204f;
 
 
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3824,21 +3545,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_F4.m_VertexList[0].x = 1.5f; Bullet_F4.m_VertexList[0].y = 1.5f;
-		Bullet_F4.m_VertexList[1].x = 1.5f; Bullet_F4.m_VertexList[1].y = 1.5f;
-		Bullet_F4.m_VertexList[2].x = 1.5f; Bullet_F4.m_VertexList[2].y = 1.5f;
-		Bullet_F4.m_VertexList[3].x = 1.5f; Bullet_F4.m_VertexList[3].y = 1.5f;
-		Bullet_F4.m_VertexList[4].x = 1.5f; Bullet_F4.m_VertexList[4].y = 1.5f;
-		Bullet_F4.m_VertexList[5].x = 1.5f; Bullet_F4.m_VertexList[5].y = 1.5f;
-		Bullet_F4.m_VertexList[6].x = 1.5f; Bullet_F4.m_VertexList[6].y = 1.5f;
+		Bullet_F4.m_VertexList[0].x = 3.765f; Bullet_F4.m_VertexList[0].y = 3.765f;
+		Bullet_F4.m_VertexList[1].x = 3.765f; Bullet_F4.m_VertexList[1].y = 3.765f;
+		Bullet_F4.m_VertexList[2].x = 3.765f; Bullet_F4.m_VertexList[2].y = 3.765f;
+		Bullet_F4.m_VertexList[3].x = 3.765f; Bullet_F4.m_VertexList[3].y = 3.765f;
+		Bullet_F4.m_VertexList[4].x = 3.765f; Bullet_F4.m_VertexList[4].y = 3.765f;
+		Bullet_F4.m_VertexList[5].x = 3.765f; Bullet_F4.m_VertexList[5].y = 3.765f;
+		Bullet_F4.m_VertexList[6].x = 3.765f; Bullet_F4.m_VertexList[6].y = 3.765f;
 
-		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[0].x = 3.275f; Bullet_Ghost_2.m_VertexList[0].y = 3.275f;
+		Bullet_Ghost_2.m_VertexList[1].x = 3.275f; Bullet_Ghost_2.m_VertexList[1].y = 3.275f;
+		Bullet_Ghost_2.m_VertexList[2].x = 3.275f; Bullet_Ghost_2.m_VertexList[2].y = 3.275f;
+		Bullet_Ghost_2.m_VertexList[3].x = 3.275f; Bullet_Ghost_2.m_VertexList[3].y = 3.275f;
+		Bullet_Ghost_2.m_VertexList[4].x = 3.275f; Bullet_Ghost_2.m_VertexList[4].y = 3.275f;
+		Bullet_Ghost_2.m_VertexList[5].x = 3.275f; Bullet_Ghost_2.m_VertexList[5].y = 3.275f;
+		Bullet_Ghost_2.m_VertexList[6].x = 3.275f; Bullet_Ghost_2.m_VertexList[6].y = 3.275f;
 
 
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3871,21 +3592,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_F4.m_VertexList[0].x = 1.5f; Bullet_F4.m_VertexList[0].y = 1.5f;
-		Bullet_F4.m_VertexList[1].x = 1.5f; Bullet_F4.m_VertexList[1].y = 1.5f;
-		Bullet_F4.m_VertexList[2].x = 1.5f; Bullet_F4.m_VertexList[2].y = 1.5f;
-		Bullet_F4.m_VertexList[3].x = 1.5f; Bullet_F4.m_VertexList[3].y = 1.5f;
-		Bullet_F4.m_VertexList[4].x = 1.5f; Bullet_F4.m_VertexList[4].y = 1.5f;
-		Bullet_F4.m_VertexList[5].x = 1.5f; Bullet_F4.m_VertexList[5].y = 1.5f;
-		Bullet_F4.m_VertexList[6].x = 1.5f; Bullet_F4.m_VertexList[6].y = 1.5f;
+		Bullet_F4.m_VertexList[0].x = 3.812f; Bullet_F4.m_VertexList[0].y = 3.812f;
+		Bullet_F4.m_VertexList[1].x = 3.812f; Bullet_F4.m_VertexList[1].y = 3.812f;
+		Bullet_F4.m_VertexList[2].x = 3.812f; Bullet_F4.m_VertexList[2].y = 3.812f;
+		Bullet_F4.m_VertexList[3].x = 3.812f; Bullet_F4.m_VertexList[3].y = 3.812f;
+		Bullet_F4.m_VertexList[4].x = 3.812f; Bullet_F4.m_VertexList[4].y = 3.812f;
+		Bullet_F4.m_VertexList[5].x = 3.812f; Bullet_F4.m_VertexList[5].y = 3.812f;
+		Bullet_F4.m_VertexList[6].x = 3.812f; Bullet_F4.m_VertexList[6].y = 3.812f;
 
-		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[0].x = 2.88f; Bullet_Ghost_3.m_VertexList[0].y = 2.88f;
+		Bullet_Ghost_3.m_VertexList[1].x = 2.88f; Bullet_Ghost_3.m_VertexList[1].y = 2.88f;
+		Bullet_Ghost_3.m_VertexList[2].x = 2.88f; Bullet_Ghost_3.m_VertexList[2].y = 2.88f;
+		Bullet_Ghost_3.m_VertexList[3].x = 2.88f; Bullet_Ghost_3.m_VertexList[3].y = 2.88f;
+		Bullet_Ghost_3.m_VertexList[4].x = 2.88f; Bullet_Ghost_3.m_VertexList[4].y = 2.88f;
+		Bullet_Ghost_3.m_VertexList[5].x = 2.88f; Bullet_Ghost_3.m_VertexList[5].y = 2.88f;
+		Bullet_Ghost_3.m_VertexList[6].x = 2.88f; Bullet_Ghost_3.m_VertexList[6].y = 2.88f;
 
 
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3918,21 +3639,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_F4.m_VertexList[0].x = 1.5f; Bullet_F4.m_VertexList[0].y = 1.5f;
-		Bullet_F4.m_VertexList[1].x = 1.5f; Bullet_F4.m_VertexList[1].y = 1.5f;
-		Bullet_F4.m_VertexList[2].x = 1.5f; Bullet_F4.m_VertexList[2].y = 1.5f;
-		Bullet_F4.m_VertexList[3].x = 1.5f; Bullet_F4.m_VertexList[3].y = 1.5f;
-		Bullet_F4.m_VertexList[4].x = 1.5f; Bullet_F4.m_VertexList[4].y = 1.5f;
-		Bullet_F4.m_VertexList[5].x = 1.5f; Bullet_F4.m_VertexList[5].y = 1.5f;
-		Bullet_F4.m_VertexList[6].x = 1.5f; Bullet_F4.m_VertexList[6].y = 1.5f;
+		Bullet_F4.m_VertexList[0].x = 6.36f; Bullet_F4.m_VertexList[0].y = 6.36f;
+		Bullet_F4.m_VertexList[1].x = 6.36f; Bullet_F4.m_VertexList[1].y = 6.36f;
+		Bullet_F4.m_VertexList[2].x = 6.36f; Bullet_F4.m_VertexList[2].y = 6.36f;
+		Bullet_F4.m_VertexList[3].x = 6.36f; Bullet_F4.m_VertexList[3].y = 6.36f;
+		Bullet_F4.m_VertexList[4].x = 6.36f; Bullet_F4.m_VertexList[4].y = 6.36f;
+		Bullet_F4.m_VertexList[5].x = 6.36f; Bullet_F4.m_VertexList[5].y = 6.36f;
+		Bullet_F4.m_VertexList[6].x = 6.36f; Bullet_F4.m_VertexList[6].y = 6.36f;
 
-		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[0].x = 3.741f; Bullet_Ghost_4.m_VertexList[0].y = 3.741f;
+		Bullet_Ghost_4.m_VertexList[1].x = 3.741f; Bullet_Ghost_4.m_VertexList[1].y = 3.741f;
+		Bullet_Ghost_4.m_VertexList[2].x = 3.741f; Bullet_Ghost_4.m_VertexList[2].y = 3.741f;
+		Bullet_Ghost_4.m_VertexList[3].x = 3.741f; Bullet_Ghost_4.m_VertexList[3].y = 3.741f;
+		Bullet_Ghost_4.m_VertexList[4].x = 3.741f; Bullet_Ghost_4.m_VertexList[4].y = 3.741f;
+		Bullet_Ghost_4.m_VertexList[5].x = 3.741f; Bullet_Ghost_4.m_VertexList[5].y = 3.741f;
+		Bullet_Ghost_4.m_VertexList[6].x = 3.741f; Bullet_Ghost_4.m_VertexList[6].y = 3.741f;
 
 
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -3968,21 +3689,21 @@ void TSceneGame::Bullet_Ghost_collision()
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
 
-		Bullet_C1.m_VertexList[0].x = 1.5f; Bullet_C1.m_VertexList[0].y = 1.5f;
-		Bullet_C1.m_VertexList[1].x = 1.5f; Bullet_C1.m_VertexList[1].y = 1.5f;
-		Bullet_C1.m_VertexList[2].x = 1.5f; Bullet_C1.m_VertexList[2].y = 1.5f;
-		Bullet_C1.m_VertexList[3].x = 1.5f; Bullet_C1.m_VertexList[3].y = 1.5f;
-		Bullet_C1.m_VertexList[4].x = 1.5f; Bullet_C1.m_VertexList[4].y = 1.5f;
-		Bullet_C1.m_VertexList[5].x = 1.5f; Bullet_C1.m_VertexList[5].y = 1.5f;
-		Bullet_C1.m_VertexList[6].x = 1.5f; Bullet_C1.m_VertexList[6].y = 1.5f;
+		Bullet_C1.m_VertexList[0].x = 4.115f; Bullet_C1.m_VertexList[0].y = 4.115f;
+		Bullet_C1.m_VertexList[1].x = 4.115f; Bullet_C1.m_VertexList[1].y = 4.115f;
+		Bullet_C1.m_VertexList[2].x = 4.115f; Bullet_C1.m_VertexList[2].y = 4.115f;
+		Bullet_C1.m_VertexList[3].x = 4.115f; Bullet_C1.m_VertexList[3].y = 4.115f;
+		Bullet_C1.m_VertexList[4].x = 4.115f; Bullet_C1.m_VertexList[4].y = 4.115f;
+		Bullet_C1.m_VertexList[5].x = 4.115f; Bullet_C1.m_VertexList[5].y = 4.115f;
+		Bullet_C1.m_VertexList[6].x = 4.115f; Bullet_C1.m_VertexList[6].y = 4.115f;
 
-		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[0].x = 4.82f; Bullet_Ghost_1.m_VertexList[0].y = 4.82f;
+		Bullet_Ghost_1.m_VertexList[1].x = 4.82f; Bullet_Ghost_1.m_VertexList[1].y = 4.82f;
+		Bullet_Ghost_1.m_VertexList[2].x = 4.82f; Bullet_Ghost_1.m_VertexList[2].y = 4.82f;
+		Bullet_Ghost_1.m_VertexList[3].x = 4.82f; Bullet_Ghost_1.m_VertexList[3].y = 4.82f;
+		Bullet_Ghost_1.m_VertexList[4].x = 4.82f; Bullet_Ghost_1.m_VertexList[4].y = 4.82f;
+		Bullet_Ghost_1.m_VertexList[5].x = 4.82f; Bullet_Ghost_1.m_VertexList[5].y = 4.82f;
+		Bullet_Ghost_1.m_VertexList[6].x = 4.82f; Bullet_Ghost_1.m_VertexList[6].y = 4.82f;
 
 
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4016,21 +3737,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_C1.m_VertexList[0].x = 1.5f; Bullet_C1.m_VertexList[0].y = 1.5f;
-		Bullet_C1.m_VertexList[1].x = 1.5f; Bullet_C1.m_VertexList[1].y = 1.5f;
-		Bullet_C1.m_VertexList[2].x = 1.5f; Bullet_C1.m_VertexList[2].y = 1.5f;
-		Bullet_C1.m_VertexList[3].x = 1.5f; Bullet_C1.m_VertexList[3].y = 1.5f;
-		Bullet_C1.m_VertexList[4].x = 1.5f; Bullet_C1.m_VertexList[4].y = 1.5f;
-		Bullet_C1.m_VertexList[5].x = 1.5f; Bullet_C1.m_VertexList[5].y = 1.5f;
-		Bullet_C1.m_VertexList[6].x = 1.5f; Bullet_C1.m_VertexList[6].y = 1.5f;
+		Bullet_C1.m_VertexList[0].x = 2.344f; Bullet_C1.m_VertexList[0].y = 2.344f;
+		Bullet_C1.m_VertexList[1].x = 2.344f; Bullet_C1.m_VertexList[1].y = 2.344f;
+		Bullet_C1.m_VertexList[2].x = 2.344f; Bullet_C1.m_VertexList[2].y = 2.344f;
+		Bullet_C1.m_VertexList[3].x = 2.344f; Bullet_C1.m_VertexList[3].y = 2.344f;
+		Bullet_C1.m_VertexList[4].x = 2.344f; Bullet_C1.m_VertexList[4].y = 2.344f;
+		Bullet_C1.m_VertexList[5].x = 2.344f; Bullet_C1.m_VertexList[5].y = 2.344f;
+		Bullet_C1.m_VertexList[6].x = 2.344f; Bullet_C1.m_VertexList[6].y = 2.344f;
 
-		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[0].x = 4.11f; Bullet_Ghost_2.m_VertexList[0].y = 4.11f;
+		Bullet_Ghost_2.m_VertexList[1].x = 4.11f; Bullet_Ghost_2.m_VertexList[1].y = 4.11f;
+		Bullet_Ghost_2.m_VertexList[2].x = 4.11f; Bullet_Ghost_2.m_VertexList[2].y = 4.11f;
+		Bullet_Ghost_2.m_VertexList[3].x = 4.11f; Bullet_Ghost_2.m_VertexList[3].y = 4.11f;
+		Bullet_Ghost_2.m_VertexList[4].x = 4.11f; Bullet_Ghost_2.m_VertexList[4].y = 4.11f;
+		Bullet_Ghost_2.m_VertexList[5].x = 4.11f; Bullet_Ghost_2.m_VertexList[5].y = 4.11f;
+		Bullet_Ghost_2.m_VertexList[6].x = 4.11f; Bullet_Ghost_2.m_VertexList[6].y = 4.11f;
 
 
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4064,21 +3785,21 @@ void TSceneGame::Bullet_Ghost_collision()
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
 
-		Bullet_C1.m_VertexList[0].x = 1.5f; Bullet_C1.m_VertexList[0].y = 1.5f;
-		Bullet_C1.m_VertexList[1].x = 1.5f; Bullet_C1.m_VertexList[1].y = 1.5f;
-		Bullet_C1.m_VertexList[2].x = 1.5f; Bullet_C1.m_VertexList[2].y = 1.5f;
-		Bullet_C1.m_VertexList[3].x = 1.5f; Bullet_C1.m_VertexList[3].y = 1.5f;
-		Bullet_C1.m_VertexList[4].x = 1.5f; Bullet_C1.m_VertexList[4].y = 1.5f;
-		Bullet_C1.m_VertexList[5].x = 1.5f; Bullet_C1.m_VertexList[5].y = 1.5f;
-		Bullet_C1.m_VertexList[6].x = 1.5f; Bullet_C1.m_VertexList[6].y = 1.5f;
+		Bullet_C1.m_VertexList[0].x = 4.785f; Bullet_C1.m_VertexList[0].y = 4.785f;
+		Bullet_C1.m_VertexList[1].x = 4.785f; Bullet_C1.m_VertexList[1].y = 4.785f;
+		Bullet_C1.m_VertexList[2].x = 4.785f; Bullet_C1.m_VertexList[2].y = 4.785f;
+		Bullet_C1.m_VertexList[3].x = 4.785f; Bullet_C1.m_VertexList[3].y = 4.785f;
+		Bullet_C1.m_VertexList[4].x = 4.785f; Bullet_C1.m_VertexList[4].y = 4.785f;
+		Bullet_C1.m_VertexList[5].x = 4.785f; Bullet_C1.m_VertexList[5].y = 4.785f;
+		Bullet_C1.m_VertexList[6].x = 4.785f; Bullet_C1.m_VertexList[6].y = 4.785f;
 
-		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[0].x = 5.45f; Bullet_Ghost_3.m_VertexList[0].y = 5.45f;
+		Bullet_Ghost_3.m_VertexList[1].x = 5.45f; Bullet_Ghost_3.m_VertexList[1].y = 5.45f;
+		Bullet_Ghost_3.m_VertexList[2].x = 5.45f; Bullet_Ghost_3.m_VertexList[2].y = 5.45f;
+		Bullet_Ghost_3.m_VertexList[3].x = 5.45f; Bullet_Ghost_3.m_VertexList[3].y = 5.45f;
+		Bullet_Ghost_3.m_VertexList[4].x = 5.45f; Bullet_Ghost_3.m_VertexList[4].y = 5.45f;
+		Bullet_Ghost_3.m_VertexList[5].x = 5.45f; Bullet_Ghost_3.m_VertexList[5].y = 5.45f;
+		Bullet_Ghost_3.m_VertexList[6].x = 5.45f; Bullet_Ghost_3.m_VertexList[6].y = 5.45f;
 
 
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4113,21 +3834,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_C1.m_VertexList[0].x = 1.5f; Bullet_C1.m_VertexList[0].y = 1.5f;
-		Bullet_C1.m_VertexList[1].x = 1.5f; Bullet_C1.m_VertexList[1].y = 1.5f;
-		Bullet_C1.m_VertexList[2].x = 1.5f; Bullet_C1.m_VertexList[2].y = 1.5f;
-		Bullet_C1.m_VertexList[3].x = 1.5f; Bullet_C1.m_VertexList[3].y = 1.5f;
-		Bullet_C1.m_VertexList[4].x = 1.5f; Bullet_C1.m_VertexList[4].y = 1.5f;
-		Bullet_C1.m_VertexList[5].x = 1.5f; Bullet_C1.m_VertexList[5].y = 1.5f;
-		Bullet_C1.m_VertexList[6].x = 1.5f; Bullet_C1.m_VertexList[6].y = 1.5f;
+		Bullet_C1.m_VertexList[0].x = 4.27f; Bullet_C1.m_VertexList[0].y = 4.27f;
+		Bullet_C1.m_VertexList[1].x = 4.27f; Bullet_C1.m_VertexList[1].y = 4.27f;
+		Bullet_C1.m_VertexList[2].x = 4.27f; Bullet_C1.m_VertexList[2].y = 4.27f;
+		Bullet_C1.m_VertexList[3].x = 4.27f; Bullet_C1.m_VertexList[3].y = 4.27f;
+		Bullet_C1.m_VertexList[4].x = 4.27f; Bullet_C1.m_VertexList[4].y = 4.27f;
+		Bullet_C1.m_VertexList[5].x = 4.27f; Bullet_C1.m_VertexList[5].y = 4.27f;
+		Bullet_C1.m_VertexList[6].x = 4.27f; Bullet_C1.m_VertexList[6].y = 4.27f;
 
-		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[0].x = 4.874f; Bullet_Ghost_4.m_VertexList[0].y = 4.874f;
+		Bullet_Ghost_4.m_VertexList[1].x = 4.874f; Bullet_Ghost_4.m_VertexList[1].y = 4.874f;
+		Bullet_Ghost_4.m_VertexList[2].x = 4.874f; Bullet_Ghost_4.m_VertexList[2].y = 4.874f;
+		Bullet_Ghost_4.m_VertexList[3].x = 4.874f; Bullet_Ghost_4.m_VertexList[3].y = 4.874f;
+		Bullet_Ghost_4.m_VertexList[4].x = 4.874f; Bullet_Ghost_4.m_VertexList[4].y = 4.874f;
+		Bullet_Ghost_4.m_VertexList[5].x = 4.874f; Bullet_Ghost_4.m_VertexList[5].y = 4.874f;
+		Bullet_Ghost_4.m_VertexList[6].x = 4.874f; Bullet_Ghost_4.m_VertexList[6].y = 4.874f;
 
 
 		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4163,21 +3884,21 @@ void TSceneGame::Bullet_Ghost_collision()
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
 
-		Bullet_C2.m_VertexList[0].x = 1.5f; Bullet_C2.m_VertexList[0].y = 1.5f;
-		Bullet_C2.m_VertexList[1].x = 1.5f; Bullet_C2.m_VertexList[1].y = 1.5f;
-		Bullet_C2.m_VertexList[2].x = 1.5f; Bullet_C2.m_VertexList[2].y = 1.5f;
-		Bullet_C2.m_VertexList[3].x = 1.5f; Bullet_C2.m_VertexList[3].y = 1.5f;
-		Bullet_C2.m_VertexList[4].x = 1.5f; Bullet_C2.m_VertexList[4].y = 1.5f;
-		Bullet_C2.m_VertexList[5].x = 1.5f; Bullet_C2.m_VertexList[5].y = 1.5f;
-		Bullet_C2.m_VertexList[6].x = 1.5f; Bullet_C2.m_VertexList[6].y = 1.5f;
+		Bullet_C2.m_VertexList[0].x = 4.22f; Bullet_C2.m_VertexList[0].y = 4.22f;
+		Bullet_C2.m_VertexList[1].x = 4.22f; Bullet_C2.m_VertexList[1].y = 4.22f;
+		Bullet_C2.m_VertexList[2].x = 4.22f; Bullet_C2.m_VertexList[2].y = 4.22f;
+		Bullet_C2.m_VertexList[3].x = 4.22f; Bullet_C2.m_VertexList[3].y = 4.22f;
+		Bullet_C2.m_VertexList[4].x = 4.22f; Bullet_C2.m_VertexList[4].y = 4.22f;
+		Bullet_C2.m_VertexList[5].x = 4.22f; Bullet_C2.m_VertexList[5].y = 4.22f;
+		Bullet_C2.m_VertexList[6].x = 4.22f; Bullet_C2.m_VertexList[6].y = 4.22f;
 
-		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[0].x = 4.712f; Bullet_Ghost_1.m_VertexList[0].y = 4.712f;
+		Bullet_Ghost_1.m_VertexList[1].x = 4.712f; Bullet_Ghost_1.m_VertexList[1].y = 4.712f;
+		Bullet_Ghost_1.m_VertexList[2].x = 4.712f; Bullet_Ghost_1.m_VertexList[2].y = 4.712f;
+		Bullet_Ghost_1.m_VertexList[3].x = 4.712f; Bullet_Ghost_1.m_VertexList[3].y = 4.712f;
+		Bullet_Ghost_1.m_VertexList[4].x = 4.712f; Bullet_Ghost_1.m_VertexList[4].y = 4.712f;
+		Bullet_Ghost_1.m_VertexList[5].x = 4.712f; Bullet_Ghost_1.m_VertexList[5].y = 4.712f;
+		Bullet_Ghost_1.m_VertexList[6].x = 4.712f; Bullet_Ghost_1.m_VertexList[6].y = 4.712f;
 
 
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4211,21 +3932,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_C2.m_VertexList[0].x = 1.5f; Bullet_C2.m_VertexList[0].y = 1.5f;
-		Bullet_C2.m_VertexList[1].x = 1.5f; Bullet_C2.m_VertexList[1].y = 1.5f;
-		Bullet_C2.m_VertexList[2].x = 1.5f; Bullet_C2.m_VertexList[2].y = 1.5f;
-		Bullet_C2.m_VertexList[3].x = 1.5f; Bullet_C2.m_VertexList[3].y = 1.5f;
-		Bullet_C2.m_VertexList[4].x = 1.5f; Bullet_C2.m_VertexList[4].y = 1.5f;
-		Bullet_C2.m_VertexList[5].x = 1.5f; Bullet_C2.m_VertexList[5].y = 1.5f;
-		Bullet_C2.m_VertexList[6].x = 1.5f; Bullet_C2.m_VertexList[6].y = 1.5f;
+		Bullet_C2.m_VertexList[0].x = 2.335f; Bullet_C2.m_VertexList[0].y = 2.335f;
+		Bullet_C2.m_VertexList[1].x = 2.335f; Bullet_C2.m_VertexList[1].y = 2.335f;
+		Bullet_C2.m_VertexList[2].x = 2.335f; Bullet_C2.m_VertexList[2].y = 2.335f;
+		Bullet_C2.m_VertexList[3].x = 2.335f; Bullet_C2.m_VertexList[3].y = 2.335f;
+		Bullet_C2.m_VertexList[4].x = 2.335f; Bullet_C2.m_VertexList[4].y = 2.335f;
+		Bullet_C2.m_VertexList[5].x = 2.335f; Bullet_C2.m_VertexList[5].y = 2.335f;
+		Bullet_C2.m_VertexList[6].x = 2.335f; Bullet_C2.m_VertexList[6].y = 2.335f;
 
-		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[0].x = 5.32f; Bullet_Ghost_2.m_VertexList[0].y =5.32f;
+		Bullet_Ghost_2.m_VertexList[1].x = 5.32f; Bullet_Ghost_2.m_VertexList[1].y =5.32f;
+		Bullet_Ghost_2.m_VertexList[2].x = 5.32f; Bullet_Ghost_2.m_VertexList[2].y =5.32f;
+		Bullet_Ghost_2.m_VertexList[3].x = 5.32f; Bullet_Ghost_2.m_VertexList[3].y =5.32f;
+		Bullet_Ghost_2.m_VertexList[4].x = 5.32f; Bullet_Ghost_2.m_VertexList[4].y =5.32f;
+		Bullet_Ghost_2.m_VertexList[5].x = 5.32f; Bullet_Ghost_2.m_VertexList[5].y =5.32f;
+		Bullet_Ghost_2.m_VertexList[6].x = 5.32f; Bullet_Ghost_2.m_VertexList[6].y =5.32f;
 
 
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4259,21 +3980,21 @@ void TSceneGame::Bullet_Ghost_collision()
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
 
-		Bullet_C2.m_VertexList[0].x = 1.5f; Bullet_C2.m_VertexList[0].y = 1.5f;
-		Bullet_C2.m_VertexList[1].x = 1.5f; Bullet_C2.m_VertexList[1].y = 1.5f;
-		Bullet_C2.m_VertexList[2].x = 1.5f; Bullet_C2.m_VertexList[2].y = 1.5f;
-		Bullet_C2.m_VertexList[3].x = 1.5f; Bullet_C2.m_VertexList[3].y = 1.5f;
-		Bullet_C2.m_VertexList[4].x = 1.5f; Bullet_C2.m_VertexList[4].y = 1.5f;
-		Bullet_C2.m_VertexList[5].x = 1.5f; Bullet_C2.m_VertexList[5].y = 1.5f;
-		Bullet_C2.m_VertexList[6].x = 1.5f; Bullet_C2.m_VertexList[6].y = 1.5f;
+		Bullet_C2.m_VertexList[0].x = 3.833f; Bullet_C2.m_VertexList[0].y = 3.833f;
+		Bullet_C2.m_VertexList[1].x = 3.833f; Bullet_C2.m_VertexList[1].y = 3.833f;
+		Bullet_C2.m_VertexList[2].x = 3.833f; Bullet_C2.m_VertexList[2].y = 3.833f;
+		Bullet_C2.m_VertexList[3].x = 3.833f; Bullet_C2.m_VertexList[3].y = 3.833f;
+		Bullet_C2.m_VertexList[4].x = 3.833f; Bullet_C2.m_VertexList[4].y = 3.833f;
+		Bullet_C2.m_VertexList[5].x = 3.833f; Bullet_C2.m_VertexList[5].y = 3.833f;
+		Bullet_C2.m_VertexList[6].x = 3.833f; Bullet_C2.m_VertexList[6].y = 3.833f;
 
-		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[0].x = 4.162f; Bullet_Ghost_3.m_VertexList[0].y = 4.162f;
+		Bullet_Ghost_3.m_VertexList[1].x = 4.162f; Bullet_Ghost_3.m_VertexList[1].y = 4.162f;
+		Bullet_Ghost_3.m_VertexList[2].x = 4.162f; Bullet_Ghost_3.m_VertexList[2].y = 4.162f;
+		Bullet_Ghost_3.m_VertexList[3].x = 4.162f; Bullet_Ghost_3.m_VertexList[3].y = 4.162f;
+		Bullet_Ghost_3.m_VertexList[4].x = 4.162f; Bullet_Ghost_3.m_VertexList[4].y = 4.162f;
+		Bullet_Ghost_3.m_VertexList[5].x = 4.162f; Bullet_Ghost_3.m_VertexList[5].y = 4.162f;
+		Bullet_Ghost_3.m_VertexList[6].x = 4.162f; Bullet_Ghost_3.m_VertexList[6].y = 4.162f;
 
 
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4307,21 +4028,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_C2.m_VertexList[0].x = 1.5f; Bullet_C2.m_VertexList[0].y = 1.5f;
-		Bullet_C2.m_VertexList[1].x = 1.5f; Bullet_C2.m_VertexList[1].y = 1.5f;
-		Bullet_C2.m_VertexList[2].x = 1.5f; Bullet_C2.m_VertexList[2].y = 1.5f;
-		Bullet_C2.m_VertexList[3].x = 1.5f; Bullet_C2.m_VertexList[3].y = 1.5f;
-		Bullet_C2.m_VertexList[4].x = 1.5f; Bullet_C2.m_VertexList[4].y = 1.5f;
-		Bullet_C2.m_VertexList[5].x = 1.5f; Bullet_C2.m_VertexList[5].y = 1.5f;
-		Bullet_C2.m_VertexList[6].x = 1.5f; Bullet_C2.m_VertexList[6].y = 1.5f;
+		Bullet_C2.m_VertexList[0].x = 3.233f; Bullet_C2.m_VertexList[0].y = 3.233f;
+		Bullet_C2.m_VertexList[1].x = 3.233f; Bullet_C2.m_VertexList[1].y = 3.233f;
+		Bullet_C2.m_VertexList[2].x = 3.233f; Bullet_C2.m_VertexList[2].y = 3.233f;
+		Bullet_C2.m_VertexList[3].x = 3.233f; Bullet_C2.m_VertexList[3].y = 3.233f;
+		Bullet_C2.m_VertexList[4].x = 3.233f; Bullet_C2.m_VertexList[4].y = 3.233f;
+		Bullet_C2.m_VertexList[5].x = 3.233f; Bullet_C2.m_VertexList[5].y = 3.233f;
+		Bullet_C2.m_VertexList[6].x = 3.233f; Bullet_C2.m_VertexList[6].y = 3.233f;
 
-		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[0].x = 2.768f; Bullet_Ghost_4.m_VertexList[0].y = 2.768f;
+		Bullet_Ghost_4.m_VertexList[1].x = 2.768f; Bullet_Ghost_4.m_VertexList[1].y = 2.768f;
+		Bullet_Ghost_4.m_VertexList[2].x = 2.768f; Bullet_Ghost_4.m_VertexList[2].y = 2.768f;
+		Bullet_Ghost_4.m_VertexList[3].x = 2.768f; Bullet_Ghost_4.m_VertexList[3].y = 2.768f;
+		Bullet_Ghost_4.m_VertexList[4].x = 2.768f; Bullet_Ghost_4.m_VertexList[4].y = 2.768f;
+		Bullet_Ghost_4.m_VertexList[5].x = 2.768f; Bullet_Ghost_4.m_VertexList[5].y = 2.768f;
+		Bullet_Ghost_4.m_VertexList[6].x = 2.768f; Bullet_Ghost_4.m_VertexList[6].y = 2.768f;
 
 
 		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4358,21 +4079,21 @@ void TSceneGame::Bullet_Ghost_collision()
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
 
-		Bullet_C3.m_VertexList[0].x = 1.5f; Bullet_C3.m_VertexList[0].y = 1.5f;
-		Bullet_C3.m_VertexList[1].x = 1.5f; Bullet_C3.m_VertexList[1].y = 1.5f;
-		Bullet_C3.m_VertexList[2].x = 1.5f; Bullet_C3.m_VertexList[2].y = 1.5f;
-		Bullet_C3.m_VertexList[3].x = 1.5f; Bullet_C3.m_VertexList[3].y = 1.5f;
-		Bullet_C3.m_VertexList[4].x = 1.5f; Bullet_C3.m_VertexList[4].y = 1.5f;
-		Bullet_C3.m_VertexList[5].x = 1.5f; Bullet_C3.m_VertexList[5].y = 1.5f;
-		Bullet_C3.m_VertexList[6].x = 1.5f; Bullet_C3.m_VertexList[6].y = 1.5f;
+		Bullet_C3.m_VertexList[0].x = 3.69f; Bullet_C3.m_VertexList[0].y = 3.69f;
+		Bullet_C3.m_VertexList[1].x = 3.69f; Bullet_C3.m_VertexList[1].y = 3.69f;
+		Bullet_C3.m_VertexList[2].x = 3.69f; Bullet_C3.m_VertexList[2].y = 3.69f;
+		Bullet_C3.m_VertexList[3].x = 3.69f; Bullet_C3.m_VertexList[3].y = 3.69f;
+		Bullet_C3.m_VertexList[4].x = 3.69f; Bullet_C3.m_VertexList[4].y = 3.69f;
+		Bullet_C3.m_VertexList[5].x = 3.69f; Bullet_C3.m_VertexList[5].y = 3.69f;
+		Bullet_C3.m_VertexList[6].x = 3.69f; Bullet_C3.m_VertexList[6].y = 3.69f;
 
-		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[0].x = 3.97f; Bullet_Ghost_1.m_VertexList[0].y = 3.97f;
+		Bullet_Ghost_1.m_VertexList[1].x = 3.97f; Bullet_Ghost_1.m_VertexList[1].y = 3.97f;
+		Bullet_Ghost_1.m_VertexList[2].x = 3.97f; Bullet_Ghost_1.m_VertexList[2].y = 3.97f;
+		Bullet_Ghost_1.m_VertexList[3].x = 3.97f; Bullet_Ghost_1.m_VertexList[3].y = 3.97f;
+		Bullet_Ghost_1.m_VertexList[4].x = 3.97f; Bullet_Ghost_1.m_VertexList[4].y = 3.97f;
+		Bullet_Ghost_1.m_VertexList[5].x = 3.97f; Bullet_Ghost_1.m_VertexList[5].y = 3.97f;
+		Bullet_Ghost_1.m_VertexList[6].x = 3.97f; Bullet_Ghost_1.m_VertexList[6].y = 3.97f;
 
 
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4406,21 +4127,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_C3.m_VertexList[0].x = 1.5f; Bullet_C3.m_VertexList[0].y = 1.5f;
-		Bullet_C3.m_VertexList[1].x = 1.5f; Bullet_C3.m_VertexList[1].y = 1.5f;
-		Bullet_C3.m_VertexList[2].x = 1.5f; Bullet_C3.m_VertexList[2].y = 1.5f;
-		Bullet_C3.m_VertexList[3].x = 1.5f; Bullet_C3.m_VertexList[3].y = 1.5f;
-		Bullet_C3.m_VertexList[4].x = 1.5f; Bullet_C3.m_VertexList[4].y = 1.5f;
-		Bullet_C3.m_VertexList[5].x = 1.5f; Bullet_C3.m_VertexList[5].y = 1.5f;
-		Bullet_C3.m_VertexList[6].x = 1.5f; Bullet_C3.m_VertexList[6].y = 1.5f;
+		Bullet_C3.m_VertexList[0].x = 4.45f; Bullet_C3.m_VertexList[0].y = 4.45f;
+		Bullet_C3.m_VertexList[1].x = 4.45f; Bullet_C3.m_VertexList[1].y = 4.45f;
+		Bullet_C3.m_VertexList[2].x = 4.45f; Bullet_C3.m_VertexList[2].y = 4.45f;
+		Bullet_C3.m_VertexList[3].x = 4.45f; Bullet_C3.m_VertexList[3].y = 4.45f;
+		Bullet_C3.m_VertexList[4].x = 4.45f; Bullet_C3.m_VertexList[4].y = 4.45f;
+		Bullet_C3.m_VertexList[5].x = 4.45f; Bullet_C3.m_VertexList[5].y = 4.45f;
+		Bullet_C3.m_VertexList[6].x = 4.45f; Bullet_C3.m_VertexList[6].y = 4.45f;
 
-		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[0].x = 6.35f; Bullet_Ghost_2.m_VertexList[0].y = 6.35f;
+		Bullet_Ghost_2.m_VertexList[1].x = 6.35f; Bullet_Ghost_2.m_VertexList[1].y = 6.35f;
+		Bullet_Ghost_2.m_VertexList[2].x = 6.35f; Bullet_Ghost_2.m_VertexList[2].y = 6.35f;
+		Bullet_Ghost_2.m_VertexList[3].x = 6.35f; Bullet_Ghost_2.m_VertexList[3].y = 6.35f;
+		Bullet_Ghost_2.m_VertexList[4].x = 6.35f; Bullet_Ghost_2.m_VertexList[4].y = 6.35f;
+		Bullet_Ghost_2.m_VertexList[5].x = 6.35f; Bullet_Ghost_2.m_VertexList[5].y = 6.35f;
+		Bullet_Ghost_2.m_VertexList[6].x = 6.35f; Bullet_Ghost_2.m_VertexList[6].y = 6.35f;
 
 
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4454,21 +4175,21 @@ void TSceneGame::Bullet_Ghost_collision()
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
 
-		Bullet_C3.m_VertexList[0].x = 1.5f; Bullet_C3.m_VertexList[0].y = 1.5f;
-		Bullet_C3.m_VertexList[1].x = 1.5f; Bullet_C3.m_VertexList[1].y = 1.5f;
-		Bullet_C3.m_VertexList[2].x = 1.5f; Bullet_C3.m_VertexList[2].y = 1.5f;
-		Bullet_C3.m_VertexList[3].x = 1.5f; Bullet_C3.m_VertexList[3].y = 1.5f;
-		Bullet_C3.m_VertexList[4].x = 1.5f; Bullet_C3.m_VertexList[4].y = 1.5f;
-		Bullet_C3.m_VertexList[5].x = 1.5f; Bullet_C3.m_VertexList[5].y = 1.5f;
-		Bullet_C3.m_VertexList[6].x = 1.5f; Bullet_C3.m_VertexList[6].y = 1.5f;
+		Bullet_C3.m_VertexList[0].x = 4.91f; Bullet_C3.m_VertexList[0].y = 4.91f;
+		Bullet_C3.m_VertexList[1].x = 4.91f; Bullet_C3.m_VertexList[1].y = 4.91f;
+		Bullet_C3.m_VertexList[2].x = 4.91f; Bullet_C3.m_VertexList[2].y = 4.91f;
+		Bullet_C3.m_VertexList[3].x = 4.91f; Bullet_C3.m_VertexList[3].y = 4.91f;
+		Bullet_C3.m_VertexList[4].x = 4.91f; Bullet_C3.m_VertexList[4].y = 4.91f;
+		Bullet_C3.m_VertexList[5].x = 4.91f; Bullet_C3.m_VertexList[5].y = 4.91f;
+		Bullet_C3.m_VertexList[6].x = 4.91f; Bullet_C3.m_VertexList[6].y = 4.91f;
 
-		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[0].x = 4.63f; Bullet_Ghost_3.m_VertexList[0].y =4.63f;
+		Bullet_Ghost_3.m_VertexList[1].x = 4.63f; Bullet_Ghost_3.m_VertexList[1].y =4.63f;
+		Bullet_Ghost_3.m_VertexList[2].x = 4.63f; Bullet_Ghost_3.m_VertexList[2].y =4.63f;
+		Bullet_Ghost_3.m_VertexList[3].x = 4.63f; Bullet_Ghost_3.m_VertexList[3].y =4.63f;
+		Bullet_Ghost_3.m_VertexList[4].x = 4.63f; Bullet_Ghost_3.m_VertexList[4].y =4.63f;
+		Bullet_Ghost_3.m_VertexList[5].x = 4.63f; Bullet_Ghost_3.m_VertexList[5].y =4.63f;
+		Bullet_Ghost_3.m_VertexList[6].x = 4.63f; Bullet_Ghost_3.m_VertexList[6].y =4.63f;
 
 
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4503,21 +4224,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_C3.m_VertexList[0].x = 1.5f; Bullet_C3.m_VertexList[0].y = 1.5f;
-		Bullet_C3.m_VertexList[1].x = 1.5f; Bullet_C3.m_VertexList[1].y = 1.5f;
-		Bullet_C3.m_VertexList[2].x = 1.5f; Bullet_C3.m_VertexList[2].y = 1.5f;
-		Bullet_C3.m_VertexList[3].x = 1.5f; Bullet_C3.m_VertexList[3].y = 1.5f;
-		Bullet_C3.m_VertexList[4].x = 1.5f; Bullet_C3.m_VertexList[4].y = 1.5f;
-		Bullet_C3.m_VertexList[5].x = 1.5f; Bullet_C3.m_VertexList[5].y = 1.5f;
-		Bullet_C3.m_VertexList[6].x = 1.5f; Bullet_C3.m_VertexList[6].y = 1.5f;
+		Bullet_C3.m_VertexList[0].x = 4.59f; Bullet_C3.m_VertexList[0].y = 4.59f;
+		Bullet_C3.m_VertexList[1].x = 4.59f; Bullet_C3.m_VertexList[1].y = 4.59f;
+		Bullet_C3.m_VertexList[2].x = 4.59f; Bullet_C3.m_VertexList[2].y = 4.59f;
+		Bullet_C3.m_VertexList[3].x = 4.59f; Bullet_C3.m_VertexList[3].y = 4.59f;
+		Bullet_C3.m_VertexList[4].x = 4.59f; Bullet_C3.m_VertexList[4].y = 4.59f;
+		Bullet_C3.m_VertexList[5].x = 4.59f; Bullet_C3.m_VertexList[5].y = 4.59f;
+		Bullet_C3.m_VertexList[6].x = 4.59f; Bullet_C3.m_VertexList[6].y = 4.59f;
 
-		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[0].x = 4.72f; Bullet_Ghost_4.m_VertexList[0].y = 4.72f;
+		Bullet_Ghost_4.m_VertexList[1].x = 4.72f; Bullet_Ghost_4.m_VertexList[1].y = 4.72f;
+		Bullet_Ghost_4.m_VertexList[2].x = 4.72f; Bullet_Ghost_4.m_VertexList[2].y = 4.72f;
+		Bullet_Ghost_4.m_VertexList[3].x = 4.72f; Bullet_Ghost_4.m_VertexList[3].y = 4.72f;
+		Bullet_Ghost_4.m_VertexList[4].x = 4.72f; Bullet_Ghost_4.m_VertexList[4].y = 4.72f;
+		Bullet_Ghost_4.m_VertexList[5].x = 4.72f; Bullet_Ghost_4.m_VertexList[5].y = 4.72f;
+		Bullet_Ghost_4.m_VertexList[6].x = 4.72f; Bullet_Ghost_4.m_VertexList[6].y = 4.72f;
 
 
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4554,21 +4275,21 @@ void TSceneGame::Bullet_Ghost_collision()
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
 
-		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
-		Bullet_C4.m_VertexList[1].x = 1.5f; Bullet_C4.m_VertexList[1].y = 1.5f;
-		Bullet_C4.m_VertexList[2].x = 1.5f; Bullet_C4.m_VertexList[2].y = 1.5f;
-		Bullet_C4.m_VertexList[3].x = 1.5f; Bullet_C4.m_VertexList[3].y = 1.5f;
-		Bullet_C4.m_VertexList[4].x = 1.5f; Bullet_C4.m_VertexList[4].y = 1.5f;
-		Bullet_C4.m_VertexList[5].x = 1.5f; Bullet_C4.m_VertexList[5].y = 1.5f;
-		Bullet_C4.m_VertexList[6].x = 1.5f; Bullet_C4.m_VertexList[6].y = 1.5f;
+		Bullet_C4.m_VertexList[0].x = 3.257f; Bullet_C4.m_VertexList[0].y = 3.257f;
+		Bullet_C4.m_VertexList[1].x = 3.257f; Bullet_C4.m_VertexList[1].y = 3.257f;
+		Bullet_C4.m_VertexList[2].x = 3.257f; Bullet_C4.m_VertexList[2].y = 3.257f;
+		Bullet_C4.m_VertexList[3].x = 3.257f; Bullet_C4.m_VertexList[3].y = 3.257f;
+		Bullet_C4.m_VertexList[4].x = 3.257f; Bullet_C4.m_VertexList[4].y = 3.257f;
+		Bullet_C4.m_VertexList[5].x = 3.257f; Bullet_C4.m_VertexList[5].y = 3.257f;
+		Bullet_C4.m_VertexList[6].x = 3.257f; Bullet_C4.m_VertexList[6].y = 3.257f;
 
-		Bullet_Ghost_1.m_VertexList[0].x = 1.5f; Bullet_Ghost_1.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[1].x = 1.5f; Bullet_Ghost_1.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[2].x = 1.5f; Bullet_Ghost_1.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[3].x = 1.5f; Bullet_Ghost_1.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[4].x = 1.5f; Bullet_Ghost_1.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[5].x = 1.5f; Bullet_Ghost_1.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_1.m_VertexList[6].x = 1.5f; Bullet_Ghost_1.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_1.m_VertexList[0].x = 3.074f; Bullet_Ghost_1.m_VertexList[0].y = 3.074f;
+		Bullet_Ghost_1.m_VertexList[1].x = 3.074f; Bullet_Ghost_1.m_VertexList[1].y = 3.074f;
+		Bullet_Ghost_1.m_VertexList[2].x = 3.074f; Bullet_Ghost_1.m_VertexList[2].y = 3.074f;
+		Bullet_Ghost_1.m_VertexList[3].x = 3.074f; Bullet_Ghost_1.m_VertexList[3].y = 3.074f;
+		Bullet_Ghost_1.m_VertexList[4].x = 3.074f; Bullet_Ghost_1.m_VertexList[4].y = 3.074f;
+		Bullet_Ghost_1.m_VertexList[5].x = 3.074f; Bullet_Ghost_1.m_VertexList[5].y = 3.074f;
+		Bullet_Ghost_1.m_VertexList[6].x = 3.074f; Bullet_Ghost_1.m_VertexList[6].y = 3.074f;
 
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4603,21 +4324,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
-		Bullet_C4.m_VertexList[1].x = 1.5f; Bullet_C4.m_VertexList[1].y = 1.5f;
-		Bullet_C4.m_VertexList[2].x = 1.5f; Bullet_C4.m_VertexList[2].y = 1.5f;
-		Bullet_C4.m_VertexList[3].x = 1.5f; Bullet_C4.m_VertexList[3].y = 1.5f;
-		Bullet_C4.m_VertexList[4].x = 1.5f; Bullet_C4.m_VertexList[4].y = 1.5f;
-		Bullet_C4.m_VertexList[5].x = 1.5f; Bullet_C4.m_VertexList[5].y = 1.5f;
-		Bullet_C4.m_VertexList[6].x = 1.5f; Bullet_C4.m_VertexList[6].y = 1.5f;
+		Bullet_C4.m_VertexList[0].x = 4.333f; Bullet_C4.m_VertexList[0].y = 4.333f;
+		Bullet_C4.m_VertexList[1].x = 4.333f; Bullet_C4.m_VertexList[1].y = 4.333f;
+		Bullet_C4.m_VertexList[2].x = 4.333f; Bullet_C4.m_VertexList[2].y = 4.333f;
+		Bullet_C4.m_VertexList[3].x = 4.333f; Bullet_C4.m_VertexList[3].y = 4.333f;
+		Bullet_C4.m_VertexList[4].x = 4.333f; Bullet_C4.m_VertexList[4].y = 4.333f;
+		Bullet_C4.m_VertexList[5].x = 4.333f; Bullet_C4.m_VertexList[5].y = 4.333f;
+		Bullet_C4.m_VertexList[6].x = 4.333f; Bullet_C4.m_VertexList[6].y = 4.333f;
 
-		Bullet_Ghost_2.m_VertexList[0].x = 1.5f; Bullet_Ghost_2.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[1].x = 1.5f; Bullet_Ghost_2.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[2].x = 1.5f; Bullet_Ghost_2.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[3].x = 1.5f; Bullet_Ghost_2.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[4].x = 1.5f; Bullet_Ghost_2.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[5].x = 1.5f; Bullet_Ghost_2.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_2.m_VertexList[6].x = 1.5f; Bullet_Ghost_2.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_2.m_VertexList[0].x = 4.112f; Bullet_Ghost_2.m_VertexList[0].y = 4.112f;
+		Bullet_Ghost_2.m_VertexList[1].x = 4.112f; Bullet_Ghost_2.m_VertexList[1].y = 4.112f;
+		Bullet_Ghost_2.m_VertexList[2].x = 4.112f; Bullet_Ghost_2.m_VertexList[2].y = 4.112f;
+		Bullet_Ghost_2.m_VertexList[3].x = 4.112f; Bullet_Ghost_2.m_VertexList[3].y = 4.112f;
+		Bullet_Ghost_2.m_VertexList[4].x = 4.112f; Bullet_Ghost_2.m_VertexList[4].y = 4.112f;
+		Bullet_Ghost_2.m_VertexList[5].x = 4.112f; Bullet_Ghost_2.m_VertexList[5].y = 4.112f;
+		Bullet_Ghost_2.m_VertexList[6].x = 4.112f; Bullet_Ghost_2.m_VertexList[6].y = 4.112f;
 
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4653,21 +4374,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
-		Bullet_C4.m_VertexList[1].x = 1.5f; Bullet_C4.m_VertexList[1].y = 1.5f;
-		Bullet_C4.m_VertexList[2].x = 1.5f; Bullet_C4.m_VertexList[2].y = 1.5f;
-		Bullet_C4.m_VertexList[3].x = 1.5f; Bullet_C4.m_VertexList[3].y = 1.5f;
-		Bullet_C4.m_VertexList[4].x = 1.5f; Bullet_C4.m_VertexList[4].y = 1.5f;
-		Bullet_C4.m_VertexList[5].x = 1.5f; Bullet_C4.m_VertexList[5].y = 1.5f;
-		Bullet_C4.m_VertexList[6].x = 1.5f; Bullet_C4.m_VertexList[6].y = 1.5f;
+		Bullet_C4.m_VertexList[0].x = 2.221f; Bullet_C4.m_VertexList[0].y = 2.221f;
+		Bullet_C4.m_VertexList[1].x = 2.221f; Bullet_C4.m_VertexList[1].y = 2.221f;
+		Bullet_C4.m_VertexList[2].x = 2.221f; Bullet_C4.m_VertexList[2].y = 2.221f;
+		Bullet_C4.m_VertexList[3].x = 2.221f; Bullet_C4.m_VertexList[3].y = 2.221f;
+		Bullet_C4.m_VertexList[4].x = 2.221f; Bullet_C4.m_VertexList[4].y = 2.221f;
+		Bullet_C4.m_VertexList[5].x = 2.221f; Bullet_C4.m_VertexList[5].y = 2.221f;
+		Bullet_C4.m_VertexList[6].x = 2.221f; Bullet_C4.m_VertexList[6].y = 2.221f;
 
-		Bullet_Ghost_3.m_VertexList[0].x = 1.5f; Bullet_Ghost_3.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[1].x = 1.5f; Bullet_Ghost_3.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[2].x = 1.5f; Bullet_Ghost_3.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[3].x = 1.5f; Bullet_Ghost_3.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[4].x = 1.5f; Bullet_Ghost_3.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[5].x = 1.5f; Bullet_Ghost_3.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_3.m_VertexList[6].x = 1.5f; Bullet_Ghost_3.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_3.m_VertexList[0].x = 2.843f; Bullet_Ghost_3.m_VertexList[0].y = 2.843f;
+		Bullet_Ghost_3.m_VertexList[1].x = 2.843f; Bullet_Ghost_3.m_VertexList[1].y = 2.843f;
+		Bullet_Ghost_3.m_VertexList[2].x = 2.843f; Bullet_Ghost_3.m_VertexList[2].y = 2.843f;
+		Bullet_Ghost_3.m_VertexList[3].x = 2.843f; Bullet_Ghost_3.m_VertexList[3].y = 2.843f;
+		Bullet_Ghost_3.m_VertexList[4].x = 2.843f; Bullet_Ghost_3.m_VertexList[4].y = 2.843f;
+		Bullet_Ghost_3.m_VertexList[5].x = 2.843f; Bullet_Ghost_3.m_VertexList[5].y = 2.843f;
+		Bullet_Ghost_3.m_VertexList[6].x = 2.843f; Bullet_Ghost_3.m_VertexList[6].y = 2.843f;
 
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4703,21 +4424,21 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_C4.m_VertexList[0].x = 1.5f; Bullet_C4.m_VertexList[0].y = 1.5f;
-		Bullet_C4.m_VertexList[1].x = 1.5f; Bullet_C4.m_VertexList[1].y = 1.5f;
-		Bullet_C4.m_VertexList[2].x = 1.5f; Bullet_C4.m_VertexList[2].y = 1.5f;
-		Bullet_C4.m_VertexList[3].x = 1.5f; Bullet_C4.m_VertexList[3].y = 1.5f;
-		Bullet_C4.m_VertexList[4].x = 1.5f; Bullet_C4.m_VertexList[4].y = 1.5f;
-		Bullet_C4.m_VertexList[5].x = 1.5f; Bullet_C4.m_VertexList[5].y = 1.5f;
-		Bullet_C4.m_VertexList[6].x = 1.5f; Bullet_C4.m_VertexList[6].y = 1.5f;
+		Bullet_C4.m_VertexList[0].x = 3.785f; Bullet_C4.m_VertexList[0].y = 3.785f;
+		Bullet_C4.m_VertexList[1].x = 3.785f; Bullet_C4.m_VertexList[1].y = 3.785f;
+		Bullet_C4.m_VertexList[2].x = 3.785f; Bullet_C4.m_VertexList[2].y = 3.785f;
+		Bullet_C4.m_VertexList[3].x = 3.785f; Bullet_C4.m_VertexList[3].y = 3.785f;
+		Bullet_C4.m_VertexList[4].x = 3.785f; Bullet_C4.m_VertexList[4].y = 3.785f;
+		Bullet_C4.m_VertexList[5].x = 3.785f; Bullet_C4.m_VertexList[5].y = 3.785f;
+		Bullet_C4.m_VertexList[6].x = 3.785f; Bullet_C4.m_VertexList[6].y = 3.785f;
 
-		Bullet_Ghost_4.m_VertexList[0].x = 1.5f; Bullet_Ghost_4.m_VertexList[0].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[1].x = 1.5f; Bullet_Ghost_4.m_VertexList[1].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[2].x = 1.5f; Bullet_Ghost_4.m_VertexList[2].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[3].x = 1.5f; Bullet_Ghost_4.m_VertexList[3].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[4].x = 1.5f; Bullet_Ghost_4.m_VertexList[4].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[5].x = 1.5f; Bullet_Ghost_4.m_VertexList[5].y = 1.5f;
-		Bullet_Ghost_4.m_VertexList[6].x = 1.5f; Bullet_Ghost_4.m_VertexList[6].y = 1.5f;
+		Bullet_Ghost_4.m_VertexList[0].x = 4.55f; Bullet_Ghost_4.m_VertexList[0].y = 4.55f;
+		Bullet_Ghost_4.m_VertexList[1].x = 4.55f; Bullet_Ghost_4.m_VertexList[1].y = 4.55f;
+		Bullet_Ghost_4.m_VertexList[2].x = 4.55f; Bullet_Ghost_4.m_VertexList[2].y = 4.55f;
+		Bullet_Ghost_4.m_VertexList[3].x = 4.55f; Bullet_Ghost_4.m_VertexList[3].y = 4.55f;
+		Bullet_Ghost_4.m_VertexList[4].x = 4.55f; Bullet_Ghost_4.m_VertexList[4].y = 4.55f;
+		Bullet_Ghost_4.m_VertexList[5].x = 4.55f; Bullet_Ghost_4.m_VertexList[5].y = 4.55f;
+		Bullet_Ghost_4.m_VertexList[6].x = 4.55f; Bullet_Ghost_4.m_VertexList[6].y = 4.55f;
 
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);

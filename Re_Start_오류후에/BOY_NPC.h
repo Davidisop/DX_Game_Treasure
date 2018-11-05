@@ -11,6 +11,7 @@ public:
 	int hurt_step;
 	bool hurt_flag;
 	bool initial_start;
+	bool Enter_hurt_flag;
 
 
 
@@ -146,7 +147,7 @@ public:
 	  hurt_step = 1;
 	  initial_start = true;
 	  hurt_flag = false;
-	
+	  Enter_hurt_flag = false;
 	}
 	virtual ~Boy_NPC() {}
 
