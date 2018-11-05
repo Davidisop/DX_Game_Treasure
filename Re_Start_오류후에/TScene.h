@@ -247,7 +247,7 @@ public:
 	void Boy_NPC_collision_from_hero_attack();
 	void Hero_bullets_basic_Action();
 	void Hero_Ghost_collision();
-	void Hero_collision_final_decision();
+
 
 	void Herosword_boss_collision();
 	void Herosword_ghost_collsion();
@@ -258,15 +258,18 @@ public:
 	void Bullet_Box_Alive_collision();
 	void Bullet_Boss_collision();
 
-	void Box_Alive_collision_final_decision();
-	void Boy_NPC_collision_final_decision_including_second_message();
 	
 	void Boss_Canon_hero_collision();
 	void Boss_sword_hero_collsion();
 
 	void Boss_FSM();
 
+
+	void Boy_NPC_collision_final_decision_including_second_message();
+	void Box_Alive_collision_final_decision();
 	void Boss_collision_final_decision();
+	void Hero_collision_final_decision();
+
 
 public:
 	TSceneGame();
@@ -487,27 +490,42 @@ bool    TSceneGame::Frame()
 	Hero_Actions();
 	Boy_NPC_Action_including_first_messgae();
 	Hero_bullets_basic_Action();
-	Hero_Ghost_collision();
-	Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
-
-	Bullet_Box_Alive_collision();
-	Bullet_Ghost_collision();
-	
-	
-	Herosword_ghost_collsion();
-	Herosword_box_alive_collision();
 	Boy_NPC_collision_from_hero_attack();
 
 
+
+	if (box_alive_live_or_dead < 2)
+	{
+		Herosword_box_alive_collision();
+		Bullet_Box_Alive_collision();
+		Tresure_Box__m_Actor_Dection_collision_and_ghost_shots();
+		Bullet_Ghost_collision();
+		Herosword_ghost_collsion();
+		Hero_Ghost_collision();
+	}
+
 	
-		 Boss_FSM();
+
+	
+	if (box_alive_live_or_dead > 1 && Robot_live_or_dead < 4)
+	{
+		Boss_FSM();
+		Bullet_Boss_collision();
+		Herosword_boss_collision();
+	}
+
+
+
+		 if (Hero_live_or_dead == 4)
+		 {
 		 Boss_Canon_hero_collision();
 		 Boss_sword_hero_collsion();
+		 }
 	 
 		 
 
-	Bullet_Boss_collision();
-	Herosword_boss_collision();
+	
+	
 	Boss_collision_final_decision();
 	Hero_collision_final_decision();
 	Box_Alive_collision_final_decision();
@@ -635,13 +653,12 @@ TSceneGame::~TSceneGame()
 
 void TSceneGame::Boss_FSM()
 {
-	if (box_alive_live_or_dead > 1 && Robot_live_or_dead<4)
-	{
+	
 		Robot.distance_direction_between_hero_boss = Robot.m_pos.x - m_Actor.m_pos.x;
 		Robot.basic_frame();
 		Robot.ATTACK_SWORD(); Robot.sword();
 		Robot.ATTACK_SHOT(); Robot.shot();
-	}
+	
 	
 	
 	
