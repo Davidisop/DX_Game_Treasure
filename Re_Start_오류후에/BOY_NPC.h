@@ -9,6 +9,8 @@ public:
 	int dead_step;
 	bool walk_flag;
 	int hurt_step;
+	bool hurt_flag;
+	bool initial_start;
 
 
 
@@ -21,6 +23,7 @@ public:
 	{
 		static float fAddTime = 0.0f;
 		fAddTime += g_fSecPerFrame;
+
 		if (fAddTime >= 0.1f)
 		{
 			switch (walk_step)
@@ -140,6 +143,10 @@ public:
 	{ 
 	  dead_step = 0;
 	  walk_flag = 0;
+	  hurt_step = 1;
+	  initial_start = true;
+	  hurt_flag = false;
+	
 	}
 	virtual ~Boy_NPC() {}
 
@@ -191,7 +198,7 @@ void Boy_NPC::hurt()
 			Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
-			hurt_step = 0;
+			++hurt_step;
 		}break;
 	}
 
