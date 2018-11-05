@@ -21,7 +21,7 @@ class xCore : public xWindow
 {
 public:
 	TTimer			m_Timer;
-	TDirectWrite	m_Font;
+
 	
 public:
 	bool GamePreInit();

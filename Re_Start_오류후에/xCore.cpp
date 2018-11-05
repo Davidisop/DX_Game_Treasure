@@ -5,7 +5,7 @@ bool xCore::Init()
 {
 	xWindow::Init();
 	m_Timer.Init();
-	m_Font.Init();
+	
 	I_Input.Init();
 
 	DeleteDeviceResources(m_sd.BufferDesc.Width, m_sd.BufferDesc.Height);
@@ -16,7 +16,7 @@ bool xCore::Frame()
 {
 	xWindow::Frame();
 	m_Timer.Frame();
-	m_Font.Frame();
+
 	I_Input.Frame();
 	return true;
 }
@@ -33,7 +33,7 @@ bool xCore::Render()
 {
 	xWindow::Render();
 	m_Timer.Render();
-	m_Font.Render();
+
 	I_Input.Render();
 	return true;
 }
@@ -41,7 +41,7 @@ bool xCore::Release()
 {
 	xWindow::Release();
 	m_Timer.Release();
-	m_Font.Release();
+	
 	I_Input.Release();
 	return true;
 }
@@ -142,14 +142,14 @@ bool xCore::GamePostRender()
 
 void xCore::DeleteDeviceResources(UINT iWidth, UINT iHeight)
 {
-	m_Font.DiscardDeviceResources();
+	
 }
 HRESULT xCore::CreateDeviceResources(UINT iWidth, UINT iHeight)
 {
 	IDXGISurface1*		pBackBuffer;
 
 	HRESULT hr = m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer);
-	hr = m_Font.CreateDeviceResources(pBackBuffer);
+	
 	
 	if (pBackBuffer)	pBackBuffer->Release();
 	
