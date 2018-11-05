@@ -1045,6 +1045,9 @@ void TSceneGame::Hero_Actions()
 void TSceneGame::Boy_NPC_Action_including_first_messgae()
 {
 
+	////////////////////////////////////// 시작 단계
+
+
 	if (m_Boy_NPC.initial_start == true)
 	{
 		m_Boy_NPC.initial_start = false;
@@ -1055,6 +1058,9 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 	{
 		m_Boy_NPC.walk_flag = true;
 	}
+
+
+	//////////////////////////////////////// 200m 가서 일어나는 일
 
 
 	if (m_Boy_NPC.m_pos.x > 200)
@@ -1077,6 +1083,20 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 	}
 
 
+	/////////////////////////////////////////////////////////////////////////   기본 걷는 동작
+
+	if (m_Boy_NPC.walk_flag == true)
+	{
+		m_Boy_NPC.walk();
+		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 10) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+	}
+
+
 
 
 /*
@@ -1094,18 +1114,7 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 	}*/
 
 
-
-	if (m_Boy_NPC.walk_flag == true)
-	{	
-		m_Boy_NPC.walk();
-		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 10) {m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-	}
-
+/*
 
 
 	if (I_Input.Key('Q'))
@@ -1114,7 +1123,7 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 		m_Boy_NPC.hurt_step = 0;
 		m_Boy_NPC.walk_flag = false;
 	}m_Boy_NPC.dead();
-
+*/
 
 
 	//if (I_Input.Key('R'))
