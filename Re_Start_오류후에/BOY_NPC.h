@@ -10,13 +10,31 @@ public:
 	bool walk_flag;
 	int hurt_step;
 	bool hurt_flag;
+	bool Enter_flag_1;
 	bool initial_start;
-	bool Enter_hurt_flag;
+	bool Finish_start;
+	
 
 
 
 	void dead();
 	void hurt();
+
+
+public:
+	Boy_NPC()
+	{
+		dead_step = 0;
+		walk_flag = 0;
+		hurt_step = 1;
+		Enter_flag_1 = false;
+		initial_start = true;
+		Finish_start = true;
+		hurt_flag = false;
+	
+	}
+	virtual ~Boy_NPC() {}
+
 
 public:
 
@@ -138,18 +156,6 @@ public:
 
 	}
 
-
-public:
-	Boy_NPC() 
-	{ 
-	  dead_step = 0;
-	  walk_flag = 0;
-	  hurt_step = 1;
-	  initial_start = true;
-	  hurt_flag = false;
-	  Enter_hurt_flag = false;
-	}
-	virtual ~Boy_NPC() {}
 
 };
 
