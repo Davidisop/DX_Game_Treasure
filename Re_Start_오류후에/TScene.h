@@ -1051,9 +1051,9 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 			m_Boy_NPC.Enter_flag_1 = true;
 
 
-			m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;    m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 6;
+			m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;    m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 5;
 			m_Boy_NPC.in_Texture_SetData_factors(568, 327, 76, 61, 757, 1274);
-			m_Boy_NPC.Window_SetData_factors(70, 330, m_Boy_NPC.m_for_update_Rects.x, m_Boy_NPC.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+			m_Boy_NPC.Window_SetData_factors(60, 310, m_Boy_NPC.m_for_update_Rects.x, m_Boy_NPC.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 			m_Boy_NPC.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 			
@@ -1738,6 +1738,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 void TSceneGame::Boss_collision_final_decision()
 {
 
+	
 	Robot_live_or_dead = Robot_Col_F1 + Robot_Col_C1 +	Robot_Col_F2 + Robot_Col_C2 +	Robot_Col_F3 + Robot_Col_C3 +	Robot_Col_F4 + Robot_Col_C4+Robot_Col_S1 + Robot_Col_S2 + Robot_Col_S3 + Robot_Col_S4;
 
 
@@ -1978,22 +1979,22 @@ void TSceneGame::Boss_sword_hero_collsion()
 	//////////////// Robot sword attack과  Hero 충돌
 
 	
-	if (Robot.sword_step == 2  && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 0)
+	if (Robot.sword_step == 3  && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 0)
 	{
 		Hero_Col_S1 = true;
 	}
 
-	if (Robot.sword_step == 2 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 1)
+	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 1)
 	{
 		Hero_Col_S2 = true;
 	}
 
-	if (Robot.sword_step == 2 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 2)
+	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 2)
 	{
 		Hero_Col_S3 = true;
 	}
 
-	if (Robot.sword_step == 2 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 3)
+	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 3)
 	{
 		Hero_Col_S4 = true;
 	}
@@ -2402,14 +2403,13 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 	if (m_Boy_NPC.Finish_start == true)
 	{
 		m_Boy_NPC.Finish_start = false;
-
 		m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;    m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 5;
 		m_Boy_NPC.in_Texture_SetData_factors(91, 2, 57, 92, 753, 532);
 		//m_Boy_NPC.Window_SetData_factors(0, 310, m_Boy_NPC.m_for_update_Rects.x, m_Boy_NPC.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 		m_Boy_NPC.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/AD_Boy.png");
-		
 		m_Boy_NPC.walk_step = 1;
 	}
+
 
 	if (m_Boy_NPC.walk_step == 1)
 	{
@@ -2419,8 +2419,10 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 
 	//////////////////////////////////////// hero가 npc를 공격 충돌 & 충돌 되고 일어나는 일
 
+	if(NPC_live_or_dead<2)
+	{
 	NPC_live_or_dead = NPC_Col_F3 + NPC_Col_C3 + NPC_Col_F4 + NPC_Col_C4 + NPC_Col_S1 + NPC_Col_S2;
-
+	}
 
 	if (NPC_live_or_dead == 1)
 	{
@@ -2472,7 +2474,6 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 
 	if (m_Boy_NPC.walk_flag == true)
 	{
-
 		m_Boy_NPC.walk();
 		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
 		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
@@ -2510,17 +2511,21 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 
 	if (NPC_live_or_dead == 2)
 	{
-			m_Boy_NPC.walk_step = 0;
-			m_Boy_NPC.dead_step = 1;
-			m_Boy_NPC.walk_flag == false;
+		++NPC_live_or_dead;
 
-
-		if (m_Boy_NPC.walk_step == 1)
-		{
-			m_Boy_NPC.walk_flag = true;
-		}
-
-	}m_Boy_NPC.dead();
+			m_Boy_NPC.dead_flag = true;
+			m_Boy_NPC.walk_flag = false;
+			m_Boy_NPC.hurt_flag = false;		
+	}
+	
+	if (m_Boy_NPC.dead_flag == true)
+	{
+		m_Boy_NPC.dead_flag = false;
+		m_Boy_NPC.dead_step = 1;
+	}
+	
+	
+	m_Boy_NPC.dead();
 
 	memcpy(N_VertexList_BA, Box_Alive.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2935,6 +2940,7 @@ void TSceneGame::Hero_collision_final_decision()
 		m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
 		m_Actor_life_bar.Window_SetData_factors(200, 10, m_Actor_life_bar.m_for_update_Rects.x, m_Actor_life_bar.m_for_update_Rects.y);
 		m_Actor_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/0_Bar.png");
+		m_bNextSceneStart = true;
 	}
 	///////////////////////////////////////////////////
 

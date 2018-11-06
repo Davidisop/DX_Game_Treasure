@@ -7,6 +7,7 @@ public:
 
 public:
 	int dead_step;
+	bool dead_flag;
 	bool walk_flag;
 	int hurt_step;
 	bool hurt_flag;
@@ -25,6 +26,7 @@ public:
 	Boy_NPC()
 	{
 		dead_step = 0;
+		dead_flag = false;
 		walk_flag = 0;
 		hurt_step = 1;
 		Enter_flag_1 = false;
@@ -302,7 +304,7 @@ void Boy_NPC::dead()
 					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/woman_man_plus.png");
 
 
-					dead_step = 0;
+					++dead_step ;
 				}break;
 
 			}
