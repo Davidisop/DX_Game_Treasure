@@ -5,6 +5,7 @@ HWND g_hWnd = NULL;
 HINSTANCE g_hInstance = NULL;
 RECT g_rtClient;
 HDC  g_hOffScreenDC;
+bool g_bActiveApp = false;
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -25,6 +26,10 @@ LRESULT xWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+	case WM_ACTIVATEAPP:
+		g_bActiveApp = (BOOL)wParam; //wParam에 TRUE가 들어오면 활성화.
+		break;
+
 	case WM_SIZE:
 		{
 			UINT width = LOWORD(lParam);

@@ -57,6 +57,7 @@ extern float		g_fGameTimer;
 extern float		g_fSecPerFrame;
 extern ID3D11Device*g_pd3dDevice;
 extern ID3D11DeviceContext*	g_pContext;
+extern bool g_bActiveApp;
 
 
 typedef struct _D3DVECTOR {

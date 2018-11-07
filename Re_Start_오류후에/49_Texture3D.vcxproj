@@ -91,15 +91,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../include/dx/;../../include_3D/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/dx/;../../include_3D/;../../include/fmod/</AdditionalIncludeDirectories>
       <CallingConvention>StdCall</CallingConvention>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>../../lib/;../../lib/dx/x64/</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dinput8.lib;dxguid.lib;d3dx11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../lib/;../../lib/dx/x64/;../../lib/fmod/</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmod64_vc.lib;d3d11.lib;dxgi.lib;dinput8.lib;dxguid.lib;d3dx11.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

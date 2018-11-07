@@ -7,6 +7,7 @@
 #include "Box_Alive.h"
 #include "Box.h"
 #include "BOSS_NPC.h"
+#include "TSound.h"
 
 
 
