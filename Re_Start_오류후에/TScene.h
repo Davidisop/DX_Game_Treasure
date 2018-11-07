@@ -8,6 +8,10 @@
 #include "Box.h"
 #include "BOSS_NPC.h"
 
+
+
+int end_decision;
+
 enum TSceneState
 {
 	GAME_SCENE_LOBBY = 0,
@@ -272,6 +276,8 @@ public:
 	void Box_Alive_collision_final_decision();
 	void Boss_collision_final_decision();
 	void Hero_collision_final_decision();
+
+	void Treasure_Box_open();
 
 
 public:
@@ -2382,6 +2388,19 @@ void TSceneGame::Bullet_Boss_collision()
 
 }
 
+void TSceneGame::Treasure_Box_open()
+{
+	if (TCollision::SphereInSphere(m_Boy_NPC.m_rtCollision, Treasure_Box.m_rtCollision))
+	{
+
+	}
+
+
+}
+
+
+
+
 void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 {
 
@@ -2944,6 +2963,9 @@ void TSceneGame::Hero_collision_final_decision()
 		m_Actor_life_bar.Window_SetData_factors(200, 10, m_Actor_life_bar.m_for_update_Rects.x, m_Actor_life_bar.m_for_update_Rects.y);
 		m_Actor_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/0_Bar.png");
 		m_bNextSceneStart = true;
+
+		end_decision = 2;
+		
 	}
 	///////////////////////////////////////////////////
 
@@ -4638,9 +4660,14 @@ void TSceneGame::Bullet_Ghost_collision()
 
 }
 
+
+
 class TSceneEnd : public TScene
 {
 
+public:
+	Background			Ending_Background_success;
+	Background			Ending_Background_failure;
 public:
 	virtual bool	Init();
 	bool	Frame();
@@ -4659,17 +4686,49 @@ public:
 bool	TSceneEnd::Init()
 {
 
+
+	Ending_Background_success.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
+	Ending_Background_success.m_for_update_Rects.x = g_rtClient.right;	Ending_Background_success.m_for_update_Rects.y = g_rtClient.bottom;
+	Ending_Background_success.Window_SetData_factors(900, 0, Ending_Background_success.m_for_update_Rects.x, Ending_Background_success.m_for_update_Rects.y);
+	Ending_Background_success.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/ending_1.jpg");
+
+
+	Ending_Background_failure.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
+	Ending_Background_failure.m_for_update_Rects.x = g_rtClient.right;	Ending_Background_failure.m_for_update_Rects.y = g_rtClient.bottom;
+	Ending_Background_failure.Window_SetData_factors(900, 0, Ending_Background_failure.m_for_update_Rects.x, Ending_Background_failure.m_for_update_Rects.y);
+	Ending_Background_failure.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Treasure_Island.bmp");
+
+
 	return true;
 };
 bool	TSceneEnd::Frame()
 {
+
+	if (end_decision ==1)
+	{
+		Ending_Background_success.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
+		Ending_Background_success.m_for_update_Rects.x = g_rtClient.right;	Ending_Background_success.m_for_update_Rects.y = g_rtClient.bottom;
+		Ending_Background_success.Window_SetData_factors(0, 0, Ending_Background_success.m_for_update_Rects.x, Ending_Background_success.m_for_update_Rects.y);
+		Ending_Background_success.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/ending_1.jpg");
+	}
+
+	if (end_decision ==2)
+	{
+		Ending_Background_failure.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
+		Ending_Background_failure.m_for_update_Rects.x = g_rtClient.right;	Ending_Background_failure.m_for_update_Rects.y = g_rtClient.bottom;
+		Ending_Background_failure.Window_SetData_factors(0, 0, Ending_Background_failure.m_for_update_Rects.x, Ending_Background_failure.m_for_update_Rects.y);
+		Ending_Background_failure.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Treasure_Island.bmp");
+	}
+
+
 
 	return true;
 };
 
 bool	TSceneEnd::Render()
 {
-
+	Ending_Background_success.Render(g_pContext);
+	Ending_Background_failure.Render(g_pContext);
 
 	return true;
 };
@@ -4687,6 +4746,4 @@ TSceneEnd::TSceneEnd()
 
 TSceneEnd::~TSceneEnd()
 {}
-
-
 

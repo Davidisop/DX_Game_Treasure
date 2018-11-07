@@ -80,7 +80,7 @@ public:
 public:
 	Sample() 
 	{
-		m_iLevel = 1;
+		m_iLevel = 0;
 
 		m_pLobbyScene = new TSceneLobby();
 		m_pGameScene = new TSceneGame();
