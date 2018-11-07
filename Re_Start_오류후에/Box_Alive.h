@@ -47,7 +47,7 @@ public:
 
 		detection_time += g_fSecPerFrame;
 
-		if (detection_time >= 3.0f)
+		if (detection_time >= 1.5f)
 		{
 			detection_time = 0;
 			Detction_FULL();

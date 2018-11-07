@@ -315,6 +315,7 @@ TSceneGame::TSceneGame()
 
 
 	Robot_live_or_dead = 0;
+
 	Robot_Col_F1 = false; Robot_Col_C1 = false;
 	Robot_Col_F2 = false; Robot_Col_C2 = false;
 	Robot_Col_F3 = false; Robot_Col_C3 = false;
@@ -344,30 +345,28 @@ bool   TSceneGame::Init()
 	Game_Background.Window_SetData_factors(0, 0, Game_Background.m_for_update_Rects.x, Game_Background.m_for_update_Rects.y);
 	Game_Background.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/background.bmp");
 
-
 	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
 	Message.m_for_update_Rects.x = g_rtClient.right / 30;    Message.m_for_update_Rects.y = g_rtClient.bottom / 30;
 	Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
 	Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Board_UI.png");
 
 
-
 	Treasure_Box.in_Texture_SetData_factors(0, 0, 100, 75, 100, 75);
 	Treasure_Box.m_for_update_Rects.x = g_rtClient.right / 11;    Treasure_Box.m_for_update_Rects.y = g_rtClient.bottom / 8;
-	Treasure_Box.Window_SetData_factors(380, 280, Treasure_Box.m_for_update_Rects.x, Treasure_Box.m_for_update_Rects.y);
+	Treasure_Box.Window_SetData_factors(805, 255, Treasure_Box.m_for_update_Rects.x, Treasure_Box.m_for_update_Rects.y);
 	Treasure_Box.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Treasure_Close_100_75.png");
-
 
 	Box_Alive.in_Texture_SetData_factors(0, 0, 125, 127, 125, 127);
 	Box_Alive.m_for_update_Rects.x = g_rtClient.right / 6.5;    Box_Alive.m_for_update_Rects.y = g_rtClient.bottom / 3.8;
-	Box_Alive.Window_SetData_factors(740, 290, Box_Alive.m_for_update_Rects.x, Box_Alive.m_for_update_Rects.y);
+	Box_Alive.Window_SetData_factors(630, 285, Box_Alive.m_for_update_Rects.x, Box_Alive.m_for_update_Rects.y);
 	Box_Alive.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Alter.png");
 
 
-	Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 90, 10, 90, 10);
-	Box_Alive_life_bar.m_for_update_Rects.x = g_rtClient.right / 10;    Box_Alive_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 26;
-	Box_Alive_life_bar.Window_SetData_factors(765, 250, Box_Alive_life_bar.m_for_update_Rects.x, Box_Alive_life_bar.m_for_update_Rects.y);
-	Box_Alive_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/full_bar.bmp");
+	Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+	Box_Alive_life_bar.m_for_update_Rects.x = g_rtClient.right / 35;    Box_Alive_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Box_Alive_life_bar.Window_SetData_factors(900, 10, Box_Alive_life_bar.m_for_update_Rects.x, Box_Alive_life_bar.m_for_update_Rects.y);
+	Box_Alive_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Full_Bar_A.png");
+
 
 
 	UI_Bullet_1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
@@ -431,8 +430,6 @@ bool   TSceneGame::Init()
 	Bullet_F4.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F4.m_for_update_Rects.y = g_rtClient.bottom / 15;
 	Bullet_F4.Window_SetData_factors(10, 180, Bullet_F4.m_for_update_Rects.x, Bullet_F4.m_for_update_Rects.y);
 	Bullet_F4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
-
-
 
 
 	Bullet_C1.in_Texture_SetData_factors(253, 61, 12, 12, 400, 300);
@@ -534,8 +531,8 @@ bool   TSceneGame::Init()
 
 
 	Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
-	Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
-	Robot_life_bar.Window_SetData_factors(400, 10, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
+	Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 35;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+	Robot_life_bar.Window_SetData_factors(900, 10, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
 	Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Full_Bar_B.png");
 
 
@@ -1070,12 +1067,12 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 	{
 
 		m_Boy_NPC.walk();
-		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 10) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 10) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
 	}
 
 
@@ -1590,13 +1587,13 @@ void TSceneGame::Hero_bullets_basic_Action()
 
 void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 {
-	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Treasure_Box.m_rtDetection))
+	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Box_Alive.m_rtDetection))
 	{
 		Box_Alive.frame();
 	}
 
 
-	if (!TCollision::SphereInSphere(m_Actor.m_rtCollision, Treasure_Box.m_rtDetection))
+	if (!TCollision::SphereInSphere(m_Actor.m_rtCollision, Box_Alive.m_rtDetection))
 	{
 		Box_Alive.detection_time = 0.0f;
 	}
@@ -1737,38 +1734,30 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 
 void TSceneGame::Boss_collision_final_decision()
 {
-
 	
 	Robot_live_or_dead = Robot_Col_F1 + Robot_Col_C1 +	Robot_Col_F2 + Robot_Col_C2 +	Robot_Col_F3 + Robot_Col_C3 +	Robot_Col_F4 + Robot_Col_C4+Robot_Col_S1 + Robot_Col_S2 + Robot_Col_S3 + Robot_Col_S4;
-
-
-
-
-
-
-
 
 	if (Robot_live_or_dead== 1)
 	{
 		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
-		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
-		Robot_life_bar.Window_SetData_factors(400, 10, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
+		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 8;
+		Robot_life_bar.Window_SetData_factors(400, 5, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
 		Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/3_4_Bar_B.png");
 	}
 
 	if (Robot_live_or_dead == 2)
 	{
 		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
-		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
-		Robot_life_bar.Window_SetData_factors(400, 10, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
+		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 8;
+		Robot_life_bar.Window_SetData_factors(400, 5, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
 		Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/2_4_Bar_B.png");
 	}
 
 	if (Robot_live_or_dead == 3)
 	{
 		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
-		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
-		Robot_life_bar.Window_SetData_factors(400, 10, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
+		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 8;
+		Robot_life_bar.Window_SetData_factors(400, 5, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
 		Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/1_4_Bar_B.png");
 	}
 
@@ -2424,16 +2413,17 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 	NPC_live_or_dead = NPC_Col_F3 + NPC_Col_C3 + NPC_Col_F4 + NPC_Col_C4 + NPC_Col_S1 + NPC_Col_S2;
 	}
 
-	if (NPC_live_or_dead == 1)
+	if (NPC_live_or_dead == 1 && m_Boy_NPC.Enter_flag_2==false)
 	{
 		m_Boy_NPC.Finish_start = false;
 		m_Boy_NPC.walk_step = 0;
 		m_Boy_NPC.walk_flag = false;
 		m_Boy_NPC.hurt_flag = true;
+
 	}
 
 
-	if (m_Boy_NPC.hurt_flag == true)
+	if (m_Boy_NPC.hurt_flag == true&& m_Boy_NPC.Enter_flag_2 == false)
 	{
 		m_Boy_NPC.hurt();
 		Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
@@ -2445,29 +2435,20 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 
 	//////////////ENTER KEY 누르면, 원래대로 서고, 해야 한다.
 
-	//if (I_Input.Key(VK_RETURN))
-	//{
-
-	//	m_Boy_NPC.hurt_flag = false;
-	//
-
-	//	if (m_Boy_NPC.Finish_start == true)
-	//	{
-	//		m_Boy_NPC.Finish_start = false;
-	//		m_Boy_NPC.walk_step = 1;
-	//	}
-
-	//	if (m_Boy_NPC.walk_step == 1)
-	//	{
-	//		m_Boy_NPC.walk_flag = true;
-	//	}
+	if (I_Input.Key(VK_RETURN))
+	{
+		m_Boy_NPC.Enter_flag_2 = true;
+		m_Boy_NPC.hurt_flag = false;
+	
+			m_Boy_NPC.walk_step = 1;
+			m_Boy_NPC.walk_flag = true;
 
 
-	//	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
-	//	Message.m_for_update_Rects.x = g_rtClient.right / 100;    Message.m_for_update_Rects.y = g_rtClient.bottom / 100;
-	//	Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
-	//	Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Board_UI.png");
-	//}
+		Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
+		Message.m_for_update_Rects.x = g_rtClient.right / 100;    Message.m_for_update_Rects.y = g_rtClient.bottom / 100;
+		Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
+		Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Board_UI.png");
+	}
 
 
 	/////////////////////////////////////////////////////////////////////////   기본 걷는 동작
@@ -2475,12 +2456,12 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 	if (m_Boy_NPC.walk_flag == true)
 	{
 		m_Boy_NPC.walk();
-		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
-		if (m_Boy_NPC.walk_step == 10) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.1f); }
+		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		if (m_Boy_NPC.walk_step == 10) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
 	}
 
 	////////////////////////////////////////////////////////////////////  NPC Frame 반영
@@ -2555,17 +2536,39 @@ void TSceneGame::Box_Alive_collision_final_decision()
 	if (box_alive_live_or_dead == 1)
 
 	{
-		Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 90, 10, 90, 10);
-		Box_Alive_life_bar.m_for_update_Rects.x = g_rtClient.right / 10;    Box_Alive_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 26;
-		Box_Alive_life_bar.Window_SetData_factors(770, 240, Box_Alive_life_bar.m_for_update_Rects.x, Box_Alive_life_bar.m_for_update_Rects.y);
-		Box_Alive_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/half_bar.bmp");
-	
+
+		Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+		Box_Alive_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    Box_Alive_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+		Box_Alive_life_bar.Window_SetData_factors(400, 10, Box_Alive_life_bar.m_for_update_Rects.x, Box_Alive_life_bar.m_for_update_Rects.y);
+		Box_Alive_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/3_4_Bar_A.png");
+
+	}
+
+
+	if (box_alive_live_or_dead == 2)
+
+	{
+		Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+		Box_Alive_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    Box_Alive_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+		Box_Alive_life_bar.Window_SetData_factors(400, 10, Box_Alive_life_bar.m_for_update_Rects.x, Box_Alive_life_bar.m_for_update_Rects.y);
+		Box_Alive_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/2_4_Bar_A.png");
+
+	}
+
+	if (box_alive_live_or_dead == 3)
+
+	{
+		Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+		Box_Alive_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    Box_Alive_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
+		Box_Alive_life_bar.Window_SetData_factors(400, 10, Box_Alive_life_bar.m_for_update_Rects.x, Box_Alive_life_bar.m_for_update_Rects.y);
+		Box_Alive_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/1_4_Bar_A.png");
+
 	}
 
 
 
 
-	if (box_alive_live_or_dead == 2)
+	if (box_alive_live_or_dead == 4)
 	{
 		Box_Alive.m_VertexList[0].x = 3.2125f; Box_Alive.m_VertexList[0].y = 3.2125f;
 		Box_Alive.m_VertexList[1].x = 3.2125f; Box_Alive.m_VertexList[1].y = 3.2125f;

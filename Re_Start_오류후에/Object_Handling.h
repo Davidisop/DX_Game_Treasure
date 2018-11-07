@@ -143,7 +143,7 @@ void Object_Handling::GenCenter_Rects_Adapt_new()
 	m_rtCollision.top = m_pos.y + m_for_update_Rects.y/2;
 	m_rtCollision.bottom = m_pos.y - m_for_update_Rects.y / 2;
 
-	m_rtDetection.left = m_rtCollision.left - 100;
+	m_rtDetection.left = m_rtCollision.left - 165;
 	m_rtDetection.top = m_rtCollision.top - 100;
 	m_rtDetection.right = m_rtCollision.right + 100;
 	m_rtDetection.bottom = m_rtCollision.bottom + 100;

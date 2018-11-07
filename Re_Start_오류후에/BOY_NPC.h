@@ -12,6 +12,7 @@ public:
 	int hurt_step;
 	bool hurt_flag;
 	bool Enter_flag_1;
+	bool Enter_flag_2;
 	bool initial_start;
 	bool Finish_start;
 	
@@ -30,6 +31,7 @@ public:
 		walk_flag = 0;
 		hurt_step = 1;
 		Enter_flag_1 = false;
+		Enter_flag_2 = false;
 		initial_start = true;
 		Finish_start = true;
 		hurt_flag = false;
