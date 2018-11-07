@@ -154,6 +154,7 @@
     <ClCompile Include="TCollision.cpp" />
     <ClCompile Include="TDevice.cpp" />
     <ClCompile Include="TInput.cpp" />
+    <ClCompile Include="TSound.cpp" />
     <ClCompile Include="TTimer.cpp" />
     <ClCompile Include="xCore.cpp" />
     <ClCompile Include="xWindow.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="THeroObj.h" />
     <ClInclude Include="TInput.h" />
     <ClInclude Include="TScene.h" />
+    <ClInclude Include="TSound.h" />
     <ClInclude Include="TTimer.h" />
     <ClInclude Include="xCore.h" />
     <ClInclude Include="xStd.h" />

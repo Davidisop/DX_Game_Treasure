@@ -51,6 +51,9 @@
     <ClCompile Include="TInput.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TSound.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TDevice.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="BOSS_NPC.h">
       <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="TSound.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

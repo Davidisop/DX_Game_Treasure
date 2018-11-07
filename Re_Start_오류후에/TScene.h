@@ -45,7 +45,7 @@ class TSceneLobby : public TScene
 public:
 	Background			Lobby_Background;
 	Box					UI_BUTTON;
-
+	Box					Message; 
 public:
 	virtual bool	Init();
 	bool	Frame();
@@ -59,6 +59,17 @@ public:
 
 bool	TSceneLobby::Init()
 {
+
+
+		
+	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
+	Message.m_for_update_Rects.x = g_rtClient.right / 1;    Message.m_for_update_Rects.y = g_rtClient.bottom / 1;
+	Message.Window_SetData_factors(0, 0, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
+	Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/KEYBOARD.png");
+
+
+
+
 	Lobby_Background.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
 	Lobby_Background.m_for_update_Rects.x = g_rtClient.right;	Lobby_Background.m_for_update_Rects.y = g_rtClient.bottom;
 	Lobby_Background.Window_SetData_factors(0, 0, Lobby_Background.m_for_update_Rects.x, Lobby_Background.m_for_update_Rects.y);
@@ -66,7 +77,7 @@ bool	TSceneLobby::Init()
 
 	UI_BUTTON.m_for_update_Rects.x = g_rtClient.right / 4;	UI_BUTTON.m_for_update_Rects.y = g_rtClient.bottom / 8;
 	UI_BUTTON.in_Texture_SetData_factors(0, 0, 334, 82, 334, 82);
-	UI_BUTTON.Window_SetData_factors(340, 240, UI_BUTTON.m_for_update_Rects.x, UI_BUTTON.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+	UI_BUTTON.Window_SetData_factors(340, 400, UI_BUTTON.m_for_update_Rects.x, UI_BUTTON.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 	UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_dis.bmp");
 	return true;
 };
@@ -75,7 +86,24 @@ bool	TSceneLobby::Init()
 bool	TSceneLobby::Frame()
 {
 
-	if (340 < I_Input.m_MousePos.x && I_Input.m_MousePos.x < 470 && 240 < I_Input.m_MousePos.y && I_Input.m_MousePos.y < 300)
+	static float fAddTime = 0.0f;
+	fAddTime += g_fSecPerFrame;
+
+	if (fAddTime>8.0f)
+	{
+
+		Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
+		Message.m_for_update_Rects.x = g_rtClient.right / 32;    Message.m_for_update_Rects.y = g_rtClient.bottom / 32;
+		Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
+		Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/KEYBOARD.png");
+
+
+	}
+
+
+
+
+	if (340 < I_Input.m_MousePos.x && I_Input.m_MousePos.x < 470 && 420 < I_Input.m_MousePos.y && I_Input.m_MousePos.y < 470)
 	{
 		UI_BUTTON.m_bDead = true;
 	}
@@ -85,7 +113,7 @@ bool	TSceneLobby::Frame()
 	{
 		UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_pus.bmp");
 
-		if (I_Input.Key(VK_LBUTTON) && 340 < I_Input.m_MousePos.x && I_Input.m_MousePos.x < 470 && 240 < I_Input.m_MousePos.y && I_Input.m_MousePos.y < 300)
+		if (I_Input.Key(VK_LBUTTON) && 340 < I_Input.m_MousePos.x && I_Input.m_MousePos.x < 500 && 420 < I_Input.m_MousePos.y && I_Input.m_MousePos.y < 470)
 		{
 			UI_BUTTON.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/main_start_sel.bmp");
 			m_bNextSceneStart = true;
@@ -100,6 +128,7 @@ bool	TSceneLobby::Render()
 
 	Lobby_Background.Render(g_pContext);
 	UI_BUTTON.Render(g_pContext);
+	Message.Render(g_pContext);
 
 	return true;
 };
@@ -688,8 +717,15 @@ TSceneGame::~TSceneGame()
 
 void TSceneGame::succees_ending()
 {
-m_bNextSceneStart = true;
-end_decision = 1;
+	static float fAddTime = 0.0f;
+	fAddTime += g_fSecPerFrame;
+
+	if (fAddTime > 5.0f)
+	{
+
+		m_bNextSceneStart = true;
+		end_decision = 1;
+	}
 
 }
 
@@ -2573,6 +2609,18 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 		m_Boy_NPC.dead_step = 1;
 	}
 	
+
+	if (NPC_live_or_dead == 3)
+	{
+		static float fAddTime = 0.0f;
+		fAddTime += g_fSecPerFrame;
+
+		if (fAddTime > 10.0f)
+		{
+			m_bNextSceneStart = true;
+			end_decision = 2;
+		}
+	}
 	
 	m_Boy_NPC.dead();
 
