@@ -61,6 +61,9 @@ public:
 bool	TSceneLobby::Init()
 {
 
+	TSound::Get()->Init();
+	TSound::Get()->Load("../../data/Opening1_Indian.wav", true);
+	TSound::Get()->Load("../../data/Opening2_Thunder.wav", true);
 
 		
 	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
@@ -86,6 +89,7 @@ bool	TSceneLobby::Init()
 
 bool	TSceneLobby::Frame()
 {
+	TSound::Get()->Frame();
 
 	static float fAddTime = 0.0f;
 	fAddTime += g_fSecPerFrame;
@@ -127,6 +131,7 @@ bool	TSceneLobby::Frame()
 bool	TSceneLobby::Render()
 {
 
+
 	Lobby_Background.Render(g_pContext);
 	UI_BUTTON.Render(g_pContext);
 	Message.Render(g_pContext);
@@ -136,6 +141,7 @@ bool	TSceneLobby::Render()
 
 bool	TSceneLobby::Release()
 {
+	TSound::Get()->Release();
 	return true;
 };
 TSceneLobby::TSceneLobby()
@@ -2015,7 +2021,7 @@ void TSceneGame::Herosword_box_alive_collision()
 
 	//////////////// Hero sword attack°ú  Box_Alive Ãæµ¹
 
-	if (m_Actor.sword_step==2 & TCollision::SphereInSphere(m_Actor.m_rtCollision, Box_Alive.m_rtCollision) && box_alive_live_or_dead == 0)
+	if (m_Actor.sword_step==2 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Box_Alive.m_rtCollision) && box_alive_live_or_dead == 0)
 	{
 		box_alive_Col_S1 = true;
 	}

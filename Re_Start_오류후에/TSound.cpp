@@ -1,7 +1,6 @@
 #include "TSound.h"
 #include "xStd.h"
 
-
 bool TSound::Init()
 {
 	FMOD::System_Create(&m_pSystem);
@@ -16,8 +15,7 @@ int    TSound::Load(const char* pLoadName, bool bPlay)
 		0, &m_pSound[m_iSoundList++]);
 	if (bPlay == true)
 	{
-		m_pSystem->playSound(m_pSound[m_iSoundList-1],0,
-			      false, &pChannel);
+		m_pSystem->playSound(FMOD_CHANNEL_FREE,m_pSound[m_iSoundList - 1],	false, &pChannel);
 		m_pChannel[m_iSoundList - 1] = pChannel;
 	}
 
@@ -25,10 +23,9 @@ int    TSound::Load(const char* pLoadName, bool bPlay)
 };
 void     TSound::PlayEffect(int iIndex)
 {
-	if (g_bActiveApp== false) return;
+	if (g_bActiveApp == false) return;
 	Channel* pChannel = NULL;
-	m_pSystem->playSound(m_pSound[iIndex], false,
-		false, &pChannel);
+	m_pSystem->playSound(FMOD_CHANNEL_FREE,m_pSound[iIndex], false, &pChannel);
 	m_pChannel[iIndex] = pChannel;
 }
 void    TSound::Play(int iIndex, bool bPlay, bool bLoop)
@@ -46,8 +43,7 @@ void    TSound::Play(int iIndex, bool bPlay, bool bLoop)
 		else
 			m_pSound[iIndex]->setMode(FMOD_LOOP_OFF);
 
-		m_pSystem->playSound(m_pSound[iIndex], false,
-			false, &m_pChannel[iIndex]);
+		m_pSystem->playSound(FMOD_CHANNEL_FREE,m_pSound[iIndex], false, &m_pChannel[iIndex]);
 	}
 }
 void    TSound::Stop(int iIndex)
@@ -89,13 +85,14 @@ bool TSound::Frame()
 	m_pChannel[0]->getPosition(&ms, FMOD_TIMEUNIT_MS);
 
 	_stprintf_s(m_szBuffer, L"[%02d:%02d:%02d]<-->"
-							L"[% 02d:% 02d : % 02d]",
+		L"[% 02d:% 02d : % 02d]",
 		total / 1000 / 60,
-		total / 1000 %60,
+		total / 1000 % 60,
 		total / 10 % 60,
 		ms / 1000 / 60,
 		ms / 1000 % 60,
-		ms / 10 % 60 );
+		ms / 10 % 60);
+
 	return true;
 }
 bool TSound::Render()

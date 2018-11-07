@@ -28,7 +28,7 @@ public:
 	bool	Render();
 public:
 	int     Load(const char* pLoadName, bool bPlay);
-	void    Play(int iIndex, bool bPlay=true, bool bLoop=false);
+	void    Play(int iIndex, bool bPlay = true, bool bLoop = false);
 	void    PlayEffect(int iIndex);
 	void    Stop(int iIndex);
 	void    paused(int iIndex);
@@ -38,4 +38,5 @@ private:
 public:
 	virtual ~TSound();
 };
+
 
