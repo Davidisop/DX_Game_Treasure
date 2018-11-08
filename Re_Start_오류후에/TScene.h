@@ -7,7 +7,7 @@
 #include "Box_Alive.h"
 #include "Box.h"
 #include "BOSS_NPC.h"
-
+#include "xSound.h"
 
 
 int end_decision;
@@ -60,6 +60,10 @@ public:
 
 bool	TSceneLobby::Init()
 {
+
+	TSound::Get()->Init();
+	TSound::Get()->Load("../../data/Opening1_Indian.wav", true);
+	TSound::Get()->Load("../../data/Opening2_Thunder.wav", true);
 
 		
 	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);

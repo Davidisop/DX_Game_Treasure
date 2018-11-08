@@ -113,6 +113,9 @@
     <ClInclude Include="BOSS_NPC.h">
       <Filter>Character</Filter>
     </ClInclude>
+    <ClInclude Include="xSound.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="sprite.txt">
