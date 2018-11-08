@@ -61,10 +61,11 @@ public:
 bool	TSceneLobby::Init()
 {
 
-	TSound::Get()->Init();
-	TSound::Get()->Load("../../data/Opening1_Indian.wav", true);
-	TSound::Get()->Load("../../data/Opening2_Thunder.wav", true);
+	sSound->Init();
+	sSound->Load("../../data/00_Menu.mp3", false);
+	sSound->Load("../../data/GunShot.mp3", false);
 
+	sSound->Play(0);
 		
 	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
 	Message.m_for_update_Rects.x = g_rtClient.right / 1;    Message.m_for_update_Rects.y = g_rtClient.bottom / 1;
@@ -97,21 +98,29 @@ bool	TSceneLobby::Frame()
 	if (fAddTime>8.0f)
 	{
 
+
+
 		Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
 		Message.m_for_update_Rects.x = g_rtClient.right / 32;    Message.m_for_update_Rects.y = g_rtClient.bottom / 32;
 		Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
 		Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/KEYBOARD.png");
+		
+		//sSound-> PlayEffect(0);
+
 
 
 	}
-
-
 
 
 	if (340 < I_Input.m_MousePos.x && I_Input.m_MousePos.x < 470 && 420 < I_Input.m_MousePos.y && I_Input.m_MousePos.y < 470)
 	{
 		UI_BUTTON.m_bDead = true;
+		sSound->Stop(0);
+		sSound->Play(1);
+
 	}
+
+
 
 
 	if (UI_BUTTON.m_bDead)
@@ -124,6 +133,9 @@ bool	TSceneLobby::Frame()
 			m_bNextSceneStart = true;
 		}
 	}
+
+	sSound->Frame();
+
 	return true;
 };
 
@@ -141,6 +153,7 @@ bool	TSceneLobby::Render()
 
 bool	TSceneLobby::Release()
 {
+	sSound->Release();
 	
 	return true;
 };
@@ -324,6 +337,7 @@ public:
 };
 
 
+
 TSceneGame::TSceneGame() : fAngle(0.0f), box_alive_Col_S1(false), box_alive_Col_S2(false), box_alive_live_or_dead(0), box_alive_Col_F1(false), box_alive_Col_C1(false), box_alive_Col_F2(false), box_alive_Col_C2(false), box_alive_Col_F3(false), box_alive_Col_C3(false), box_alive_Col_F4(false), box_alive_Col_C4(false), Hero_live_or_dead(0), Hero_Col_G1(false), Hero_Col_G2(false), Hero_Col_G3(false), Hero_Col_G4(false), Hero_Col_B1(false), Hero_Col_B2 (false), Hero_Col_B3(false), Hero_Col_B4(false), Hero_Col_S1(false), Hero_Col_S2(false), Hero_Col_S3(false), Hero_Col_S4(false), Robot_live_or_dead (0), Robot_Col_F1(false), Robot_Col_C1(false), Robot_Col_F2(false), Robot_Col_C2(false), Robot_Col_F3(false), Robot_Col_C3(false), Robot_Col_F4(false), Robot_Col_C4(false), Robot_Col_S1(false), Robot_Col_S2(false), Robot_Col_S3(false), Robot_Col_S4(false), NPC_live_or_dead(0), NPC_Col_F3(false), NPC_Col_C3(false), NPC_Col_F4(false), NPC_Col_C4(false), NPC_Col_S1(false), NPC_Col_S2(false), BOX_ALIVE_FINAL_SWITCH(false), Trasure_Box_FINAL_SWITCH(false)
 {
 	m_iSceneID = GAME_SCENE_PLAY;
@@ -386,6 +400,16 @@ TSceneGame::TSceneGame() : fAngle(0.0f), box_alive_Col_S1(false), box_alive_Col_
 
 bool   TSceneGame::Init()
 {
+
+	sSound->Init();
+
+	sSound->Load("../../data/00_Menu.mp3", false);
+	sSound->Load("../../data/GunShot.mp3", false);
+
+	sSound->Play(0);
+
+
+
 	Game_Background.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
 	Game_Background.m_for_update_Rects.x = g_rtClient.right;    Game_Background.m_for_update_Rects.y = g_rtClient.bottom;
 	Game_Background.Window_SetData_factors(0, 0, Game_Background.m_for_update_Rects.x, Game_Background.m_for_update_Rects.y);

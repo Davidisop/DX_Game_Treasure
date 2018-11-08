@@ -46,14 +46,6 @@ bool dxSound::Init()
 	FMOD::System_Create(&m_pSystem);
 	m_pSystem->init(32, FMOD_INIT_NORMAL, 0);
 
-	dxSound::Get()->Load("../../data/stage_loop.wav", false);
-	dxSound::Get()->Load("../../data/Winter_Hiru.wav", false);
-	dxSound::Get()->Load("../../data/steyraug-fire.wav", false);
-	dxSound::Get()->Load("../../data/npcbulleted.ogg", false);
-	dxSound::Get()->Load("../../data/m_okay.wav", false);
-	dxSound::Get()->Load("../../data/AKIHA17.ogg", false);
-	dxSound::Get()->Load("../../data/ 00_Menu.mp3", false);
-	dxSound::Get()->Load("../../data/ SATSUKI16.ogg", false);
 	return true;
 }
 int    dxSound::Load(const char* pLoadName, bool bPlay)
