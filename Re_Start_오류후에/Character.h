@@ -31,11 +31,11 @@ public:
 	}
 
 public:
-	Character()
+	Character() : Face_Direction(2), walk_step(0), sprite_ptr(new sprite)
 	{
-		Face_Direction = 2;
+		/*Face_Direction = 2;
 		walk_step = 0;
-		sprite_ptr = new sprite;
+		sprite_ptr = new sprite;*/
 	}
 	virtual ~Character() {}
 };

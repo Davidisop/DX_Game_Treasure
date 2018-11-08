@@ -24,9 +24,9 @@ public:
 
 
 public:
-	Boy_NPC()
+	Boy_NPC() :dead_step(0), dead_flag(false), walk_flag(0), hurt_step(1), Enter_flag_1 (false), Enter_flag_2 (false), initial_start(true), Finish_start(true), hurt_flag (false)
 	{
-		dead_step = 0;
+	/*	dead_step = 0;
 		dead_flag = false;
 		walk_flag = 0;
 		hurt_step = 1;
@@ -34,8 +34,7 @@ public:
 		Enter_flag_2 = false;
 		initial_start = true;
 		Finish_start = true;
-		hurt_flag = false;
-	
+		hurt_flag = false;*/
 	}
 	virtual ~Boy_NPC() {}
 
@@ -314,97 +313,3 @@ void Boy_NPC::dead()
 
 	
 }
-
-
-	//void fall()
-	//{
-	//	static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-	//	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-	//	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
-
-
-	//	if (fall_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	//	{
-	//		fall_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	//	}
-
-	//	if (fall_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	//	{
-	//		fall_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	//	}
-
-	//	if (fall_step == 3 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	//	{
-	//		fall_step = 4;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	//	}
-
-	//	if (fall_step == 4 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	//	{
-	//		fall_step = 5;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	//	}
-
-	//	if (fall_step == 5 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	//	{
-	//		fall_step = 6;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	//	}
-
-
-
-	//	switch (fall_step)
-	//			{
-	//			case 1:
-	//			{
-	//				in_Texture_SetData_sprite_factors(sprite_ptr, 3, 0, 758, 535);
-	//				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
-
-
-	//				++fall_step;
-	//			}break;
-
-	//			case 2:
-	//			{
-	//				in_Texture_SetData_sprite_factors(sprite_ptr, 3, 1, 758, 535);
-	//				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
-
-
-	//				++fall_step;
-
-	//			}break;
-
-	//			case 3:
-	//			{
-	//				in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-	//				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
-
-
-	//				++fall_step;
-	//			}break;
-	//			case 4:
-	//			{
-	//				in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-	//				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
-
-
-	//				++fall_step;
-	//			}break;
-	//			case 5:
-	//			{
-	//				in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-	//				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
-
-
-	//				++fall_step;
-	//			}break;
-	//			case 6:
-	//			{
-	//				in_Texture_SetData_sprite_factors(sprite_ptr, 3, 2, 758, 535);
-	//				Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Girl_Right.png");
-
-
-	//				fall_step=0;
-	//			}break;
-
-	//	}
-	//	
-
-	

@@ -56,15 +56,15 @@ public:
 
 	}
 
-	Box_Alive()
+	Box_Alive() : state (Detection_0), detection_time(0), ghost_shoot_flag(false), Bullet_G1_Bullet_Go(false), Bullet_G2_Bullet_Go(false), Bullet_G3_Bullet_Go(false), Bullet_G4_Bullet_Go(false)
 	{
-		state = Detection_0;
+		/*state = Detection_0;
 		detection_time = 0;
 		ghost_shoot_flag = false;
 		Bullet_G1_Bullet_Go = false;
 		Bullet_G2_Bullet_Go = false;
 		Bullet_G3_Bullet_Go = false;
-		Bullet_G4_Bullet_Go = false;
+		Bullet_G4_Bullet_Go = false;*/
 	}
 	virtual ~Box_Alive() {}
 

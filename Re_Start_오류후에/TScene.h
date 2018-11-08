@@ -7,7 +7,6 @@
 #include "Box_Alive.h"
 #include "Box.h"
 #include "BOSS_NPC.h"
-#include "TSound.h"
 
 
 
@@ -41,6 +40,7 @@ public:
 };
 
 
+
 class TSceneLobby : public TScene
 {
 public:
@@ -60,10 +60,6 @@ public:
 
 bool	TSceneLobby::Init()
 {
-
-	TSound::Get()->Init();
-	TSound::Get()->Load("../../data/Opening1_Indian.wav", true);
-	TSound::Get()->Load("../../data/Opening2_Thunder.wav", true);
 
 		
 	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
@@ -89,7 +85,7 @@ bool	TSceneLobby::Init()
 
 bool	TSceneLobby::Frame()
 {
-	TSound::Get()->Frame();
+	
 
 	static float fAddTime = 0.0f;
 	fAddTime += g_fSecPerFrame;
@@ -141,7 +137,7 @@ bool	TSceneLobby::Render()
 
 bool	TSceneLobby::Release()
 {
-	TSound::Get()->Release();
+	
 	return true;
 };
 TSceneLobby::TSceneLobby()
@@ -324,60 +320,61 @@ public:
 };
 
 
-TSceneGame::TSceneGame()
+TSceneGame::TSceneGame() : fAngle(0.0f), box_alive_Col_S1(false), box_alive_Col_S2(false), box_alive_live_or_dead(0), box_alive_Col_F1(false), box_alive_Col_C1(false), box_alive_Col_F2(false), box_alive_Col_C2(false), box_alive_Col_F3(false), box_alive_Col_C3(false), box_alive_Col_F4(false), box_alive_Col_C4(false), Hero_live_or_dead(0), Hero_Col_G1(false), Hero_Col_G2(false), Hero_Col_G3(false), Hero_Col_G4(false), Hero_Col_B1(false), Hero_Col_B2 (false), Hero_Col_B3(false), Hero_Col_B4(false), Hero_Col_S1(false), Hero_Col_S2(false), Hero_Col_S3(false), Hero_Col_S4(false), Robot_live_or_dead (0), Robot_Col_F1(false), Robot_Col_C1(false), Robot_Col_F2(false), Robot_Col_C2(false), Robot_Col_F3(false), Robot_Col_C3(false), Robot_Col_F4(false), Robot_Col_C4(false), Robot_Col_S1(false), Robot_Col_S2(false), Robot_Col_S3(false), Robot_Col_S4(false), NPC_live_or_dead(0), NPC_Col_F3(false), NPC_Col_C3(false), NPC_Col_F4(false), NPC_Col_C4(false), NPC_Col_S1(false), NPC_Col_S2(false), BOX_ALIVE_FINAL_SWITCH(false), Trasure_Box_FINAL_SWITCH(false)
 {
 	m_iSceneID = GAME_SCENE_PLAY;
 	m_bNextSceneStart = false;
-	fAngle = 0.0f;
-
-	box_alive_Col_S1 = false;
-	box_alive_Col_S2 = false;
-
-	box_alive_live_or_dead = 0;
-	box_alive_Col_F1 = false;   box_alive_Col_C1 = false;
-	box_alive_Col_F2 = false;   box_alive_Col_C2 = false;
-	box_alive_Col_F3 = false;   box_alive_Col_C3 = false;
-	box_alive_Col_F4 = false;   box_alive_Col_C4 = false;
 	
+	//fAngle = 0.0f;
 
-	Hero_live_or_dead = 0;
-	Hero_Col_G1 = false;
-	Hero_Col_G2 = false;
-	Hero_Col_G3 = false;
-	Hero_Col_G4 = false;
+	//box_alive_Col_S1 = false;
+	//box_alive_Col_S2 = false;
 
-	Hero_Col_B1 = false;
-	Hero_Col_B2 = false;
-	Hero_Col_B3 = false;
-	Hero_Col_B4 = false;
+	//box_alive_live_or_dead = 0;
+	//box_alive_Col_F1 = false;   box_alive_Col_C1 = false;
+	//box_alive_Col_F2 = false;   box_alive_Col_C2 = false;
+	//box_alive_Col_F3 = false;   box_alive_Col_C3 = false;
+	//box_alive_Col_F4 = false;   box_alive_Col_C4 = false;
+	//
 
-	Hero_Col_S1 = false;
-	Hero_Col_S2 = false;
-	Hero_Col_S3 = false;
-	Hero_Col_S4 = false;
+	//Hero_live_or_dead = 0;
+	//Hero_Col_G1 = false;
+	//Hero_Col_G2 = false;
+	//Hero_Col_G3 = false;
+	//Hero_Col_G4 = false;
 
+	//Hero_Col_B1 = false;
+	//Hero_Col_B2 = false;
+	//Hero_Col_B3 = false;
+	//Hero_Col_B4 = false;
 
-
-	Robot_live_or_dead = 0;
-
-	Robot_Col_F1 = false; Robot_Col_C1 = false;
-	Robot_Col_F2 = false; Robot_Col_C2 = false;
-	Robot_Col_F3 = false; Robot_Col_C3 = false;
-	Robot_Col_F4 = false; Robot_Col_C4 = false;
-
-	Robot_Col_S1 = false;
-	Robot_Col_S2 = false;
-	Robot_Col_S3 = false;
-	Robot_Col_S4 = false;
+	//Hero_Col_S1 = false;
+	//Hero_Col_S2 = false;
+	//Hero_Col_S3 = false;
+	//Hero_Col_S4 = false;
 
 
-	NPC_live_or_dead = 0;
-	NPC_Col_F3 = false;         NPC_Col_C3 = false;
-	NPC_Col_F4 = false;         NPC_Col_C4 = false;
-	NPC_Col_S1 = false;         NPC_Col_S2 = false;
 
-	BOX_ALIVE_FINAL_SWITCH = false;
-	Trasure_Box_FINAL_SWITCH = false;
+	//Robot_live_or_dead = 0;
+
+	//Robot_Col_F1 = false; Robot_Col_C1 = false;
+	//Robot_Col_F2 = false; Robot_Col_C2 = false;
+	//Robot_Col_F3 = false; Robot_Col_C3 = false;
+	//Robot_Col_F4 = false; Robot_Col_C4 = false;
+
+	//Robot_Col_S1 = false;
+	//Robot_Col_S2 = false;
+	//Robot_Col_S3 = false;
+	//Robot_Col_S4 = false;
+
+
+	//NPC_live_or_dead = 0;
+	//NPC_Col_F3 = false;         NPC_Col_C3 = false;
+	//NPC_Col_F4 = false;         NPC_Col_C4 = false;
+	//NPC_Col_S1 = false;         NPC_Col_S2 = false;
+
+	//BOX_ALIVE_FINAL_SWITCH = false;
+	//Trasure_Box_FINAL_SWITCH = false;
 
 }
 

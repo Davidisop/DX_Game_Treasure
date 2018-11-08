@@ -34,6 +34,29 @@ public:
 
 	float distance_direction_between_hero_boss;
 
+
+public:
+	BOSS_NPC() : Gun_step(0), m_Collision_down_side(0), sword_step(0), slide_step(0), detection_time(0), shoot_flag(0), Bullet_B1_Bullet_Go(0), Bullet_B2_Bullet_Go(0), Bullet_B3_Bullet_Go(0), Bullet_B4_Bullet_Go (0), sword_flag (0), sword_left_right_go(9), distance_direction_between_hero_boss(0)
+	{
+	/*	Gun_step = 0;
+		m_Collision_down_side = false;
+		sword_step = 0;
+		slide_step = 0;
+		detection_time = 0;
+
+		shoot_flag = false;
+		Bullet_B1_Bullet_Go = false;
+		Bullet_B2_Bullet_Go = false;
+		Bullet_B3_Bullet_Go = false;
+		Bullet_B4_Bullet_Go = false;
+
+		sword_flag = false;
+		sword_left_right_go = false;
+		distance_direction_between_hero_boss = 0;*/
+
+	}
+	virtual ~BOSS_NPC() {}
+
 public:
 
 
@@ -168,27 +191,6 @@ public:
 
 
 
-public:
-	BOSS_NPC()
-	{
-		Gun_step = 0;
-		m_Collision_down_side = false;
-		sword_step = 0;
-		slide_step = 0;
-		detection_time = 0;
-
-		shoot_flag = false;
-		Bullet_B1_Bullet_Go = false;
-		Bullet_B2_Bullet_Go = false;
-		Bullet_B3_Bullet_Go = false;
-		Bullet_B4_Bullet_Go = false;
-
-		sword_flag = false;
-		sword_left_right_go = false;
-		distance_direction_between_hero_boss = 0;
-
-	}
-	virtual ~BOSS_NPC() {}
 };
 
 

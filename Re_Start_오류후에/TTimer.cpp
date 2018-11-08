@@ -47,18 +47,7 @@ bool TTimer::Frame()
 }
 bool TTimer::Render()
 {
-	////HDC hdc = GetDC(g_hWnd);
-
-	//assert(g_hOffScreenDC != NULL);
-
-	//SetBkColor(g_hOffScreenDC, RGB(255, 0, 0));
-	//SetTextColor(g_hOffScreenDC, RGB(0, 0, 255));
-	////SetBkMode(hdc, TRANSPARENT);			//배경색을 투명하게 한다.
-
-
-	////유니코드의 wcslen 글자수를 구하는 함수 strlen이랑 같음
-	//TextOut(g_hOffScreenDC, 0,0, m_csBuffer, wcslen(m_csBuffer));
-	////ReleaseDC(g_hWnd, hdc);
+	
 
 	return true;
 }
@@ -68,12 +57,12 @@ bool TTimer::Release()
 }
 
 
-TTimer::TTimer()
+TTimer::TTimer() :m_iFramePerSecond(0), m_iFrameCount (0), m_fSecPerFrame(0.0f), m_fGameTime (0.0f)
 {
-	m_iFramePerSecond = 0;
+	/*m_iFramePerSecond = 0;
 	m_iFrameCount = 0;
 	m_fSecPerFrame = 0.0f;
-	m_fGameTime = 0.0f;		//1) 1프레임의 경과 시간
+	m_fGameTime = 0.0f;	*/	//1) 1프레임의 경과 시간
 
 	// 시스템의 주파수 변동폭을 얻어 온다. 이는 시간의 표준을 잡기 위해서 사용한다.
 	QueryPerformanceFrequency((LARGE_INTEGER*)&m_Frequency);

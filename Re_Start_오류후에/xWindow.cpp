@@ -242,10 +242,10 @@ bool xWindow::GameRelease()
 {
 	return true;
 }
-xWindow::xWindow()
+xWindow::xWindow() : m_dwStyle(WS_OVERLAPPEDWINDOW)
 {
 	g_pWindow = this;
-	m_dwStyle = WS_OVERLAPPEDWINDOW;
+	//m_dwStyle = WS_OVERLAPPEDWINDOW;
 }
 
 

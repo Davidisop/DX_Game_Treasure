@@ -15,7 +15,6 @@ public:
 public:
 
 	bool  m_bDead;
-	bool  m_bDebugRect;
 	bool  m_bDetectRect;
 
 public:
@@ -37,12 +36,11 @@ public:
 
 public:
 
-	Object_Handling()
+	Object_Handling() : m_bDead(false), m_bDetectRect(false), m_Collision_number(0)
 	{
-		m_bDead = false;
-		m_bDebugRect = false;
+		/*m_bDead = false;
 		m_bDetectRect = false;
-		m_Collision_number = 0;
+		m_Collision_number = 0;*/
 	}
 	virtual ~Object_Handling() {}
 };

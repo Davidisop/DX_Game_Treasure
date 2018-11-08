@@ -190,13 +190,13 @@ public:
 	}
 
 public:
-	Gun_Bullet()
+	Gun_Bullet() : Bullet_Go(false), bullet_step(0), Face_Direction1_flag(false), Face_Direction2_flag(false), sprite_ptr(new sprite)
 	{
-		Bullet_Go = false;
+		/*Bullet_Go = false;
 		bullet_step = 0;
 		Face_Direction1_flag = false;
 		Face_Direction2_flag = false;
-		sprite_ptr = new sprite;
+		sprite_ptr = new sprite;*/
 
 	}
 	virtual ~Gun_Bullet() {}
