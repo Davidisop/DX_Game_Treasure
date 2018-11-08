@@ -46,6 +46,28 @@ bool dxSound::Init()
 	FMOD::System_Create(&m_pSystem);
 	m_pSystem->init(32, FMOD_INIT_NORMAL, 0);
 
+	sSound->Load("../../data/00_Menu.mp3", false);//0
+	sSound->Load("../../data/GunShot.mp3", false);
+
+	sSound->Load("../../data/game_background.mp3",false);//2
+
+	sSound->Load("../../data/hero_fire.wav", false);//3
+	sSound->Load("../../data/hero_energy.wav", false);
+	sSound->Load("../../data/hero_sword.wav", false);
+	
+	sSound->Load("../../data/ghost.wav", false);//6
+
+	sSound->Load("../../data/boss_gun.wav", false);//7
+	sSound->Load("../../data/boss_sword.wav", false);
+	sSound->Load("../../data/robot_reaction1.wav", false);
+	sSound->Load("../../data/robot_reaction2.wav", false);
+
+
+	sSound->Load("../../data/box_open.wav", false); //11
+
+	sSound->Load("../../data/succes_ending.wav", false); //12
+	sSound->Load("../../data/fail_ending.wav", false);
+
 	return true;
 }
 int    dxSound::Load(const char* pLoadName, bool bPlay)

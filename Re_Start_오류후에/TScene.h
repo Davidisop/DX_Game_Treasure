@@ -46,7 +46,7 @@ class TSceneLobby : public TScene
 public:
 	Background			Lobby_Background;
 	Box					UI_BUTTON;
-	Box					Message; 
+	//Box					Message; 
 public:
 	virtual bool	Init();
 	bool	Frame();
@@ -62,16 +62,15 @@ bool	TSceneLobby::Init()
 {
 
 	sSound->Init();
-	sSound->Load("../../data/00_Menu.mp3", false);
-	sSound->Load("../../data/GunShot.mp3", false);
+	
 
 	sSound->Play(0);
 		
-	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
+	/*Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
 	Message.m_for_update_Rects.x = g_rtClient.right / 1;    Message.m_for_update_Rects.y = g_rtClient.bottom / 1;
 	Message.Window_SetData_factors(0, 0, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
 	Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/KEYBOARD.png");
-
+*/
 
 
 
@@ -90,26 +89,26 @@ bool	TSceneLobby::Init()
 
 bool	TSceneLobby::Frame()
 {
-	
+	/*
 
 	static float fAddTime = 0.0f;
-	fAddTime += g_fSecPerFrame;
+	fAddTime += g_fSecPerFrame;*/
 
-	if (fAddTime>8.0f)
-	{
-
-
-
-		Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
-		Message.m_for_update_Rects.x = g_rtClient.right / 32;    Message.m_for_update_Rects.y = g_rtClient.bottom / 32;
-		Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
-		Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/KEYBOARD.png");
-		
-		//sSound-> PlayEffect(0);
+	//if (fAddTime>8.0f)
+	//{
 
 
 
-	}
+	//	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
+	//	Message.m_for_update_Rects.x = g_rtClient.right / 32;    Message.m_for_update_Rects.y = g_rtClient.bottom / 32;
+	//	Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
+	//	Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/KEYBOARD.png");
+	//	
+	//	//sSound-> PlayEffect(0);
+
+
+
+	//}
 
 
 	if (340 < I_Input.m_MousePos.x && I_Input.m_MousePos.x < 470 && 420 < I_Input.m_MousePos.y && I_Input.m_MousePos.y < 470)
@@ -134,7 +133,7 @@ bool	TSceneLobby::Frame()
 		}
 	}
 
-	sSound->Frame();
+	
 
 	return true;
 };
@@ -146,14 +145,14 @@ bool	TSceneLobby::Render()
 
 	Lobby_Background.Render(g_pContext);
 	UI_BUTTON.Render(g_pContext);
-	Message.Render(g_pContext);
+	//Message.Render(g_pContext);
 
 	return true;
 };
 
 bool	TSceneLobby::Release()
 {
-	sSound->Release();
+	
 	
 	return true;
 };
@@ -400,13 +399,8 @@ TSceneGame::TSceneGame() : fAngle(0.0f), box_alive_Col_S1(false), box_alive_Col_
 
 bool   TSceneGame::Init()
 {
+		
 
-	sSound->Init();
-
-	sSound->Load("../../data/00_Menu.mp3", false);
-	sSound->Load("../../data/GunShot.mp3", false);
-
-	sSound->Play(0);
 
 
 
@@ -822,6 +816,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B1_Bullet_Go == true && Robot.Face_Direction == 1)
 	{
+		sSound->Play(7);
 		Robot.Bullet_B1_Bullet_Go = false; Bullet_B1.Face_Direction1_flag = true;
 		Bullet_B1.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B1.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
 		Bullet_B1.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B1.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
@@ -834,6 +829,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B1_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
+		sSound->Play(7);
 		Robot.Bullet_B1_Bullet_Go = false; Bullet_B1.Face_Direction2_flag = true;
 		Bullet_B1.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B1.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
 		Bullet_B1.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B1.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
@@ -872,6 +868,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B2_Bullet_Go == true && Robot.Face_Direction == 1)
 	{
+		sSound->Play(7);
 		Robot.Bullet_B2_Bullet_Go  = false; Bullet_B2.Face_Direction1_flag = true;
 		Bullet_B2.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B2.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
 		Bullet_B2.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B2.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
@@ -884,6 +881,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B2_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
+		sSound->Play(7);
 		Robot.Bullet_B2_Bullet_Go = false; Bullet_B2.Face_Direction2_flag = true;
 		Bullet_B2.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B2.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
 		Bullet_B2.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B2.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
@@ -923,6 +921,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B3_Bullet_Go == true && Robot.Face_Direction == 1)
 	{
+		sSound->Play(7);
 		Robot.Bullet_B3_Bullet_Go = false; Bullet_B3.Face_Direction1_flag = true;
 		Bullet_B3.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B3.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
 		Bullet_B3.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B3.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
@@ -935,6 +934,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B3_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
+		sSound->Play(7);
 		Robot.Bullet_B3_Bullet_Go = false; Bullet_B3.Face_Direction2_flag = true;
 		Bullet_B3.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B3.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
 		Bullet_B3.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B3.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
@@ -1065,7 +1065,9 @@ void TSceneGame::Hero_Actions()
 
 
 	if (I_Input.Key('O'))
-	{	m_Actor.sword_step = 1;}
+	{	m_Actor.sword_step = 1;
+		sSound->Play(5);
+	}
 
 	if (I_Input.Key('K') || I_Input.Key('L'))
 	{
@@ -1153,6 +1155,8 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 			Message.m_for_update_Rects.x = g_rtClient.right / 100;    Message.m_for_update_Rects.y = g_rtClient.bottom / 100;
 			Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
 			Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Board_UI.png");
+
+			sSound->Play(2);
 		}
 
 
@@ -1201,20 +1205,20 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (I_Input.Key('K') == KEY_PUSH)
 	{
 		static int count_K = 1;
-		if (count_K == 1) { Bullet_F1.Bullet_Go = true; }
-		if (count_K == 2) { Bullet_F2.Bullet_Go = true; }
-		if (count_K == 3) { Bullet_F3.Bullet_Go = true; }
-		if (count_K == 4) { Bullet_F4.Bullet_Go = true; }
+		if (count_K == 1) { Bullet_F1.Bullet_Go = true; sSound->Play(3);}
+		if (count_K == 2) { Bullet_F2.Bullet_Go = true; sSound->Play(3);}
+		if (count_K == 3) { Bullet_F3.Bullet_Go = true; sSound->Play(3);}
+		if (count_K == 4) { Bullet_F4.Bullet_Go = true; sSound->Play(3);}
 		count_K++;
 	}
 
 	if (I_Input.Key('L') == KEY_PUSH)
 	{
 		static int count_L = 1;
-		if (count_L == 1) { Bullet_C1.Bullet_Go = true; }
-		if (count_L == 2) { Bullet_C2.Bullet_Go = true; }
-		if (count_L == 3) { Bullet_C3.Bullet_Go = true; }
-		if (count_L == 4) { Bullet_C4.Bullet_Go = true; }
+		if (count_L == 1) { Bullet_C1.Bullet_Go = true; sSound->Play(4);}
+		if (count_L == 2) { Bullet_C2.Bullet_Go = true; sSound->Play(4);}
+		if (count_L == 3) { Bullet_C3.Bullet_Go = true; sSound->Play(4);}
+		if (count_L == 4) { Bullet_C4.Bullet_Go = true; sSound->Play(4);}
 		count_L++;
 	}
 
@@ -1697,6 +1701,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	
 	if (Box_Alive.Bullet_G1_Bullet_Go == true)
 	{
+		sSound->Play(6);
 		Box_Alive.Bullet_G1_Bullet_Go = false; Bullet_Ghost_1.Face_Direction1_flag = true;
 		Bullet_Ghost_1.m_VertexList[0].x =Box_Alive.m_VertexList[0].x; Bullet_Ghost_1.m_VertexList[0].y =Box_Alive.m_VertexList[0].y ;
 		Bullet_Ghost_1.m_VertexList[1].x =Box_Alive.m_VertexList[1].x; Bullet_Ghost_1.m_VertexList[1].y =Box_Alive.m_VertexList[1].y ;
@@ -1729,7 +1734,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 
 
 	if (Box_Alive.Bullet_G2_Bullet_Go == true)
-	{
+	{	sSound->Play(6);
 		Box_Alive.Bullet_G2_Bullet_Go = false; Bullet_Ghost_2.Face_Direction1_flag = true;
 		Bullet_Ghost_2.m_VertexList[0].x = Box_Alive.m_VertexList[0].x; Bullet_Ghost_2.m_VertexList[0].y = Box_Alive.m_VertexList[0].y;
 		Bullet_Ghost_2.m_VertexList[1].x = Box_Alive.m_VertexList[1].x; Bullet_Ghost_2.m_VertexList[1].y = Box_Alive.m_VertexList[1].y;
@@ -1767,6 +1772,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 
 	if (Box_Alive.Bullet_G3_Bullet_Go == true)
 	{
+		sSound->Play(6);
 		Box_Alive.Bullet_G3_Bullet_Go = false; Bullet_Ghost_3.Face_Direction1_flag = true;
 		Bullet_Ghost_3.m_VertexList[0].x = Box_Alive.m_VertexList[0].x; Bullet_Ghost_3.m_VertexList[0].y = Box_Alive.m_VertexList[0].y;
 		Bullet_Ghost_3.m_VertexList[1].x = Box_Alive.m_VertexList[1].x; Bullet_Ghost_3.m_VertexList[1].y = Box_Alive.m_VertexList[1].y;
@@ -1798,6 +1804,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 
 	if (Box_Alive.Bullet_G4_Bullet_Go == true)
 	{
+		sSound->Play(6);
 		Box_Alive.Bullet_G4_Bullet_Go = false; Bullet_Ghost_4.Face_Direction1_flag = true;
 		Bullet_Ghost_4.m_VertexList[0].x = Box_Alive.m_VertexList[0].x; Bullet_Ghost_4.m_VertexList[0].y = Box_Alive.m_VertexList[0].y;
 		Bullet_Ghost_4.m_VertexList[1].x = Box_Alive.m_VertexList[1].x; Bullet_Ghost_4.m_VertexList[1].y = Box_Alive.m_VertexList[1].y;
@@ -1834,6 +1841,7 @@ void TSceneGame::Boss_collision_final_decision()
 
 	if (Robot_live_or_dead== 1)
 	{
+		sSound->Play(9);
 		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
 		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 8;
 		Robot_life_bar.Window_SetData_factors(400, 5, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
@@ -1842,6 +1850,7 @@ void TSceneGame::Boss_collision_final_decision()
 
 	if (Robot_live_or_dead == 2)
 	{
+		
 		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
 		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 8;
 		Robot_life_bar.Window_SetData_factors(400, 5, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
@@ -1850,6 +1859,7 @@ void TSceneGame::Boss_collision_final_decision()
 
 	if (Robot_live_or_dead == 3)
 	{
+		sSound->Play(10);
 		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
 		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 8;
 		Robot_life_bar.Window_SetData_factors(400, 5, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
@@ -2065,22 +2075,22 @@ void TSceneGame::Boss_sword_hero_collsion()
 	
 	if (Robot.sword_step == 3  && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 0)
 	{
-		Hero_Col_S1 = true;
+		Hero_Col_S1 = true; sSound->Play(8);
 	}
 
 	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 1)
 	{
-		Hero_Col_S2 = true;
+		Hero_Col_S2 = true; sSound->Play(8);
 	}
 
 	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 2)
 	{
-		Hero_Col_S3 = true;
+		Hero_Col_S3 = true; sSound->Play(8);
 	}
 
 	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 3)
 	{
-		Hero_Col_S4 = true;
+		Hero_Col_S4 = true; sSound->Play(8);
 	}
 
 
@@ -2584,6 +2594,8 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 		Message.m_for_update_Rects.x = g_rtClient.right / 100;    Message.m_for_update_Rects.y = g_rtClient.bottom / 100;
 		Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
 		Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Board_UI.png");
+
+		sSound->Stop(2);
 	}
 
 
@@ -4864,6 +4876,7 @@ bool	TSceneEnd::Render()
 
 bool	TSceneEnd::Release()
 {
+	sSound->Release();
 	return true;
 };
 
