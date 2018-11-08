@@ -77,19 +77,18 @@ public:
 
 	bool Release()
 	{
-
-		if (m_pVertextBuffer != NULL)	m_pVertextBuffer->Release();
-		if (m_pVertexShader != NULL)	m_pVertexShader->Release();
-		if (m_pPixelShader != NULL)		m_pPixelShader->Release();
 		if (m_pVertexLayout != NULL)	m_pVertexLayout->Release();
+		if (m_pAlphaBlend != NULL)m_pAlphaBlend->Release();
+		if (m_pVertextBuffer != NULL)	m_pVertextBuffer->Release();
+		if (m_pSamplerState != NULL)m_pSamplerState->Release();
+		if (m_pTextureSRV != NULL)m_pTextureSRV->Release();
+		if (m_pPixelShader != NULL)		m_pPixelShader->Release();
+		if (m_pVertexShader != NULL)	m_pVertexShader->Release();
+	
+		
 		if (m_pVSBlob != NULL) m_pVSBlob->Release();
 		if (m_pPSBlob != NULL) m_pPSBlob->Release();
 		if (m_pErrorBlob != NULL)m_pErrorBlob->Release();
-		if (m_pTextureSRV != NULL)m_pTextureSRV->Release();
-		if (m_pSamplerState != NULL)m_pSamplerState->Release();
-		if (m_pAlphaBlend != NULL)m_pAlphaBlend->Release();
-						
-			
 
 		m_pVSBlob = NULL;
 		m_pPSBlob = NULL;

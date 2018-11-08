@@ -61,11 +61,12 @@ bool dxSound::Init()
 	sSound->Load("../../data/boss_sword.wav", false);
 	sSound->Load("../../data/robot_reaction1.wav", false);
 	sSound->Load("../../data/robot_reaction2.wav", false);
+	sSound->Load("../../data/robot_emrge.wav", false);
+	
 
+	sSound->Load("../../data/box_open.wav", false); //12
 
-	sSound->Load("../../data/box_open.wav", false); //11
-
-	sSound->Load("../../data/succes_ending.wav", false); //12
+	sSound->Load("../../data/succes_ending.wav", false); //13
 	sSound->Load("../../data/fail_ending.wav", false);
 
 	return true;

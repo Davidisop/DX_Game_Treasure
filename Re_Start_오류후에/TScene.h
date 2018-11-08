@@ -638,6 +638,7 @@ bool    TSceneGame::Frame()
 
 	if (BOX_ALIVE_FINAL_SWITCH == true && Robot_live_or_dead < 4)
 	{
+		sSound->Play(11);
 		Boss_FSM();
 		Bullet_Boss_collision();
 		Herosword_boss_collision();
@@ -2502,7 +2503,7 @@ void TSceneGame::Treasure_Box_open()
 		m_Boy_NPC.walk_step = false;
 		m_Boy_NPC.hurt_flag = false;
 	
-
+		sSound->Play(12);
 
 
 	  memcpy(N_VertexList_BA, Box_Alive.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -4847,6 +4848,7 @@ bool	TSceneEnd::Frame()
 
 	if (end_decision ==1)
 	{
+		sSound->Play(13);
 		Ending_Background_success.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
 		Ending_Background_success.m_for_update_Rects.x = g_rtClient.right;	Ending_Background_success.m_for_update_Rects.y = g_rtClient.bottom;
 		Ending_Background_success.Window_SetData_factors(0, 0, Ending_Background_success.m_for_update_Rects.x, Ending_Background_success.m_for_update_Rects.y);
@@ -4855,6 +4857,7 @@ bool	TSceneEnd::Frame()
 
 	if (end_decision ==2)
 	{
+		sSound->Play(14);
 		Ending_Background_failure.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
 		Ending_Background_failure.m_for_update_Rects.x = g_rtClient.right;	Ending_Background_failure.m_for_update_Rects.y = g_rtClient.bottom;
 		Ending_Background_failure.Window_SetData_factors(0, 0, Ending_Background_failure.m_for_update_Rects.x, Ending_Background_failure.m_for_update_Rects.y);
