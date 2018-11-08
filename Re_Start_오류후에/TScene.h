@@ -638,7 +638,7 @@ bool    TSceneGame::Frame()
 
 	if (BOX_ALIVE_FINAL_SWITCH == true && Robot_live_or_dead < 4)
 	{
-		sSound->Play(11);
+	
 		Boss_FSM();
 		Bullet_Boss_collision();
 		Herosword_boss_collision();
@@ -744,6 +744,7 @@ TSceneGame::~TSceneGame()
 
 void TSceneGame::succees_ending()
 {
+	sSound->Stop(2);
 	static float fAddTime = 0.0f;
 	fAddTime += g_fSecPerFrame;
 
@@ -2776,7 +2777,7 @@ void TSceneGame::Box_Alive_collision_final_decision()
 		}
 		g_pContext->UpdateSubresource(Box_Alive_life_bar.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA_LB, 0, 0);
 
-	
+		sSound->Play(11);
 		BOX_ALIVE_FINAL_SWITCH = true;
 
 	}
@@ -3104,9 +3105,11 @@ void TSceneGame::Hero_collision_final_decision()
 		m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
 		m_Actor_life_bar.Window_SetData_factors(200, 10, m_Actor_life_bar.m_for_update_Rects.x, m_Actor_life_bar.m_for_update_Rects.y);
 		m_Actor_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/0_Bar.png");
+		
 		m_bNextSceneStart = true;
 
 		end_decision = 2;
+		sSound->Stop(2);
 		
 	}
 	///////////////////////////////////////////////////
