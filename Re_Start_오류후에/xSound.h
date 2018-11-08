@@ -47,7 +47,7 @@ bool dxSound::Init()
 	m_pSystem->init(32, FMOD_INIT_NORMAL, 0);
 
 	sSound->Load("../../data/00_Menu.mp3", false);//0
-	sSound->Load("../../data/GunShot.mp3", false);
+	sSound->Load("../../data/boss_gun.wav", false);
 
 	sSound->Load("../../data/game_background.mp3",false);//2
 
