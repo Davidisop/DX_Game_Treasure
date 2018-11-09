@@ -4869,6 +4869,7 @@ bool	TSceneEnd::Frame()
 	if (end_decision ==2)
 	{
 		sSound->Play(14);
+		sSound->Play(20);
 		Ending_Background_failure.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
 		Ending_Background_failure.m_for_update_Rects.x = g_rtClient.right;	Ending_Background_failure.m_for_update_Rects.y = g_rtClient.bottom;
 		Ending_Background_failure.Window_SetData_factors(0, 0, Ending_Background_failure.m_for_update_Rects.x, Ending_Background_failure.m_for_update_Rects.y);

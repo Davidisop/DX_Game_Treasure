@@ -82,6 +82,8 @@ bool dxSound::Init()
 
 	sSound->Load("../../data/npc_dead.wav", false);//19
 
+	sSound->Load("../../data/Weather Thunderstorm 01.wav", false);//20
+
 
 
 	return true;
