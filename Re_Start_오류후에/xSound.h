@@ -46,7 +46,7 @@ bool dxSound::Init()
 	FMOD::System_Create(&m_pSystem);
 	m_pSystem->init(32, FMOD_INIT_NORMAL, 0);
 
-	sSound->Load("../../data/00_Menu.mp3", false);//0
+	sSound->Load("../../data/opening.wav", false);//0
 	sSound->Load("../../data/boss_gun.wav", false);
 
 	sSound->Load("../../data/game_background.mp3",false);//2
@@ -68,6 +68,21 @@ bool dxSound::Init()
 
 	sSound->Load("../../data/succes_ending.wav", false); //13
 	sSound->Load("../../data/fail_ending.wav", false);
+
+
+	//////////////////////
+
+
+	sSound->Load("../../data/pop_up.mp3", false); //15
+	sSound->Load("../../data/after_npc_final_popup.mp3", false);
+
+	sSound->Load("../../data/boss_emerge_koong.mp3", false);//17
+
+	sSound->Load("../../data/hero_slide.wav", false); //18
+
+	sSound->Load("../../data/npc_dead.wav", false);//19
+
+
 
 	return true;
 }

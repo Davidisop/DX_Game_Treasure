@@ -435,22 +435,22 @@ bool   TSceneGame::Init()
 
 	UI_Bullet_1.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
 	UI_Bullet_1.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_1.m_for_update_Rects.y = g_rtClient.bottom / 12;
-	UI_Bullet_1.Window_SetData_factors(10, 20, UI_Bullet_1.m_for_update_Rects.x, UI_Bullet_1.m_for_update_Rects.y);
+	UI_Bullet_1.Window_SetData_factors(10, 0, UI_Bullet_1.m_for_update_Rects.x, UI_Bullet_1.m_for_update_Rects.y);
 	UI_Bullet_1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_F.png");
 
 	UI_Bullet_2.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
 	UI_Bullet_2.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_2.m_for_update_Rects.y = g_rtClient.bottom / 12;
-	UI_Bullet_2.Window_SetData_factors(10, 70, UI_Bullet_2.m_for_update_Rects.x, UI_Bullet_2.m_for_update_Rects.y);
+	UI_Bullet_2.Window_SetData_factors(10, 40, UI_Bullet_2.m_for_update_Rects.x, UI_Bullet_2.m_for_update_Rects.y);
 	UI_Bullet_2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_F.png");
 
 	UI_Bullet_3.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
 	UI_Bullet_3.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_3.m_for_update_Rects.y = g_rtClient.bottom / 12;
-	UI_Bullet_3.Window_SetData_factors(10, 120, UI_Bullet_3.m_for_update_Rects.x, UI_Bullet_3.m_for_update_Rects.y);
+	UI_Bullet_3.Window_SetData_factors(10, 80, UI_Bullet_3.m_for_update_Rects.x, UI_Bullet_3.m_for_update_Rects.y);
 	UI_Bullet_3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_F.png");
 
 	UI_Bullet_4.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
 	UI_Bullet_4.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_4.m_for_update_Rects.y = g_rtClient.bottom / 12;
-	UI_Bullet_4.Window_SetData_factors(10, 170, UI_Bullet_4.m_for_update_Rects.x, UI_Bullet_4.m_for_update_Rects.y);
+	UI_Bullet_4.Window_SetData_factors(10, 120, UI_Bullet_4.m_for_update_Rects.x, UI_Bullet_4.m_for_update_Rects.y);
 	UI_Bullet_4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_F.png");
 
 
@@ -461,38 +461,38 @@ bool   TSceneGame::Init()
 
 	UI_Bullet_6.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
 	UI_Bullet_6.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_6.m_for_update_Rects.y = g_rtClient.bottom / 10;
-	UI_Bullet_6.Window_SetData_factors(800, 50, UI_Bullet_6.m_for_update_Rects.x, UI_Bullet_6.m_for_update_Rects.y);
+	UI_Bullet_6.Window_SetData_factors(800, 40, UI_Bullet_6.m_for_update_Rects.x, UI_Bullet_6.m_for_update_Rects.y);
 	UI_Bullet_6.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_C.png");
 
 	UI_Bullet_7.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
 	UI_Bullet_7.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_7.m_for_update_Rects.y = g_rtClient.bottom / 10;
-	UI_Bullet_7.Window_SetData_factors(800, 100, UI_Bullet_7.m_for_update_Rects.x, UI_Bullet_7.m_for_update_Rects.y);
+	UI_Bullet_7.Window_SetData_factors(800, 80, UI_Bullet_7.m_for_update_Rects.x, UI_Bullet_7.m_for_update_Rects.y);
 	UI_Bullet_7.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_C.png");
 
 	UI_Bullet_8.in_Texture_SetData_factors(0, 0, 120, 40, 120, 40);
 	UI_Bullet_8.m_for_update_Rects.x = g_rtClient.right / 10;    UI_Bullet_8.m_for_update_Rects.y = g_rtClient.bottom / 10;
-	UI_Bullet_8.Window_SetData_factors(800, 150, UI_Bullet_8.m_for_update_Rects.x, UI_Bullet_8.m_for_update_Rects.y);
+	UI_Bullet_8.Window_SetData_factors(800, 120, UI_Bullet_8.m_for_update_Rects.x, UI_Bullet_8.m_for_update_Rects.y);
 	UI_Bullet_8.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/gun_bullet_C.png");
 
 
 	Bullet_F1.in_Texture_SetData_factors(225, 141, 32, 38, 400, 300);
 	Bullet_F1.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F1.m_for_update_Rects.y = g_rtClient.bottom / 15;
-	Bullet_F1.Window_SetData_factors(10, 20, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
+	Bullet_F1.Window_SetData_factors(10, 0, Bullet_F1.m_for_update_Rects.x, Bullet_F1.m_for_update_Rects.y);
 	Bullet_F1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 	Bullet_F2.in_Texture_SetData_factors(225, 141, 32, 38, 400, 300);
 	Bullet_F2.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F2.m_for_update_Rects.y = g_rtClient.bottom / 15;
-	Bullet_F2.Window_SetData_factors(10, 70, Bullet_F2.m_for_update_Rects.x, Bullet_F2.m_for_update_Rects.y);
+	Bullet_F2.Window_SetData_factors(10, 40, Bullet_F2.m_for_update_Rects.x, Bullet_F2.m_for_update_Rects.y);
 	Bullet_F2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 	Bullet_F3.in_Texture_SetData_factors(225, 141, 32, 38, 400, 300);
 	Bullet_F3.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F3.m_for_update_Rects.y = g_rtClient.bottom / 15;
-	Bullet_F3.Window_SetData_factors(10, 120, Bullet_F3.m_for_update_Rects.x, Bullet_F3.m_for_update_Rects.y);
+	Bullet_F3.Window_SetData_factors(10, 80, Bullet_F3.m_for_update_Rects.x, Bullet_F3.m_for_update_Rects.y);
 	Bullet_F3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 	Bullet_F4.in_Texture_SetData_factors(225, 141, 32, 38, 400, 300);
 	Bullet_F4.m_for_update_Rects.x = g_rtClient.right / 15;    Bullet_F4.m_for_update_Rects.y = g_rtClient.bottom / 15;
-	Bullet_F4.Window_SetData_factors(10, 170, Bullet_F4.m_for_update_Rects.x, Bullet_F4.m_for_update_Rects.y);
+	Bullet_F4.Window_SetData_factors(10, 120, Bullet_F4.m_for_update_Rects.x, Bullet_F4.m_for_update_Rects.y);
 	Bullet_F4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 
@@ -503,17 +503,17 @@ bool   TSceneGame::Init()
 
 	Bullet_C2.in_Texture_SetData_factors(253, 61, 12, 12, 400, 300);
 	Bullet_C2.m_for_update_Rects.x = g_rtClient.right / 20;    Bullet_C2.m_for_update_Rects.y = g_rtClient.bottom / 20;
-	Bullet_C2.Window_SetData_factors(815, 60, Bullet_C2.m_for_update_Rects.x, Bullet_C2.m_for_update_Rects.y);
+	Bullet_C2.Window_SetData_factors(815, 50, Bullet_C2.m_for_update_Rects.x, Bullet_C2.m_for_update_Rects.y);
 	Bullet_C2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 	Bullet_C3.in_Texture_SetData_factors(253, 61, 12, 12, 400, 300);
 	Bullet_C3.m_for_update_Rects.x = g_rtClient.right / 20;    Bullet_C3.m_for_update_Rects.y = g_rtClient.bottom / 20;
-	Bullet_C3.Window_SetData_factors(815, 110, Bullet_C3.m_for_update_Rects.x, Bullet_C3.m_for_update_Rects.y);
+	Bullet_C3.Window_SetData_factors(815, 90, Bullet_C3.m_for_update_Rects.x, Bullet_C3.m_for_update_Rects.y);
 	Bullet_C3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 	Bullet_C4.in_Texture_SetData_factors(253, 61, 12, 12, 400, 300);
 	Bullet_C4.m_for_update_Rects.x = g_rtClient.right / 20;    Bullet_C4.m_for_update_Rects.y = g_rtClient.bottom / 20;
-	Bullet_C4.Window_SetData_factors(815, 160, Bullet_C4.m_for_update_Rects.x, Bullet_C4.m_for_update_Rects.y);
+	Bullet_C4.Window_SetData_factors(815, 130, Bullet_C4.m_for_update_Rects.x, Bullet_C4.m_for_update_Rects.y);
 	Bullet_C4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
 
 
@@ -587,9 +587,9 @@ bool   TSceneGame::Init()
 
 
 
-	Robot.m_for_update_Rects.x = g_rtClient.right / 5;    Robot.m_for_update_Rects.y = g_rtClient.bottom / 2.5;
+	Robot.m_for_update_Rects.x = g_rtClient.right / 4.7;    Robot.m_for_update_Rects.y = g_rtClient.bottom / 2.2;
 	Robot.in_Texture_SetData_factors(213, 1230, 65, 120, 702, 1843);
-	Robot.Window_SetData_factors(900, 220, Robot.m_for_update_Rects.x, Robot.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
+	Robot.Window_SetData_factors(900, 185, Robot.m_for_update_Rects.x, Robot.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 	Robot.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
 
 
@@ -657,7 +657,6 @@ bool    TSceneGame::Frame()
 	{
 		Boy_NPC_collision_from_hero_attack();
 		Boy_NPC_collision_final_decision_including_second_message();
-		Hero_collision_final_decision();
 		Treasure_Box_open();
 		
 	}
@@ -818,7 +817,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B1_Bullet_Go == true && Robot.Face_Direction == 1)
 	{
-		sSound->Play(7);
+		sSound->PlayEffect(7);
 		Robot.Bullet_B1_Bullet_Go = false; Bullet_B1.Face_Direction1_flag = true;
 		Bullet_B1.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B1.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
 		Bullet_B1.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B1.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
@@ -831,7 +830,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B1_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
-		sSound->Play(7);
+		sSound->PlayEffect(7);
 		Robot.Bullet_B1_Bullet_Go = false; Bullet_B1.Face_Direction2_flag = true;
 		Bullet_B1.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B1.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
 		Bullet_B1.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B1.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
@@ -870,7 +869,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B2_Bullet_Go == true && Robot.Face_Direction == 1)
 	{
-		sSound->Play(7);
+		sSound->PlayEffect(7);
 		Robot.Bullet_B2_Bullet_Go  = false; Bullet_B2.Face_Direction1_flag = true;
 		Bullet_B2.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B2.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
 		Bullet_B2.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B2.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
@@ -883,7 +882,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B2_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
-		sSound->Play(7);
+		sSound->PlayEffect(7);
 		Robot.Bullet_B2_Bullet_Go = false; Bullet_B2.Face_Direction2_flag = true;
 		Bullet_B2.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B2.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
 		Bullet_B2.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B2.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
@@ -923,7 +922,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B3_Bullet_Go == true && Robot.Face_Direction == 1)
 	{
-		sSound->Play(7);
+		sSound->PlayEffect(7);
 		Robot.Bullet_B3_Bullet_Go = false; Bullet_B3.Face_Direction1_flag = true;
 		Bullet_B3.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B3.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
 		Bullet_B3.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B3.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
@@ -936,7 +935,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B3_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
-		sSound->Play(7);
+		sSound->PlayEffect(7);
 		Robot.Bullet_B3_Bullet_Go = false; Bullet_B3.Face_Direction2_flag = true;
 		Bullet_B3.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B3.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
 		Bullet_B3.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B3.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
@@ -975,6 +974,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B4_Bullet_Go == true && Robot.Face_Direction == 1)
 	{
+		sSound->PlayEffect(7);
 		Robot.Bullet_B4_Bullet_Go = false; Bullet_B4.Face_Direction1_flag = true;
 		Bullet_B4.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B4.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
 		Bullet_B4.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B4.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
@@ -987,6 +987,7 @@ void TSceneGame::Boss_FSM()
 
 	if (Robot.Bullet_B4_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
+		sSound->PlayEffect(7);
 		Robot.Bullet_B4_Bullet_Go = false; Bullet_B4.Face_Direction2_flag = true;
 		Bullet_B4.m_VertexList[0].x = Robot.m_VertexList[0].x + 30 / 900; Bullet_B4.m_VertexList[0].y = Robot.m_VertexList[0].y + 5 / 900;
 		Bullet_B4.m_VertexList[1].x = Robot.m_VertexList[1].x + 30 / 900; Bullet_B4.m_VertexList[1].y = Robot.m_VertexList[1].y + 5 / 900;
@@ -1025,10 +1026,6 @@ void TSceneGame::Boss_FSM()
 }
 
 
-
-
-
-
 void TSceneGame::Hero_Actions()
 {
 	if (I_Input.Key('A'))
@@ -1049,7 +1046,9 @@ void TSceneGame::Hero_Actions()
 
 
 	if (I_Input.Key('I'))
-	{		m_Actor.slide_step = 1;}
+	{		m_Actor.slide_step = 1;
+			sSound->PlayEffect(18);
+	}
 	if (m_Actor.Face_Direction == 2 && m_Actor.slide_step != 0)
 	{	if (m_Actor.slide_step == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }     if (m_Actor.slide_step == 2) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
 		if (m_Actor.slide_step == 3) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }        if (m_Actor.slide_step == 4) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
@@ -1068,7 +1067,7 @@ void TSceneGame::Hero_Actions()
 
 	if (I_Input.Key('O'))
 	{	m_Actor.sword_step = 1;
-		sSound->Play(5);
+		sSound->PlayEffect(5);
 	}
 
 	if (I_Input.Key('K') || I_Input.Key('L'))
@@ -1116,6 +1115,10 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 
 	//////////////////////////////////////// 110m 가서 일어나는 일
 
+	if (m_Boy_NPC.m_pos.x > 105 && m_Boy_NPC.m_pos.x < 107)
+	{
+	sSound->Play(15);
+	}
 
 	if (m_Boy_NPC.m_pos.x > 110)
 	{
@@ -1129,6 +1132,7 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 
 	if (m_Boy_NPC.hurt_flag == true )
 	{
+		
 		m_Boy_NPC.hurt();
 		Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
 		Message.m_for_update_Rects.x = g_rtClient.right / 2;    Message.m_for_update_Rects.y = g_rtClient.bottom / 2;
@@ -1207,20 +1211,20 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (I_Input.Key('K') == KEY_PUSH)
 	{
 		static int count_K = 1;
-		if (count_K == 1) { Bullet_F1.Bullet_Go = true; sSound->Play(3);}
-		if (count_K == 2) { Bullet_F2.Bullet_Go = true; sSound->Play(3);}
-		if (count_K == 3) { Bullet_F3.Bullet_Go = true; sSound->Play(3);}
-		if (count_K == 4) { Bullet_F4.Bullet_Go = true; sSound->Play(3);}
+		if (count_K == 1) { Bullet_F1.Bullet_Go = true; sSound->PlayEffect(3);}
+		if (count_K == 2) { Bullet_F2.Bullet_Go = true; sSound->PlayEffect(3);}
+		if (count_K == 3) { Bullet_F3.Bullet_Go = true; sSound->PlayEffect(3);}
+		if (count_K == 4) { Bullet_F4.Bullet_Go = true; sSound->PlayEffect(3);}
 		count_K++;
 	}
 
 	if (I_Input.Key('L') == KEY_PUSH)
 	{
 		static int count_L = 1;
-		if (count_L == 1) { Bullet_C1.Bullet_Go = true; sSound->Play(4);}
-		if (count_L == 2) { Bullet_C2.Bullet_Go = true; sSound->Play(4);}
-		if (count_L == 3) { Bullet_C3.Bullet_Go = true; sSound->Play(4);}
-		if (count_L == 4) { Bullet_C4.Bullet_Go = true; sSound->Play(4);}
+		if (count_L == 1) { Bullet_C1.Bullet_Go = true; sSound->PlayEffect(4);}
+		if (count_L == 2) { Bullet_C2.Bullet_Go = true; sSound->PlayEffect(4);}
+		if (count_L == 3) { Bullet_C3.Bullet_Go = true; sSound->PlayEffect(4);}
+		if (count_L == 4) { Bullet_C4.Bullet_Go = true; sSound->PlayEffect(4);}
 		count_L++;
 	}
 
@@ -1705,13 +1709,13 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	{
 		sSound->Play(6);
 		Box_Alive.Bullet_G1_Bullet_Go = false; Bullet_Ghost_1.Face_Direction1_flag = true;
-		Bullet_Ghost_1.m_VertexList[0].x =Box_Alive.m_VertexList[0].x; Bullet_Ghost_1.m_VertexList[0].y =Box_Alive.m_VertexList[0].y ;
-		Bullet_Ghost_1.m_VertexList[1].x =Box_Alive.m_VertexList[1].x; Bullet_Ghost_1.m_VertexList[1].y =Box_Alive.m_VertexList[1].y ;
-		Bullet_Ghost_1.m_VertexList[2].x =Box_Alive.m_VertexList[2].x; Bullet_Ghost_1.m_VertexList[2].y =Box_Alive.m_VertexList[2].y ;
-		Bullet_Ghost_1.m_VertexList[3].x =Box_Alive.m_VertexList[3].x; Bullet_Ghost_1.m_VertexList[3].y =Box_Alive.m_VertexList[3].y ;
-		Bullet_Ghost_1.m_VertexList[4].x =Box_Alive.m_VertexList[4].x; Bullet_Ghost_1.m_VertexList[4].y =Box_Alive.m_VertexList[4].y ;
-		Bullet_Ghost_1.m_VertexList[5].x =Box_Alive.m_VertexList[5].x; Bullet_Ghost_1.m_VertexList[5].y =Box_Alive.m_VertexList[5].y ;
-		Bullet_Ghost_1.m_VertexList[6].x =Box_Alive.m_VertexList[6].x; Bullet_Ghost_1.m_VertexList[6].y =Box_Alive.m_VertexList[6].y ;
+		Bullet_Ghost_1.m_VertexList[0].x =Box_Alive.m_VertexList[0].x; Bullet_Ghost_1.m_VertexList[0].y =Box_Alive.m_VertexList[0].y-0.05;
+		Bullet_Ghost_1.m_VertexList[1].x =Box_Alive.m_VertexList[1].x; Bullet_Ghost_1.m_VertexList[1].y =Box_Alive.m_VertexList[1].y-0.05;
+		Bullet_Ghost_1.m_VertexList[2].x =Box_Alive.m_VertexList[2].x; Bullet_Ghost_1.m_VertexList[2].y =Box_Alive.m_VertexList[2].y-0.05;
+		Bullet_Ghost_1.m_VertexList[3].x =Box_Alive.m_VertexList[3].x; Bullet_Ghost_1.m_VertexList[3].y =Box_Alive.m_VertexList[3].y-0.05;
+		Bullet_Ghost_1.m_VertexList[4].x =Box_Alive.m_VertexList[4].x; Bullet_Ghost_1.m_VertexList[4].y =Box_Alive.m_VertexList[4].y-0.05;
+		Bullet_Ghost_1.m_VertexList[5].x =Box_Alive.m_VertexList[5].x; Bullet_Ghost_1.m_VertexList[5].y =Box_Alive.m_VertexList[5].y-0.05;
+		Bullet_Ghost_1.m_VertexList[6].x =Box_Alive.m_VertexList[6].x; Bullet_Ghost_1.m_VertexList[6].y =Box_Alive.m_VertexList[6].y-0.05;
 	}
 
 	if (Bullet_Ghost_1.Face_Direction1_flag == true)
@@ -1738,13 +1742,13 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	if (Box_Alive.Bullet_G2_Bullet_Go == true)
 	{	sSound->Play(6);
 		Box_Alive.Bullet_G2_Bullet_Go = false; Bullet_Ghost_2.Face_Direction1_flag = true;
-		Bullet_Ghost_2.m_VertexList[0].x = Box_Alive.m_VertexList[0].x; Bullet_Ghost_2.m_VertexList[0].y = Box_Alive.m_VertexList[0].y;
-		Bullet_Ghost_2.m_VertexList[1].x = Box_Alive.m_VertexList[1].x; Bullet_Ghost_2.m_VertexList[1].y = Box_Alive.m_VertexList[1].y;
-		Bullet_Ghost_2.m_VertexList[2].x = Box_Alive.m_VertexList[2].x; Bullet_Ghost_2.m_VertexList[2].y = Box_Alive.m_VertexList[2].y;
-		Bullet_Ghost_2.m_VertexList[3].x = Box_Alive.m_VertexList[3].x; Bullet_Ghost_2.m_VertexList[3].y = Box_Alive.m_VertexList[3].y;
-		Bullet_Ghost_2.m_VertexList[4].x = Box_Alive.m_VertexList[4].x; Bullet_Ghost_2.m_VertexList[4].y = Box_Alive.m_VertexList[4].y;
-		Bullet_Ghost_2.m_VertexList[5].x = Box_Alive.m_VertexList[5].x; Bullet_Ghost_2.m_VertexList[5].y = Box_Alive.m_VertexList[5].y;
-		Bullet_Ghost_2.m_VertexList[6].x = Box_Alive.m_VertexList[6].x; Bullet_Ghost_2.m_VertexList[6].y = Box_Alive.m_VertexList[6].y;
+		Bullet_Ghost_2.m_VertexList[0].x = Box_Alive.m_VertexList[0].x; Bullet_Ghost_2.m_VertexList[0].y = Box_Alive.m_VertexList[0].y - 0.05;
+		Bullet_Ghost_2.m_VertexList[1].x = Box_Alive.m_VertexList[1].x; Bullet_Ghost_2.m_VertexList[1].y = Box_Alive.m_VertexList[1].y - 0.05;
+		Bullet_Ghost_2.m_VertexList[2].x = Box_Alive.m_VertexList[2].x; Bullet_Ghost_2.m_VertexList[2].y = Box_Alive.m_VertexList[2].y - 0.05;
+		Bullet_Ghost_2.m_VertexList[3].x = Box_Alive.m_VertexList[3].x; Bullet_Ghost_2.m_VertexList[3].y = Box_Alive.m_VertexList[3].y - 0.05;
+		Bullet_Ghost_2.m_VertexList[4].x = Box_Alive.m_VertexList[4].x; Bullet_Ghost_2.m_VertexList[4].y = Box_Alive.m_VertexList[4].y - 0.05;
+		Bullet_Ghost_2.m_VertexList[5].x = Box_Alive.m_VertexList[5].x; Bullet_Ghost_2.m_VertexList[5].y = Box_Alive.m_VertexList[5].y - 0.05;
+		Bullet_Ghost_2.m_VertexList[6].x = Box_Alive.m_VertexList[6].x; Bullet_Ghost_2.m_VertexList[6].y = Box_Alive.m_VertexList[6].y - 0.05;
 	}
 
 	if (Bullet_Ghost_2.Face_Direction1_flag == true)
@@ -1776,13 +1780,13 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	{
 		sSound->Play(6);
 		Box_Alive.Bullet_G3_Bullet_Go = false; Bullet_Ghost_3.Face_Direction1_flag = true;
-		Bullet_Ghost_3.m_VertexList[0].x = Box_Alive.m_VertexList[0].x; Bullet_Ghost_3.m_VertexList[0].y = Box_Alive.m_VertexList[0].y;
-		Bullet_Ghost_3.m_VertexList[1].x = Box_Alive.m_VertexList[1].x; Bullet_Ghost_3.m_VertexList[1].y = Box_Alive.m_VertexList[1].y;
-		Bullet_Ghost_3.m_VertexList[2].x = Box_Alive.m_VertexList[2].x; Bullet_Ghost_3.m_VertexList[2].y = Box_Alive.m_VertexList[2].y;
-		Bullet_Ghost_3.m_VertexList[3].x = Box_Alive.m_VertexList[3].x; Bullet_Ghost_3.m_VertexList[3].y = Box_Alive.m_VertexList[3].y;
-		Bullet_Ghost_3.m_VertexList[4].x = Box_Alive.m_VertexList[4].x; Bullet_Ghost_3.m_VertexList[4].y = Box_Alive.m_VertexList[4].y;
-		Bullet_Ghost_3.m_VertexList[5].x = Box_Alive.m_VertexList[5].x; Bullet_Ghost_3.m_VertexList[5].y = Box_Alive.m_VertexList[5].y;
-		Bullet_Ghost_3.m_VertexList[6].x = Box_Alive.m_VertexList[6].x; Bullet_Ghost_3.m_VertexList[6].y = Box_Alive.m_VertexList[6].y;
+		Bullet_Ghost_3.m_VertexList[0].x = Box_Alive.m_VertexList[0].x; Bullet_Ghost_3.m_VertexList[0].y = Box_Alive.m_VertexList[0].y - 0.05;
+		Bullet_Ghost_3.m_VertexList[1].x = Box_Alive.m_VertexList[1].x; Bullet_Ghost_3.m_VertexList[1].y = Box_Alive.m_VertexList[1].y - 0.05;
+		Bullet_Ghost_3.m_VertexList[2].x = Box_Alive.m_VertexList[2].x; Bullet_Ghost_3.m_VertexList[2].y = Box_Alive.m_VertexList[2].y - 0.05;
+		Bullet_Ghost_3.m_VertexList[3].x = Box_Alive.m_VertexList[3].x; Bullet_Ghost_3.m_VertexList[3].y = Box_Alive.m_VertexList[3].y - 0.05;
+		Bullet_Ghost_3.m_VertexList[4].x = Box_Alive.m_VertexList[4].x; Bullet_Ghost_3.m_VertexList[4].y = Box_Alive.m_VertexList[4].y - 0.05;
+		Bullet_Ghost_3.m_VertexList[5].x = Box_Alive.m_VertexList[5].x; Bullet_Ghost_3.m_VertexList[5].y = Box_Alive.m_VertexList[5].y - 0.05;
+		Bullet_Ghost_3.m_VertexList[6].x = Box_Alive.m_VertexList[6].x; Bullet_Ghost_3.m_VertexList[6].y = Box_Alive.m_VertexList[6].y - 0.05;
 	}
 
 	if (Bullet_Ghost_3.Face_Direction1_flag == true)
@@ -1808,13 +1812,13 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	{
 		sSound->Play(6);
 		Box_Alive.Bullet_G4_Bullet_Go = false; Bullet_Ghost_4.Face_Direction1_flag = true;
-		Bullet_Ghost_4.m_VertexList[0].x = Box_Alive.m_VertexList[0].x; Bullet_Ghost_4.m_VertexList[0].y = Box_Alive.m_VertexList[0].y;
-		Bullet_Ghost_4.m_VertexList[1].x = Box_Alive.m_VertexList[1].x; Bullet_Ghost_4.m_VertexList[1].y = Box_Alive.m_VertexList[1].y;
-		Bullet_Ghost_4.m_VertexList[2].x = Box_Alive.m_VertexList[2].x; Bullet_Ghost_4.m_VertexList[2].y = Box_Alive.m_VertexList[2].y;
-		Bullet_Ghost_4.m_VertexList[3].x = Box_Alive.m_VertexList[3].x; Bullet_Ghost_4.m_VertexList[3].y = Box_Alive.m_VertexList[3].y;
-		Bullet_Ghost_4.m_VertexList[4].x = Box_Alive.m_VertexList[4].x; Bullet_Ghost_4.m_VertexList[4].y = Box_Alive.m_VertexList[4].y;
-		Bullet_Ghost_4.m_VertexList[5].x = Box_Alive.m_VertexList[5].x; Bullet_Ghost_4.m_VertexList[5].y = Box_Alive.m_VertexList[5].y;
-		Bullet_Ghost_4.m_VertexList[6].x = Box_Alive.m_VertexList[6].x; Bullet_Ghost_4.m_VertexList[6].y = Box_Alive.m_VertexList[6].y;
+		Bullet_Ghost_4.m_VertexList[0].x = Box_Alive.m_VertexList[0].x; Bullet_Ghost_4.m_VertexList[0].y = Box_Alive.m_VertexList[0].y - 0.05;
+		Bullet_Ghost_4.m_VertexList[1].x = Box_Alive.m_VertexList[1].x; Bullet_Ghost_4.m_VertexList[1].y = Box_Alive.m_VertexList[1].y - 0.05;
+		Bullet_Ghost_4.m_VertexList[2].x = Box_Alive.m_VertexList[2].x; Bullet_Ghost_4.m_VertexList[2].y = Box_Alive.m_VertexList[2].y - 0.05;
+		Bullet_Ghost_4.m_VertexList[3].x = Box_Alive.m_VertexList[3].x; Bullet_Ghost_4.m_VertexList[3].y = Box_Alive.m_VertexList[3].y - 0.05;
+		Bullet_Ghost_4.m_VertexList[4].x = Box_Alive.m_VertexList[4].x; Bullet_Ghost_4.m_VertexList[4].y = Box_Alive.m_VertexList[4].y - 0.05;
+		Bullet_Ghost_4.m_VertexList[5].x = Box_Alive.m_VertexList[5].x; Bullet_Ghost_4.m_VertexList[5].y = Box_Alive.m_VertexList[5].y - 0.05;
+		Bullet_Ghost_4.m_VertexList[6].x = Box_Alive.m_VertexList[6].x; Bullet_Ghost_4.m_VertexList[6].y = Box_Alive.m_VertexList[6].y - 0.05;
 	}
 
 	if (Bullet_Ghost_4.Face_Direction1_flag == true)
@@ -2077,22 +2081,22 @@ void TSceneGame::Boss_sword_hero_collsion()
 	
 	if (Robot.sword_step == 3  && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 0)
 	{
-		Hero_Col_S1 = true; sSound->Play(8);
+		Hero_Col_S1 = true; sSound->PlayEffect(8);
 	}
 
 	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 1)
 	{
-		Hero_Col_S2 = true; sSound->Play(8);
+		Hero_Col_S2 = true; sSound->PlayEffect(8);
 	}
 
 	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 2)
 	{
-		Hero_Col_S3 = true; sSound->Play(8);
+		Hero_Col_S3 = true; sSound->PlayEffect(8);
 	}
 
 	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 3)
 	{
-		Hero_Col_S4 = true; sSound->Play(8);
+		Hero_Col_S4 = true; sSound->PlayEffect(8);
 	}
 
 
@@ -2573,6 +2577,7 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 
 	if (m_Boy_NPC.hurt_flag == true&& m_Boy_NPC.Enter_flag_2 == false)
 	{
+		sSound->Play(15);
 		m_Boy_NPC.hurt();
 		Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
 		Message.m_for_update_Rects.x = g_rtClient.right / 2;    Message.m_for_update_Rects.y = g_rtClient.bottom / 2;
@@ -2598,6 +2603,7 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 		Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/Board_UI.png");
 
 		sSound->Stop(2);
+		sSound->Play(16);
 	}
 
 
@@ -2653,6 +2659,7 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 	{
 		m_Boy_NPC.dead_flag = false;
 		m_Boy_NPC.dead_step = 1;
+		sSound->Play(19);
 	}
 	
 
@@ -2778,6 +2785,7 @@ void TSceneGame::Box_Alive_collision_final_decision()
 		g_pContext->UpdateSubresource(Box_Alive_life_bar.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA_LB, 0, 0);
 
 		sSound->Play(11);
+		sSound->Play(17);
 		BOX_ALIVE_FINAL_SWITCH = true;
 
 	}
