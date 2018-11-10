@@ -46,7 +46,7 @@ class TSceneLobby : public TScene
 public:
 	Background			Lobby_Background;
 	Box					UI_BUTTON;
-	//Box					Message; 
+	Box					Message; 
 public:
 	virtual bool	Init();
 	bool	Frame();
@@ -60,18 +60,13 @@ public:
 
 bool	TSceneLobby::Init()
 {
-
 	sSound->Init();
 	
-
-	sSound->Play(0);
 		
-	/*Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
+	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
 	Message.m_for_update_Rects.x = g_rtClient.right / 1;    Message.m_for_update_Rects.y = g_rtClient.bottom / 1;
 	Message.Window_SetData_factors(0, 0, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
 	Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/KEYBOARD.png");
-*/
-
 
 
 	Lobby_Background.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
@@ -89,26 +84,19 @@ bool	TSceneLobby::Init()
 
 bool	TSceneLobby::Frame()
 {
-	/*
+	
 
 	static float fAddTime = 0.0f;
-	fAddTime += g_fSecPerFrame;*/
+	fAddTime += g_fSecPerFrame;
 
-	//if (fAddTime>8.0f)
-	//{
-
-
-
-	//	Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
-	//	Message.m_for_update_Rects.x = g_rtClient.right / 32;    Message.m_for_update_Rects.y = g_rtClient.bottom / 32;
-	//	Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
-	//	Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/KEYBOARD.png");
-	//	
-	//	//sSound-> PlayEffect(0);
-
-
-
-	//}
+	if (fAddTime>5.0f)
+	{
+		Message.in_Texture_SetData_factors(0, 0, 1241, 735, 1241, 735);
+		Message.m_for_update_Rects.x = g_rtClient.right / 32;    Message.m_for_update_Rects.y = g_rtClient.bottom / 32;
+		Message.Window_SetData_factors(900, 50, Message.m_for_update_Rects.x, Message.m_for_update_Rects.y);
+		Message.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/KEYBOARD.png");
+		sSound->Play(0);
+	}
 
 
 	if (340 < I_Input.m_MousePos.x && I_Input.m_MousePos.x < 470 && 420 < I_Input.m_MousePos.y && I_Input.m_MousePos.y < 470)
@@ -145,7 +133,7 @@ bool	TSceneLobby::Render()
 
 	Lobby_Background.Render(g_pContext);
 	UI_BUTTON.Render(g_pContext);
-	//Message.Render(g_pContext);
+	Message.Render(g_pContext);
 
 	return true;
 };
@@ -198,10 +186,6 @@ public:
 	bool box_alive_Col_S1;
 	bool box_alive_Col_S2;
 
-
-
-	 
-
 	int  Hero_live_or_dead;
 	bool Hero_Col_G1;
 	bool Hero_Col_G2;
@@ -213,10 +197,10 @@ public:
 	bool Hero_Col_B3;
 	bool Hero_Col_B4;
 
-	bool Hero_Col_S1;
-	bool Hero_Col_S2;
-	bool Hero_Col_S3;
-	bool Hero_Col_S4;
+	bool Hero_Col_BOSS_S1;
+	bool Hero_Col_BOSS_S2;
+	bool Hero_Col_BOSS_S3;
+	bool Hero_Col_BOSS_S4;
 
 
 	int  Robot_live_or_dead;
@@ -239,16 +223,30 @@ public:
 
 
 
-	bool ghost_Col_F1;		 bool ghost_Col_C1;
-	bool ghost_Col_F2;		 bool ghost_Col_C2;
-	bool ghost_Col_F3;		 bool ghost_Col_C3;
-	bool ghost_Col_F4;		 bool ghost_Col_C4;
+	bool ghost1_Col_F1;		  bool ghost2_Col_F1;		  bool ghost3_Col_F1;			   bool ghost4_Col_F1;
+	bool ghost1_Col_F2;		  bool ghost2_Col_F2;		  bool ghost3_Col_F2;			   bool ghost4_Col_F2;
+	bool ghost1_Col_F3;		  bool ghost2_Col_F3;		  bool ghost3_Col_F3;			   bool ghost4_Col_F3;
+	bool ghost1_Col_F4;		  bool ghost2_Col_F4;		  bool ghost3_Col_F4;			   bool ghost4_Col_F4;
+
+	bool ghost1_Col_C1;		  bool ghost2_Col_C1;		  bool ghost3_Col_C1;			   bool ghost4_Col_C1;
+	bool ghost1_Col_C2;		  bool ghost2_Col_C2;		  bool ghost3_Col_C2;			   bool ghost4_Col_C2;
+	bool ghost1_Col_C3;		  bool ghost2_Col_C3;		  bool ghost3_Col_C3;			   bool ghost4_Col_C3;
+	bool ghost1_Col_C4;		  bool ghost2_Col_C4;		  bool ghost3_Col_C4;			   bool ghost4_Col_C4;
+
+	bool ghost1_Col_S1;		  bool ghost2_Col_S1;		  bool ghost3_Col_S1;			   bool ghost4_Col_S1;
+
 	
-	
+
+	bool ghost1_live_or_dead ; 	bool ghost2_live_or_dead ; 	bool ghost3_live_or_dead ; 	bool ghost4_live_or_dead ;
+
+
+
 	bool F1_live_or_dead;		bool C1_live_or_dead;
 	bool F2_live_or_dead;		bool C2_live_or_dead;
 	bool F3_live_or_dead;		bool C3_live_or_dead;
 	bool F4_live_or_dead;		bool C4_live_or_dead;
+
+
 
 
 public:
@@ -291,6 +289,8 @@ public:
 	Gun_Bullet            Bullet_Ghost_4; SimpleVertex        N_VertexList_G4[6];
 
 
+
+
 	Gun_Bullet            Bullet_B1; SimpleVertex        N_VertexList_B1[6];
 	Gun_Bullet            Bullet_B2; SimpleVertex        N_VertexList_B2[6];
 	Gun_Bullet            Bullet_B3; SimpleVertex        N_VertexList_B3[6];
@@ -304,8 +304,6 @@ public:
 	bool				Trasure_Box_FINAL_SWITCH;
 
 	Box					Message;      SimpleVertex     N_VertexList_M[6];
-
-
 
 
 public:
@@ -336,13 +334,19 @@ public:
 	void Boss_sword_hero_collsion();
 
 	void Boss_FSM();
+	void Boss_bullet_move();
 
 
+
+	// collision
 	void Boy_NPC_collision_final_decision_including_second_message();
 	void Box_Alive_collision_final_decision();
 	void Boss_collision_final_decision();
 	void Hero_collision_final_decision();
-	void bullets_collision_final_decision();
+	void hero_bullets_collision_final_decision();
+	void ghost_collision_final_decision();
+	//
+
 
 	void Treasure_Box_open();
 
@@ -355,8 +359,31 @@ public:
 
 
 
-TSceneGame::TSceneGame() : fAngle(0.0f), box_alive_Col_S1(false), box_alive_Col_S2(false), box_alive_live_or_dead(0), box_alive_Col_F1(false), box_alive_Col_C1(false), box_alive_Col_F2(false), box_alive_Col_C2(false), box_alive_Col_F3(false), box_alive_Col_C3(false), box_alive_Col_F4(false), box_alive_Col_C4(false), Hero_live_or_dead(0), Hero_Col_G1(false), Hero_Col_G2(false), Hero_Col_G3(false), Hero_Col_G4(false), Hero_Col_B1(false), Hero_Col_B2 (false), Hero_Col_B3(false), Hero_Col_B4(false), Hero_Col_S1(false), Hero_Col_S2(false), Hero_Col_S3(false), Hero_Col_S4(false), Robot_live_or_dead (0), Robot_Col_F1(false), Robot_Col_C1(false), Robot_Col_F2(false), Robot_Col_C2(false), Robot_Col_F3(false), Robot_Col_C3(false), Robot_Col_F4(false), Robot_Col_C4(false), Robot_Col_S1(false), Robot_Col_S2(false), Robot_Col_S3(false), Robot_Col_S4(false), NPC_live_or_dead(0), NPC_Col_F3(false), NPC_Col_C3(false), NPC_Col_F4(false), NPC_Col_C4(false), NPC_Col_S1(false), NPC_Col_S2(false), BOX_ALIVE_FINAL_SWITCH(false), Trasure_Box_FINAL_SWITCH(false)
-, ghost_Col_F1(false), ghost_Col_F2(false), ghost_Col_F3(false), ghost_Col_F4(false), ghost_Col_C1(false), ghost_Col_C2(false), ghost_Col_C3(false), ghost_Col_C4(false)
+TSceneGame::TSceneGame() : fAngle(0.0f), 
+
+box_alive_Col_S1(false), box_alive_Col_S2(false),
+box_alive_live_or_dead(0),
+box_alive_Col_F1(false), box_alive_Col_C1(false),
+box_alive_Col_F2(false), box_alive_Col_C2(false),
+box_alive_Col_F3(false), box_alive_Col_C3(false),
+box_alive_Col_F4(false), box_alive_Col_C4(false),
+Hero_live_or_dead(0),
+Hero_Col_G1(false), Hero_Col_G2(false), Hero_Col_G3(false), Hero_Col_G4(false),
+Hero_Col_B1(false), Hero_Col_B2 (false), Hero_Col_B3(false), Hero_Col_B4(false), 
+Hero_Col_BOSS_S1(false), Hero_Col_BOSS_S2(false), Hero_Col_BOSS_S3(false), Hero_Col_BOSS_S4(false),
+Robot_live_or_dead (0),
+Robot_Col_F1(false), Robot_Col_C1(false),
+Robot_Col_F2(false), Robot_Col_C2(false),
+Robot_Col_F3(false), Robot_Col_C3(false),
+Robot_Col_F4(false), Robot_Col_C4(false),
+Robot_Col_S1(false), Robot_Col_S2(false), Robot_Col_S3(false), Robot_Col_S4(false),
+NPC_live_or_dead(0), 
+NPC_Col_F3(false), NPC_Col_C3(false),
+NPC_Col_F4(false), NPC_Col_C4(false),
+NPC_Col_S1(false), NPC_Col_S2(false),
+BOX_ALIVE_FINAL_SWITCH(false),
+Trasure_Box_FINAL_SWITCH(false)
+
 {
 	m_iSceneID = GAME_SCENE_PLAY;
 	m_bNextSceneStart = false;
@@ -365,78 +392,29 @@ TSceneGame::TSceneGame() : fAngle(0.0f), box_alive_Col_S1(false), box_alive_Col_
 	 F2_live_or_dead=false;		 C2_live_or_dead=false;
 	 F3_live_or_dead=false;		 C3_live_or_dead=false;
 	 F4_live_or_dead=false;		 C4_live_or_dead=false;
+
 	
-	//fAngle = 0.0f;
-
-	//box_alive_Col_S1 = false;
-	//box_alive_Col_S2 = false;
-
-	//box_alive_live_or_dead = 0;
-	//box_alive_Col_F1 = false;   box_alive_Col_C1 = false;
-	//box_alive_Col_F2 = false;   box_alive_Col_C2 = false;
-	//box_alive_Col_F3 = false;   box_alive_Col_C3 = false;
-	//box_alive_Col_F4 = false;   box_alive_Col_C4 = false;
-	//
 
 
-	//ghost_Col_F1=false;
-	//ghost_Col_F2=false;
-	//ghost_Col_F3=false;
-	//ghost_Col_F4=false;
-	//			
-	//ghost_Col_C1=false;
-	//ghost_Col_C2=false;
-	//ghost_Col_C3=false;
-	//ghost_Col_C4=false;
-
-	//Hero_live_or_dead = 0;
-	//Hero_Col_G1 = false;
-	//Hero_Col_G2 = false;
-	//Hero_Col_G3 = false;
-	//Hero_Col_G4 = false;
-
-	//Hero_Col_B1 = false;
-	//Hero_Col_B2 = false;
-	//Hero_Col_B3 = false;
-	//Hero_Col_B4 = false;
-
-	//Hero_Col_S1 = false;
-	//Hero_Col_S2 = false;
-	//Hero_Col_S3 = false;
-	//Hero_Col_S4 = false;
+	ghost1_Col_F1=false;		  bool ghost2_Col_F1=false;		  bool ghost3_Col_F1=false;			   bool ghost4_Col_F1=false;
+	ghost1_Col_F2=false;		  bool ghost2_Col_F2=false;		  bool ghost3_Col_F2=false;			   bool ghost4_Col_F2=false;
+	ghost1_Col_F3=false;		  bool ghost2_Col_F3=false;		  bool ghost3_Col_F3=false;			   bool ghost4_Col_F3=false;
+	ghost1_Col_F4=false;		  bool ghost2_Col_F4=false;		  bool ghost3_Col_F4=false;			   bool ghost4_Col_F4=false;
+				
+	ghost1_Col_C1=false;		  bool ghost2_Col_C1=false;		  bool ghost3_Col_C1=false;			   bool ghost4_Col_C1=false;
+	ghost1_Col_C2=false;		  bool ghost2_Col_C2=false;		  bool ghost3_Col_C2=false;			   bool ghost4_Col_C2=false;
+	ghost1_Col_C3=false;		  bool ghost2_Col_C3=false;		  bool ghost3_Col_C3=false;			   bool ghost4_Col_C3=false;
+	ghost1_Col_C4=false;		  bool ghost2_Col_C4=false;		  bool ghost3_Col_C4=false;			   bool ghost4_Col_C4=false;
+	
+	ghost1_Col_S1=false;		  bool ghost2_Col_S1=false;		  bool ghost3_Col_S1=false;			   bool ghost4_Col_S1=false;
 
 
-
-	//Robot_live_or_dead = 0;
-
-	//Robot_Col_F1 = false; Robot_Col_C1 = false;
-	//Robot_Col_F2 = false; Robot_Col_C2 = false;
-	//Robot_Col_F3 = false; Robot_Col_C3 = false;
-	//Robot_Col_F4 = false; Robot_Col_C4 = false;
-
-	//Robot_Col_S1 = false;
-	//Robot_Col_S2 = false;
-	//Robot_Col_S3 = false;
-	//Robot_Col_S4 = false;
-
-
-	//NPC_live_or_dead = 0;
-	//NPC_Col_F3 = false;         NPC_Col_C3 = false;
-	//NPC_Col_F4 = false;         NPC_Col_C4 = false;
-	//NPC_Col_S1 = false;         NPC_Col_S2 = false;
-
-	//BOX_ALIVE_FINAL_SWITCH = false;
-	//Trasure_Box_FINAL_SWITCH = false;
-
+	ghost1_live_or_dead = false; 	ghost2_live_or_dead = false; 	ghost3_live_or_dead = false; 	ghost4_live_or_dead = false;
+	 
 }
 
 bool   TSceneGame::Init()
 {
-		
-
-
-
-
 	Game_Background.in_Texture_SetData_factors(0, 0, 900, 500, 900, 500);
 	Game_Background.m_for_update_Rects.x = g_rtClient.right;    Game_Background.m_for_update_Rects.y = g_rtClient.bottom;
 	Game_Background.Window_SetData_factors(0, 0, Game_Background.m_for_update_Rects.x, Game_Background.m_for_update_Rects.y);
@@ -641,19 +619,14 @@ bool   TSceneGame::Init()
 bool    TSceneGame::Frame()
 {
 
+	Hero_Actions();
+	Hero_bullets_basic_Action();	
+	hero_bullets_collision_final_decision();
 
-	if (m_Boy_NPC.Enter_flag_1 == true)
-	{
-		Hero_Actions();
-		Hero_bullets_basic_Action();	
-		bullets_collision_final_decision();
-
-	}
+	
 
 	if (m_Boy_NPC.Enter_flag_1 == false)
-	{
-		Boy_NPC_Action_including_first_messgae();
-	}
+	{	Boy_NPC_Action_including_first_messgae();	}
 
 
 
@@ -666,6 +639,7 @@ bool    TSceneGame::Frame()
 		Herosword_ghost_collsion();
 		Hero_Ghost_collision();
 		Box_Alive_collision_final_decision();
+		ghost_collision_final_decision();
 	}
 
 	 
@@ -709,7 +683,6 @@ bool    TSceneGame::Frame()
 		succees_ending();
 	}
 
-	
 
 
 	return true;
@@ -719,13 +692,15 @@ bool   TSceneGame::Render()
 {
 	Game_Background.Render(g_pContext);
 
+	///////////////////////////////////
 
 	if (F1_live_or_dead==0)
 	{
 		Bullet_F1.Render(g_pContext);
 		UI_Bullet_1.Render(g_pContext);
 	}
-	if (F1_live_or_dead == 0)
+
+	if (F2_live_or_dead == 0)
 	{
 		UI_Bullet_2.Render(g_pContext);
 		Bullet_F2.Render(g_pContext);
@@ -762,45 +737,50 @@ bool   TSceneGame::Render()
 		UI_Bullet_8.Render(g_pContext);
 	}
 
+	////////////////////////////////////
+	
+
+
+
+
 	if (BOX_ALIVE_FINAL_SWITCH == false)
-	{
+	{	
 		Box_Alive.Render(g_pContext);
 		Box_Alive_life_bar.Render(g_pContext);
+		
+		if (ghost1_live_or_dead == 0)Bullet_Ghost_1.Render(g_pContext);
+		if (ghost2_live_or_dead == 0)Bullet_Ghost_2.Render(g_pContext);
+		if (ghost3_live_or_dead == 0)Bullet_Ghost_3.Render(g_pContext);
+		if (ghost4_live_or_dead == 0)Bullet_Ghost_4.Render(g_pContext);
 	}
 	
+
+	m_Actor.Render(g_pContext);
+	m_Actor_life_bar.Render(g_pContext);
+	m_Boy_NPC.Render(g_pContext);
 	Treasure_Box.Render(g_pContext);
 
-
-
-	m_Actor_life_bar.Render(g_pContext);
-
-	Bullet_Ghost_1.Render(g_pContext);
-	Bullet_Ghost_2.Render(g_pContext);
-	Bullet_Ghost_3.Render(g_pContext);
-	Bullet_Ghost_4.Render(g_pContext);
-
-	m_Boy_NPC.Render(g_pContext);
-	m_Actor.Render(g_pContext);
 
 
 	if (Robot_live_or_dead != 4) 
 	{
 		Robot.Render(g_pContext);
 		Robot_life_bar.Render(g_pContext);
-
 		Bullet_B1.Render(g_pContext);
 		Bullet_B2.Render(g_pContext);
 		Bullet_B3.Render(g_pContext);
 		Bullet_B4.Render(g_pContext);
 	}
 	
-	Message.Render(g_pContext);
+	if (m_Boy_NPC.Enter_flag_2 != true)
+	{
+		Message.Render(g_pContext);
+	}
 
 
 
 	return true;
 }
-
 
 bool    TSceneGame::Release()
 {
@@ -809,6 +789,18 @@ bool    TSceneGame::Release()
 
 TSceneGame::~TSceneGame()
 {
+}
+
+void TSceneGame::ghost_collision_final_decision()
+{
+
+	ghost1_live_or_dead = ghost1_Col_F1 + ghost1_Col_F2 + ghost1_Col_F3+ ghost1_Col_F4 + ghost1_Col_C1 + ghost1_Col_C2+ ghost1_Col_C3+ ghost1_Col_C4 + ghost1_Col_S1;
+
+	ghost2_live_or_dead = ghost2_Col_F1 + ghost2_Col_F2 + ghost2_Col_F3+ ghost2_Col_F4 + ghost2_Col_C1 + ghost2_Col_C2+ ghost2_Col_C3+ ghost2_Col_C4 + ghost2_Col_S1;
+	
+	ghost3_live_or_dead = ghost3_Col_F1 + ghost3_Col_F2 + ghost3_Col_F3 + ghost3_Col_F4 + ghost3_Col_C1 + ghost3_Col_C2 + ghost3_Col_C3 + ghost3_Col_C4 + ghost3_Col_S1;
+
+	ghost4_live_or_dead = ghost4_Col_F1 + ghost4_Col_F2 + ghost4_Col_F3 + ghost4_Col_F4 + ghost4_Col_C1 + ghost4_Col_C2 + ghost4_Col_C3 + ghost4_Col_C4 + ghost4_Col_S1;
 
 }
 
@@ -827,23 +819,18 @@ void TSceneGame::succees_ending()
 
 }
 
-void TSceneGame::bullets_collision_final_decision()
+void TSceneGame::hero_bullets_collision_final_decision()
 {
-	
-	F1_live_or_dead = Robot_Col_F1 + box_alive_Col_F1 + ghost_Col_F1 ;
-	F2_live_or_dead = Robot_Col_F2 + box_alive_Col_F2 + ghost_Col_F2 ;
-	F3_live_or_dead = Robot_Col_F3 + box_alive_Col_F3 + ghost_Col_F3 + NPC_Col_F3;
-	F4_live_or_dead = Robot_Col_F4 + box_alive_Col_F4 + ghost_Col_F4 + NPC_Col_F4;
-
-	C1_live_or_dead = Robot_Col_C1 + box_alive_Col_C1 + ghost_Col_C1 ;
-	C2_live_or_dead = Robot_Col_C2 + box_alive_Col_C2 + ghost_Col_C2 ;
-	C3_live_or_dead = Robot_Col_C3 + box_alive_Col_C3 + ghost_Col_C3 + NPC_Col_C3;
-	C4_live_or_dead = Robot_Col_C4 + box_alive_Col_C4 + ghost_Col_C4 + NPC_Col_C4;
-
+	F1_live_or_dead = Robot_Col_F1 + box_alive_Col_F1 + ghost1_Col_F1 + ghost2_Col_F1 + ghost3_Col_F1 + ghost4_Col_F1;
+	F2_live_or_dead = Robot_Col_F2 + box_alive_Col_F2 + ghost1_Col_F2 + ghost2_Col_F2 + ghost3_Col_F2 + ghost4_Col_F2;
+	F3_live_or_dead = Robot_Col_F3 + box_alive_Col_F3 + ghost1_Col_F3 + ghost2_Col_F3 + ghost3_Col_F3 + ghost4_Col_F3 + NPC_Col_F3;
+	F4_live_or_dead = Robot_Col_F4 + box_alive_Col_F4 + ghost1_Col_F4 + ghost2_Col_F4 + ghost3_Col_F4 + ghost4_Col_F4 + NPC_Col_F4;
+																			 				 				 
+	C1_live_or_dead = Robot_Col_C1 + box_alive_Col_C1 + ghost1_Col_C1 + ghost2_Col_C1 + ghost3_Col_C1 + ghost4_Col_C1;
+	C2_live_or_dead = Robot_Col_C2 + box_alive_Col_C2 + ghost1_Col_C2 + ghost2_Col_C2 + ghost3_Col_C2 + ghost4_Col_C2;
+	C3_live_or_dead = Robot_Col_C3 + box_alive_Col_C3 + ghost1_Col_C3 + ghost2_Col_C3 + ghost3_Col_C3 + ghost4_Col_C3 + NPC_Col_C3;
+	C4_live_or_dead = Robot_Col_C4 + box_alive_Col_C4 + ghost1_Col_C4 + ghost2_Col_C4 + ghost3_Col_C4 + ghost4_Col_C4 + NPC_Col_C4;	
 }
-
-
-
 
 
 void TSceneGame::Boss_FSM()
@@ -877,10 +864,10 @@ void TSceneGame::Boss_FSM()
 	else if (Robot.state == Detection__1_SWORD) { Robot.ATTACK_SWORD(); Robot.sword(); }
 	else if (Robot.state == Detection__1_GUN) { Robot.ATTACK_SHOT(); Robot.shot(); }
 
-	memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
+	
 	//////////////////////////////////////////////////////////////////////////////////
 
-
+	memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
 
 	for (int iV = 0; iV < 6; iV++)
 	{
@@ -898,8 +885,6 @@ void TSceneGame::Boss_FSM()
 		N_VertexList[iV].y += Robot.m_vCenter.y;
 	}
 	g_pContext->UpdateSubresource(Robot.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_R, 0, 0);
-
-
 
 
 	//////////////     총알의 움직임   /////////////////////////////////////
@@ -960,7 +945,7 @@ void TSceneGame::Boss_FSM()
 	if (Robot.Bullet_B2_Bullet_Go == true && Robot.Face_Direction == 1)
 	{
 		sSound->PlayEffect(7);
-		Robot.Bullet_B2_Bullet_Go  = false; Bullet_B2.Face_Direction1_flag = true;
+		Robot.Bullet_B2_Bullet_Go = false; Bullet_B2.Face_Direction1_flag = true;
 		Bullet_B2.m_VertexList[0].x = Robot.m_VertexList[0].x - 30 / 900; Bullet_B2.m_VertexList[0].y = Robot.m_VertexList[0].y - 5 / 900;
 		Bullet_B2.m_VertexList[1].x = Robot.m_VertexList[1].x - 30 / 900; Bullet_B2.m_VertexList[1].y = Robot.m_VertexList[1].y - 5 / 900;
 		Bullet_B2.m_VertexList[2].x = Robot.m_VertexList[2].x - 30 / 900; Bullet_B2.m_VertexList[2].y = Robot.m_VertexList[2].y - 5 / 900;
@@ -1116,6 +1101,14 @@ void TSceneGame::Boss_FSM()
 }
 
 
+void TSceneGame::Boss_bullet_move()
+{
+
+
+}
+
+
+
 void TSceneGame::Hero_Actions()
 {
 	if (I_Input.Key('A'))
@@ -1135,19 +1128,19 @@ void TSceneGame::Hero_Actions()
 	}
 
 
-	else if (I_Input.Key('I'))
+	if (I_Input.Key('I'))
 	{		m_Actor.slide_step = 1;
 			sSound->PlayEffect(18);
 	}
 
 
-	else if (I_Input.Key('O'))
+	if (I_Input.Key('O'))
 	{
 		m_Actor.sword_step = 1;
 		sSound->PlayEffect(5);
 	}
 
-	else if (I_Input.Key('K') || I_Input.Key('L'))
+	if (I_Input.Key('K') || I_Input.Key('L'))
 	{
 		m_Actor.Gun_step = 1;
 		if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
@@ -1421,6 +1414,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 	}
 
 	memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
+
 	for (int iV = 0; iV < 6; iV++)
 	{
 		D3DVECTOR vertex;
@@ -1633,7 +1627,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_C2.Face_Direction1_flag == true)
 	{
 		Bullet_C2.frame_C();
-		if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }		   else if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
 		else if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
 		else if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
 		else if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
@@ -1642,7 +1636,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 	else if (Bullet_C2.Face_Direction2_flag == true)
 	{
 		Bullet_C2.frame_C();
-		if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }		    else if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
 		else if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
 		else if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
 		else if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
@@ -1693,7 +1687,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_C3.Face_Direction1_flag == true)
 	{
 		Bullet_C3.frame_C();
-		if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }		   else if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
 		else if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
 		else if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
 		else if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
@@ -1702,7 +1696,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 	else if (Bullet_C3.Face_Direction2_flag == true)
 	{
 		Bullet_C3.frame_C();
-		if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }		     else if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
 		else if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
 		else if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
 		else if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
@@ -1789,14 +1783,14 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 		Box_Alive.frame();
 	}
 
-
-	if (!TCollision::SphereInSphere(m_Actor.m_rtCollision, Box_Alive.m_rtDetection))
+	else if (!TCollision::SphereInSphere(m_Actor.m_rtCollision, Box_Alive.m_rtDetection))
 	{
 		Box_Alive.detection_time = 0.0f;
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	
+
 	if (Box_Alive.Bullet_G1_Bullet_Go == true)
 	{
 		sSound->Play(6);
@@ -1811,21 +1805,22 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	}
 
 	if (Bullet_Ghost_1.Face_Direction1_flag == true)
-	{Bullet_Ghost_1.MoveX(-g_fSecPerFrame * 1.0f);}
 
-	memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+	{Bullet_Ghost_1.MoveX(-g_fSecPerFrame * 1.0f);
 
-	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
-		vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-		vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-		float S = sinf(fAngle);	float C = cosf(fAngle);
-		N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x;		 N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
+		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
+
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x;		 N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
+		}
+		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 	}
-	g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
-
 	 
 
 
@@ -1847,7 +1842,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	if (Bullet_Ghost_2.Face_Direction1_flag == true)
 	{
 		Bullet_Ghost_2.MoveX(-g_fSecPerFrame * 1.0f);
-	}
+	
 	memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
 
 	for (int iV = 0; iV < 6; iV++)
@@ -1860,7 +1855,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 		N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x;		 N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
 	}
 	g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
-
+	}
 
 
 
@@ -1885,19 +1880,21 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	if (Bullet_Ghost_3.Face_Direction1_flag == true)
 	{
 		Bullet_Ghost_3.MoveX(-g_fSecPerFrame * 1.0f);
-	}
-	memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
+		
+		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
 
-	for (int iV = 0; iV < 6; iV++)
-	{
-		D3DVECTOR vertex;
-		vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-		vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-		float S = sinf(fAngle);	float C = cosf(fAngle);
-		N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x;		 N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
+		for (int iV = 0; iV < 6; iV++)
+		{
+			D3DVECTOR vertex;
+			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
+			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x;		 N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
+		}
+
+		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
 	}
-	g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1918,6 +1915,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	{
 		Bullet_Ghost_4.MoveX(-g_fSecPerFrame * 1.0f);
 	}
+
 	memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
 
 	for (int iV = 0; iV < 6; iV++)
@@ -1936,7 +1934,14 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 void TSceneGame::Boss_collision_final_decision()
 {
 	
-	Robot_live_or_dead = Robot_Col_F1 + Robot_Col_C1 +	Robot_Col_F2 + Robot_Col_C2 +	Robot_Col_F3 + Robot_Col_C3 +	Robot_Col_F4 + Robot_Col_C4+Robot_Col_S1 + Robot_Col_S2 + Robot_Col_S3 + Robot_Col_S4;
+	Robot_live_or_dead =
+
+		Robot_Col_F1 + Robot_Col_C1 +
+		Robot_Col_F2 + Robot_Col_C2 +
+		Robot_Col_F3 + Robot_Col_C3 +
+		Robot_Col_F4 + Robot_Col_C4+
+		Robot_Col_S1 + Robot_Col_S2 +
+		Robot_Col_S3 + Robot_Col_S4;
 
 	if (Robot_live_or_dead== 1)
 	{
@@ -1949,7 +1954,6 @@ void TSceneGame::Boss_collision_final_decision()
 
 	else if (Robot_live_or_dead == 2)
 	{
-		
 		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
 		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 3;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 8;
 		Robot_life_bar.Window_SetData_factors(400, 5, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
@@ -1965,56 +1969,9 @@ void TSceneGame::Boss_collision_final_decision()
 		Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/1_4_Bar_B.png");
 	}
 
-
 	else if (Robot_live_or_dead	== 4)
 	{
-		/*Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
-		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 30;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 30;
-		Robot_life_bar.Window_SetData_factors(1000, 10, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
-		Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/0_Bar_B.png");
-
-
-		Bullet_B1.in_Texture_SetData_factors(170, 761, 143, 139, 702, 1843);
-		Bullet_B1.m_for_update_Rects.x = g_rtClient.right / 30;    Bullet_B1.m_for_update_Rects.y = g_rtClient.bottom / 30;
-		Bullet_B1.Window_SetData_factors(-100, 30, Bullet_B1.m_for_update_Rects.x, Bullet_B1.m_for_update_Rects.y);
-		Bullet_B1.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
-
-		Bullet_B2.in_Texture_SetData_factors(170, 761, 143, 139, 702, 1843);
-		Bullet_B2.m_for_update_Rects.x = g_rtClient.right / 30;    Bullet_B2.m_for_update_Rects.y = g_rtClient.bottom / 30;
-		Bullet_B2.Window_SetData_factors(-100, 80, Bullet_B2.m_for_update_Rects.x, Bullet_B2.m_for_update_Rects.y);
-		Bullet_B2.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
-
-		Bullet_B3.in_Texture_SetData_factors(170, 761, 143, 139, 702, 1843);
-		Bullet_B3.m_for_update_Rects.x = g_rtClient.right / 30;    Bullet_B3.m_for_update_Rects.y = g_rtClient.bottom / 30;
-		Bullet_B3.Window_SetData_factors(-100, 130, Bullet_B3.m_for_update_Rects.x, Bullet_B3.m_for_update_Rects.y);
-		Bullet_B3.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
-
-		Bullet_B4.in_Texture_SetData_factors(170, 761, 143, 139, 702, 1843);
-		Bullet_B4.m_for_update_Rects.x = g_rtClient.right / 30;    Bullet_B4.m_for_update_Rects.y = g_rtClient.bottom / 30;
-		Bullet_B4.Window_SetData_factors(-100, 180, Bullet_B4.m_for_update_Rects.x, Bullet_B4.m_for_update_Rects.y);
-		Bullet_B4.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/robot.png");
-
-
-		Robot.m_VertexList[0].x = 3.115f; Robot.m_VertexList[0].y = 3.115f;
-		Robot.m_VertexList[1].x = 3.115f; Robot.m_VertexList[1].y = 3.115f;
-		Robot.m_VertexList[2].x = 3.115f; Robot.m_VertexList[2].y = 3.115f;
-		Robot.m_VertexList[3].x = 3.115f; Robot.m_VertexList[3].y = 3.115f;
-		Robot.m_VertexList[4].x = 3.115f; Robot.m_VertexList[4].y = 3.115f;
-		Robot.m_VertexList[5].x = 3.115f; Robot.m_VertexList[5].y = 3.115f;
-		Robot.m_VertexList[6].x = 3.115f; Robot.m_VertexList[6].y = 3.115f;
-
-		memcpy(N_VertexList_BA, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Robot.m_VertexList[iV].x; vertex.y = Robot.m_VertexList[iV].y;
-			vertex.x -= Robot.m_vCenter.x;		 vertex.y -= Robot.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_BA[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_BA[iV].x += Robot.m_vCenter.x;		 N_VertexList_BA[iV].y += Robot.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Robot.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA, 0, 0);*/
+		
 	}
 }
 
@@ -2034,58 +1991,18 @@ void TSceneGame::Boy_NPC_collision_from_hero_attack()
 
 	/////////////////////////////////// Bullet_F3과  Boy_NPC 충돌
 
-	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, m_Boy_NPC.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, m_Boy_NPC.m_rtCollision))
 	{
-		Bullet_F3.m_VertexList[0].x = 2.1235f; Bullet_F3.m_VertexList[0].y = 2.1235f;
-		Bullet_F3.m_VertexList[1].x = 2.1235f; Bullet_F3.m_VertexList[1].y = 2.1235f;
-		Bullet_F3.m_VertexList[2].x = 2.1235f; Bullet_F3.m_VertexList[2].y = 2.1235f;
-		Bullet_F3.m_VertexList[3].x = 2.1235f; Bullet_F3.m_VertexList[3].y = 2.1235f;
-		Bullet_F3.m_VertexList[4].x = 2.1235f; Bullet_F3.m_VertexList[4].y = 2.1235f;
-		Bullet_F3.m_VertexList[5].x = 2.1235f; Bullet_F3.m_VertexList[5].y = 2.1235f;
-		Bullet_F3.m_VertexList[6].x = 2.1235f; Bullet_F3.m_VertexList[6].y = 2.1235f;
-
-		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
-			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
-
+		
 		NPC_Col_F3 = true;
 	}
 
 
-	/////////////////////////////////// Bullet_F4과  Box_Alive 충돌
+	/////////////////////////////////// Bullet_F4과  Boy_NPC 충돌
 
 	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, m_Boy_NPC.m_rtCollision))
 	{
-		Bullet_F4.m_VertexList[0].x = 2.135f; Bullet_F4.m_VertexList[0].y = 2.135f;
-		Bullet_F4.m_VertexList[1].x = 2.135f; Bullet_F4.m_VertexList[1].y = 2.135f;
-		Bullet_F4.m_VertexList[2].x = 2.135f; Bullet_F4.m_VertexList[2].y = 2.135f;
-		Bullet_F4.m_VertexList[3].x = 2.135f; Bullet_F4.m_VertexList[3].y = 2.135f;
-		Bullet_F4.m_VertexList[4].x = 2.135f; Bullet_F4.m_VertexList[4].y = 2.135f;
-		Bullet_F4.m_VertexList[5].x = 2.135f; Bullet_F4.m_VertexList[5].y = 2.135f;
-		Bullet_F4.m_VertexList[6].x = 2.135f; Bullet_F4.m_VertexList[6].y = 2.135f;
-
-		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
-
+	
 		NPC_Col_F4 = true;
 	}
 
@@ -2095,56 +2012,15 @@ void TSceneGame::Boy_NPC_collision_from_hero_attack()
 
 	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, m_Boy_NPC.m_rtCollision))
 	{
-		Bullet_C3.m_VertexList[0].x = 2.565f; Bullet_C3.m_VertexList[0].y = 2.565f;
-		Bullet_C3.m_VertexList[1].x = 2.565f; Bullet_C3.m_VertexList[1].y = 2.565f;
-		Bullet_C3.m_VertexList[2].x = 2.565f; Bullet_C3.m_VertexList[2].y = 2.565f;
-		Bullet_C3.m_VertexList[3].x = 2.565f; Bullet_C3.m_VertexList[3].y = 2.565f;
-		Bullet_C3.m_VertexList[4].x = 2.565f; Bullet_C3.m_VertexList[4].y = 2.565f;
-		Bullet_C3.m_VertexList[5].x = 2.565f; Bullet_C3.m_VertexList[5].y = 2.565f;
-		Bullet_C3.m_VertexList[6].x = 2.565f; Bullet_C3.m_VertexList[6].y = 2.565f;
-
-		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
-
+		
 		NPC_Col_C3 = true;
 	}
 
 
-	/////////////////////////////////// Bullet_C4과  Box_Alive 충돌
-
+	/////////////////////////////////// Bullet_C4과 Boy_NPC 충돌
 	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, m_Boy_NPC.m_rtCollision))
 	{
-		Bullet_C4.m_VertexList[0].x = 2.565f; Bullet_C4.m_VertexList[0].y = 2.565f;
-		Bullet_C4.m_VertexList[1].x = 2.565f; Bullet_C4.m_VertexList[1].y = 2.565f;
-		Bullet_C4.m_VertexList[2].x = 2.565f; Bullet_C4.m_VertexList[2].y = 2.565f;
-		Bullet_C4.m_VertexList[3].x = 2.565f; Bullet_C4.m_VertexList[3].y = 2.565f;
-		Bullet_C4.m_VertexList[4].x = 2.565f; Bullet_C4.m_VertexList[4].y = 2.565f;
-		Bullet_C4.m_VertexList[5].x = 2.565f; Bullet_C4.m_VertexList[5].y = 2.565f;
-		Bullet_C4.m_VertexList[6].x = 2.565f; Bullet_C4.m_VertexList[6].y = 2.565f;
-
-		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
-
+	
 		NPC_Col_C4 = true;
 	}
 }
@@ -2174,22 +2050,22 @@ void TSceneGame::Boss_sword_hero_collsion()
 	
 	if (Robot.sword_step == 3  && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 0)
 	{
-		Hero_Col_S1 = true; sSound->PlayEffect(8);
+		Hero_Col_BOSS_S1 = true; sSound->PlayEffect(8);
 	}
 
 	else if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 1)
 	{
-		Hero_Col_S2 = true; sSound->PlayEffect(8);
+		Hero_Col_BOSS_S2 = true; sSound->PlayEffect(8);
 	}
 
 	else if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 2)
 	{
-		Hero_Col_S3 = true; sSound->PlayEffect(8);
+		Hero_Col_BOSS_S3 = true; sSound->PlayEffect(8);
 	}
 
 	else if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 3)
 	{
-		Hero_Col_S4 = true; sSound->PlayEffect(8);
+		Hero_Col_BOSS_S4 = true; sSound->PlayEffect(8);
 	}
 
 
@@ -2230,27 +2106,6 @@ void TSceneGame::Boss_Canon_hero_collision()
 	if (TCollision::SphereInSphere(Bullet_B1.m_rtCollision, m_Actor.m_rtCollision))
 	{
 
-		Bullet_B1.m_VertexList[0].x = 2.321f; Bullet_B1.m_VertexList[0].y = 2.321f;
-		Bullet_B1.m_VertexList[1].x = 2.321f; Bullet_B1.m_VertexList[1].y = 2.321f;
-		Bullet_B1.m_VertexList[2].x = 2.321f; Bullet_B1.m_VertexList[2].y = 2.321f;
-		Bullet_B1.m_VertexList[3].x = 2.321f; Bullet_B1.m_VertexList[3].y = 2.321f;
-		Bullet_B1.m_VertexList[4].x = 2.321f; Bullet_B1.m_VertexList[4].y = 2.321f;
-		Bullet_B1.m_VertexList[5].x = 2.321f; Bullet_B1.m_VertexList[5].y = 2.321f;
-		Bullet_B1.m_VertexList[6].x = 2.321f; Bullet_B1.m_VertexList[6].y = 2.321f;
-
-		memcpy(N_VertexList_B1, Bullet_B1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_B1.m_VertexList[iV].x; vertex.y = Bullet_B1.m_VertexList[iV].y;
-			vertex.x -= Bullet_B1.m_vCenter.x;		 vertex.y -= Bullet_B1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_B1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_B1[iV].x += Bullet_B1.m_vCenter.x;		 N_VertexList_B1[iV].y += Bullet_B1.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_B1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B1, 0, 0);
-
 		Hero_Col_B1 = true;
 	}
 
@@ -2259,27 +2114,7 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	else if (TCollision::SphereInSphere(Bullet_B2.m_rtCollision, m_Actor.m_rtCollision))
 	{
-		Bullet_B2.m_VertexList[0].x = 5.521f; Bullet_B2.m_VertexList[0].y = 5.521f;
-		Bullet_B2.m_VertexList[1].x = 5.521f; Bullet_B2.m_VertexList[1].y = 5.521f;
-		Bullet_B2.m_VertexList[2].x = 5.521f; Bullet_B2.m_VertexList[2].y = 5.521f;
-		Bullet_B2.m_VertexList[3].x = 5.521f; Bullet_B2.m_VertexList[3].y = 5.521f;
-		Bullet_B2.m_VertexList[4].x = 5.521f; Bullet_B2.m_VertexList[4].y = 5.521f;
-		Bullet_B2.m_VertexList[5].x = 5.521f; Bullet_B2.m_VertexList[5].y = 5.521f;
-		Bullet_B2.m_VertexList[6].x = 5.521f; Bullet_B2.m_VertexList[6].y = 5.521f;
-
-		memcpy(N_VertexList_B2, Bullet_B2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_B2.m_VertexList[iV].x; vertex.y = Bullet_B2.m_VertexList[iV].y;
-			vertex.x -= Bullet_B2.m_vCenter.x;		 vertex.y -= Bullet_B2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_B2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_B2[iV].x += Bullet_B2.m_vCenter.x;		 N_VertexList_B2[iV].y += Bullet_B2.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_B2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B2, 0, 0);
-
+	
 		Hero_Col_B2 = true;
 	}
 
@@ -2289,27 +2124,7 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	else if (TCollision::SphereInSphere(Bullet_B3.m_rtCollision, m_Actor.m_rtCollision))
 	{
-		Bullet_B3.m_VertexList[0].x = 4.555f; Bullet_B3.m_VertexList[0].y = 4.555f;
-		Bullet_B3.m_VertexList[1].x = 4.555f; Bullet_B3.m_VertexList[1].y = 4.555f;
-		Bullet_B3.m_VertexList[2].x = 4.555f; Bullet_B3.m_VertexList[2].y = 4.555f;
-		Bullet_B3.m_VertexList[3].x = 4.555f; Bullet_B3.m_VertexList[3].y = 4.555f;
-		Bullet_B3.m_VertexList[4].x = 4.555f; Bullet_B3.m_VertexList[4].y = 4.555f;
-		Bullet_B3.m_VertexList[5].x = 4.555f; Bullet_B3.m_VertexList[5].y = 4.555f;
-		Bullet_B3.m_VertexList[6].x = 4.555f; Bullet_B3.m_VertexList[6].y = 4.555f;
-
-		memcpy(N_VertexList_B3, Bullet_B3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_B3.m_VertexList[iV].x; vertex.y = Bullet_B3.m_VertexList[iV].y;
-			vertex.x -= Bullet_B3.m_vCenter.x;		 vertex.y -= Bullet_B3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_B3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_B3[iV].x += Bullet_B3.m_vCenter.x;		 N_VertexList_B3[iV].y += Bullet_B3.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_B3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B3, 0, 0);
-
+	
 		Hero_Col_B3 = true;
 	}
 
@@ -2318,27 +2133,7 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	else if (TCollision::SphereInSphere(Bullet_B4.m_rtCollision, m_Actor.m_rtCollision))
 	{
-		Bullet_B4.m_VertexList[0].x = 6.523f; Bullet_B4.m_VertexList[0].y = 6.523f;
-		Bullet_B4.m_VertexList[1].x = 6.523f; Bullet_B4.m_VertexList[1].y = 6.523f;
-		Bullet_B4.m_VertexList[2].x = 6.523f; Bullet_B4.m_VertexList[2].y = 6.523f;
-		Bullet_B4.m_VertexList[3].x = 6.523f; Bullet_B4.m_VertexList[3].y = 6.523f;
-		Bullet_B4.m_VertexList[4].x = 6.523f; Bullet_B4.m_VertexList[4].y = 6.523f;
-		Bullet_B4.m_VertexList[5].x = 6.523f; Bullet_B4.m_VertexList[5].y = 6.523f;
-		Bullet_B4.m_VertexList[6].x = 6.523f; Bullet_B4.m_VertexList[6].y = 6.523f;
-
-		memcpy(N_VertexList_B4, Bullet_B4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_B4.m_VertexList[iV].x; vertex.y = Bullet_B4.m_VertexList[iV].y;
-			vertex.x -= Bullet_B4.m_vCenter.x;		 vertex.y -= Bullet_B4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_B4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_B4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_B4[iV].x += Bullet_B4.m_vCenter.x;		 N_VertexList_B4[iV].y += Bullet_B4.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_B4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_B4, 0, 0);
-
+	
 		Hero_Col_B4 = true;
 	
 	}
@@ -2353,27 +2148,7 @@ void TSceneGame::Bullet_Boss_collision()
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Robot.m_rtCollision))
 	{
 
-		Bullet_F1.m_VertexList[0].x = 2.542f; Bullet_F1.m_VertexList[0].y = 2.542f;
-		Bullet_F1.m_VertexList[1].x = 2.542f; Bullet_F1.m_VertexList[1].y = 2.542f;
-		Bullet_F1.m_VertexList[2].x = 2.542f; Bullet_F1.m_VertexList[2].y = 2.542f;
-		Bullet_F1.m_VertexList[3].x = 2.542f; Bullet_F1.m_VertexList[3].y = 2.542f;
-		Bullet_F1.m_VertexList[4].x = 2.542f; Bullet_F1.m_VertexList[4].y = 2.542f;
-		Bullet_F1.m_VertexList[5].x = 2.542f; Bullet_F1.m_VertexList[5].y = 2.542f;
-		Bullet_F1.m_VertexList[6].x = 2.542f; Bullet_F1.m_VertexList[6].y = 2.542f;
-
-		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
-			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
-
+	
 		Robot_Col_F1 = true;
 	}
 
@@ -2382,27 +2157,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_F2.m_VertexList[0].x = 2.723f; Bullet_F2.m_VertexList[0].y = 2.723f;
-		Bullet_F2.m_VertexList[1].x = 2.723f; Bullet_F2.m_VertexList[1].y = 2.723f;
-		Bullet_F2.m_VertexList[2].x = 2.723f; Bullet_F2.m_VertexList[2].y = 2.723f;
-		Bullet_F2.m_VertexList[3].x = 2.723f; Bullet_F2.m_VertexList[3].y = 2.723f;
-		Bullet_F2.m_VertexList[4].x = 2.723f; Bullet_F2.m_VertexList[4].y = 2.723f;
-		Bullet_F2.m_VertexList[5].x = 2.723f; Bullet_F2.m_VertexList[5].y = 2.723f;
-		Bullet_F2.m_VertexList[6].x = 2.723f; Bullet_F2.m_VertexList[6].y = 2.723f;
-
-		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
-			vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
-
+	
 		Robot_Col_F2 = true;
 	}
 
@@ -2410,27 +2165,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_F3.m_VertexList[0].x = 4.211f; Bullet_F3.m_VertexList[0].y = 4.211f;
-		Bullet_F3.m_VertexList[1].x = 4.211f; Bullet_F3.m_VertexList[1].y = 4.211f;
-		Bullet_F3.m_VertexList[2].x = 4.211f; Bullet_F3.m_VertexList[2].y = 4.211f;
-		Bullet_F3.m_VertexList[3].x = 4.211f; Bullet_F3.m_VertexList[3].y = 4.211f;
-		Bullet_F3.m_VertexList[4].x = 4.211f; Bullet_F3.m_VertexList[4].y = 4.211f;
-		Bullet_F3.m_VertexList[5].x = 4.211f; Bullet_F3.m_VertexList[5].y = 4.211f;
-		Bullet_F3.m_VertexList[6].x = 4.211f; Bullet_F3.m_VertexList[6].y = 4.211f;
-
-		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
-			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
-
+	
 		Robot_Col_F3 = true;
 	}
 
@@ -2439,27 +2174,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_F4.m_VertexList[0].x = 5.044f; Bullet_F4.m_VertexList[0].y = 5.044f;
-		Bullet_F4.m_VertexList[1].x = 5.044f; Bullet_F4.m_VertexList[1].y = 5.044f;
-		Bullet_F4.m_VertexList[2].x = 5.044f; Bullet_F4.m_VertexList[2].y = 5.044f;
-		Bullet_F4.m_VertexList[3].x = 5.044f; Bullet_F4.m_VertexList[3].y = 5.044f;
-		Bullet_F4.m_VertexList[4].x = 5.044f; Bullet_F4.m_VertexList[4].y = 5.044f;
-		Bullet_F4.m_VertexList[5].x = 5.044f; Bullet_F4.m_VertexList[5].y = 5.044f;
-		Bullet_F4.m_VertexList[6].x = 5.044f; Bullet_F4.m_VertexList[6].y = 5.044f;
-
-		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
-
+		
 		Robot_Col_F4 = true;
 
 	}
@@ -2470,27 +2185,7 @@ void TSceneGame::Bullet_Boss_collision()
 	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Robot.m_rtCollision))
 	{
 
-		Bullet_C1.m_VertexList[0].x = 5.372f; Bullet_C1.m_VertexList[0].y = 5.372f;
-		Bullet_C1.m_VertexList[1].x = 5.372f; Bullet_C1.m_VertexList[1].y = 5.372f;
-		Bullet_C1.m_VertexList[2].x = 5.372f; Bullet_C1.m_VertexList[2].y = 5.372f;
-		Bullet_C1.m_VertexList[3].x = 5.372f; Bullet_C1.m_VertexList[3].y = 5.372f;
-		Bullet_C1.m_VertexList[4].x = 5.372f; Bullet_C1.m_VertexList[4].y = 5.372f;
-		Bullet_C1.m_VertexList[5].x = 5.372f; Bullet_C1.m_VertexList[5].y = 5.372f;
-		Bullet_C1.m_VertexList[6].x = 5.372f; Bullet_C1.m_VertexList[6].y = 5.372f;
-
-		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
-
+		
 		Robot_Col_C1 = true;
 	}
 
@@ -2499,27 +2194,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_C2.m_VertexList[0].x = 6.231f; Bullet_C2.m_VertexList[0].y = 6.231f;
-		Bullet_C2.m_VertexList[1].x = 6.231f; Bullet_C2.m_VertexList[1].y = 6.231f;
-		Bullet_C2.m_VertexList[2].x = 6.231f; Bullet_C2.m_VertexList[2].y = 6.231f;
-		Bullet_C2.m_VertexList[3].x = 6.231f; Bullet_C2.m_VertexList[3].y = 6.231f;
-		Bullet_C2.m_VertexList[4].x = 6.231f; Bullet_C2.m_VertexList[4].y = 6.231f;
-		Bullet_C2.m_VertexList[5].x = 6.231f; Bullet_C2.m_VertexList[5].y = 6.231f;
-		Bullet_C2.m_VertexList[6].x = 6.231f; Bullet_C2.m_VertexList[6].y = 6.231f;
-
-		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
-
+		
 		Robot_Col_C2 = true;
 	}
 
@@ -2529,27 +2204,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_C3.m_VertexList[0].x = 5.223f; Bullet_C3.m_VertexList[0].y = 5.223f;
-		Bullet_C3.m_VertexList[1].x = 5.223f; Bullet_C3.m_VertexList[1].y = 5.223f;
-		Bullet_C3.m_VertexList[2].x = 5.223f; Bullet_C3.m_VertexList[2].y = 5.223f;
-		Bullet_C3.m_VertexList[3].x = 5.223f; Bullet_C3.m_VertexList[3].y = 5.223f;
-		Bullet_C3.m_VertexList[4].x = 5.223f; Bullet_C3.m_VertexList[4].y = 5.223f;
-		Bullet_C3.m_VertexList[5].x = 5.223f; Bullet_C3.m_VertexList[5].y = 5.223f;
-		Bullet_C3.m_VertexList[6].x = 5.223f; Bullet_C3.m_VertexList[6].y = 5.223f;
-
-		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
-
+		
 		Robot_Col_C3 = true;
 	}
 
@@ -2559,33 +2214,12 @@ void TSceneGame::Bullet_Boss_collision()
 
 	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Robot.m_rtCollision))
 	{
-		Bullet_C4.m_VertexList[0].x = 4.079f; Bullet_C4.m_VertexList[0].y = 4.079f;
-		Bullet_C4.m_VertexList[1].x = 4.079f; Bullet_C4.m_VertexList[1].y = 4.079f;
-		Bullet_C4.m_VertexList[2].x = 4.079f; Bullet_C4.m_VertexList[2].y = 4.079f;
-		Bullet_C4.m_VertexList[3].x = 4.079f; Bullet_C4.m_VertexList[3].y = 4.079f;
-		Bullet_C4.m_VertexList[4].x = 4.079f; Bullet_C4.m_VertexList[4].y = 4.079f;
-		Bullet_C4.m_VertexList[5].x = 4.079f; Bullet_C4.m_VertexList[5].y = 4.079f;
-		Bullet_C4.m_VertexList[6].x = 4.079f; Bullet_C4.m_VertexList[6].y = 4.079f;
-
-		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
-
+	
 		Robot_Col_C4 = true;
 	}
 
 
 }
-
 
 void TSceneGame::Treasure_Box_open()
 {
@@ -2605,30 +2239,10 @@ void TSceneGame::Treasure_Box_open()
 	
 		sSound->Play(12);
 
-/*
-	   memcpy(N_VertexList_BA, Box_Alive.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		 for (int iV = 0; iV < 6; iV++)
-   		{
-			D3DVECTOR vertex;
-			vertex.x = Box_Alive.m_VertexList[iV].x; vertex.y = Box_Alive.m_VertexList[iV].y;
-			vertex.x -= Box_Alive.m_vCenter.x;		 vertex.y -= Box_Alive.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_BA[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_BA[iV].x += Box_Alive.m_vCenter.x;		 N_VertexList_BA[iV].y += Box_Alive.m_vCenter.y;
-		}
-		   g_pContext->UpdateSubresource(Box_Alive.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA, 0, 0);
-
-*/
-
 		Trasure_Box_FINAL_SWITCH = true;
 	}
 
 }
-
-
-
-
 
 void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 {
@@ -2642,7 +2256,6 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 		m_Boy_NPC.Finish_start = false;
 		m_Boy_NPC.m_for_update_Rects.x = g_rtClient.right / 9;    m_Boy_NPC.m_for_update_Rects.y = g_rtClient.bottom / 5;
 		m_Boy_NPC.in_Texture_SetData_factors(91, 2, 57, 92, 753, 532);
-		//m_Boy_NPC.Window_SetData_factors(0, 310, m_Boy_NPC.m_for_update_Rects.x, m_Boy_NPC.m_for_update_Rects.y); // 텍스쳐 시작점 왼위점 좌표 + 텍스쳐 가로-세로 크기.
 		m_Boy_NPC.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/AD_Boy.png");
 		m_Boy_NPC.walk_step = 1;
 	}
@@ -2709,11 +2322,11 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 	{
 		m_Boy_NPC.walk();
 		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 10) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }       else if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }       else if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }       else if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }       else if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 10) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
 	}
 
 	////////////////////////////////////////////////////////////////////  NPC Frame 반영
@@ -2789,7 +2402,6 @@ void TSceneGame::Boy_NPC_collision_final_decision_including_second_message()
 }
 
 
-
 void TSceneGame::Box_Alive_collision_final_decision()
 {
 
@@ -2799,7 +2411,6 @@ void TSceneGame::Box_Alive_collision_final_decision()
 
 
 	if (box_alive_live_or_dead == 1)
-
 	{
 
 		Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
@@ -2809,8 +2420,7 @@ void TSceneGame::Box_Alive_collision_final_decision()
 
 	}
 
-
-	if (box_alive_live_or_dead == 2)
+	else if (box_alive_live_or_dead == 2)
 
 	{
 		Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
@@ -2820,7 +2430,7 @@ void TSceneGame::Box_Alive_collision_final_decision()
 
 	}
 
-	if (box_alive_live_or_dead == 3)
+	else if (box_alive_live_or_dead == 3)
 
 	{
 		Box_Alive_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
@@ -2830,63 +2440,13 @@ void TSceneGame::Box_Alive_collision_final_decision()
 
 	}
 
-
-
-
-	if (box_alive_live_or_dead == 4)
+	else if (box_alive_live_or_dead == 4)
 	{
-		Box_Alive.m_VertexList[0].x = 3.2125f; Box_Alive.m_VertexList[0].y = 3.2125f;
-		Box_Alive.m_VertexList[1].x = 3.2125f; Box_Alive.m_VertexList[1].y = 3.2125f;
-		Box_Alive.m_VertexList[2].x = 3.2125f; Box_Alive.m_VertexList[2].y = 3.2125f;
-		Box_Alive.m_VertexList[3].x = 3.2125f; Box_Alive.m_VertexList[3].y = 3.2125f;
-		Box_Alive.m_VertexList[4].x = 3.2125f; Box_Alive.m_VertexList[4].y = 3.2125f;
-		Box_Alive.m_VertexList[5].x = 3.2125f; Box_Alive.m_VertexList[5].y = 3.2125f;
-		Box_Alive.m_VertexList[6].x = 3.2125f; Box_Alive.m_VertexList[6].y = 3.2125f;
-
-		memcpy(N_VertexList_BA, Box_Alive.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Box_Alive.m_VertexList[iV].x; vertex.y = Box_Alive.m_VertexList[iV].y;
-			vertex.x -= Box_Alive.m_vCenter.x;		 vertex.y -= Box_Alive.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_BA[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_BA[iV].x += Box_Alive.m_vCenter.x;		 N_VertexList_BA[iV].y += Box_Alive.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Box_Alive.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA, 0, 0);
-
-
-
-
-		Box_Alive_life_bar.m_VertexList[0].x = 3.446f; Box_Alive_life_bar.m_VertexList[0].y = 3.446f;
-		Box_Alive_life_bar.m_VertexList[1].x = 3.446f; Box_Alive_life_bar.m_VertexList[1].y = 3.446f;
-		Box_Alive_life_bar.m_VertexList[2].x = 3.446f; Box_Alive_life_bar.m_VertexList[2].y = 3.446f;
-		Box_Alive_life_bar.m_VertexList[3].x = 3.446f; Box_Alive_life_bar.m_VertexList[3].y = 3.446f;
-		Box_Alive_life_bar.m_VertexList[4].x = 3.446f; Box_Alive_life_bar.m_VertexList[4].y = 3.446f;
-		Box_Alive_life_bar.m_VertexList[5].x = 3.446f; Box_Alive_life_bar.m_VertexList[5].y = 3.446f;
-		Box_Alive_life_bar.m_VertexList[6].x = 3.446f; Box_Alive_life_bar.m_VertexList[6].y = 3.446f;
-
-		memcpy(N_VertexList_BA_LB, Box_Alive_life_bar.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Box_Alive_life_bar.m_VertexList[iV].x; vertex.y = Box_Alive_life_bar.m_VertexList[iV].y;
-			vertex.x -= Box_Alive_life_bar.m_vCenter.x;		 vertex.y -= Box_Alive_life_bar.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_BA_LB[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA_LB[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_BA_LB[iV].x += Box_Alive_life_bar.m_vCenter.x;		 N_VertexList_BA_LB[iV].y += Box_Alive_life_bar.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Box_Alive_life_bar.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA_LB, 0, 0);
-
 		sSound->Play(11);
 		sSound->Play(17);
 		BOX_ALIVE_FINAL_SWITCH = true;
 
 	}
-
-
 }
 
 
@@ -2896,279 +2456,87 @@ void TSceneGame::Bullet_Box_Alive_collision()
 	//////////////// Bullet_F1과  Box_Alive 충돌
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Box_Alive.m_rtCollision))
 	{	
-		Bullet_F1.m_VertexList[0].x = 2.265f; Bullet_F1.m_VertexList[0].y = 2.265f;
-		Bullet_F1.m_VertexList[1].x = 2.265f; Bullet_F1.m_VertexList[1].y = 2.265f;
-		Bullet_F1.m_VertexList[2].x = 2.265f; Bullet_F1.m_VertexList[2].y = 2.265f;
-		Bullet_F1.m_VertexList[3].x = 2.265f; Bullet_F1.m_VertexList[3].y = 2.265f;
-		Bullet_F1.m_VertexList[4].x = 2.265f; Bullet_F1.m_VertexList[4].y = 2.265f;
-		Bullet_F1.m_VertexList[5].x = 2.265f; Bullet_F1.m_VertexList[5].y = 2.265f;
-		Bullet_F1.m_VertexList[6].x = 2.265f; Bullet_F1.m_VertexList[6].y = 2.265f;
-
-		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
 	
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
-			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
-		
 		box_alive_Col_F1 = true; 
 	}
 
-
 	//////////////// Bullet_F2과  Box_Alive 충돌
 
-	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Box_Alive.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_F2.m_VertexList[0].x = 2.463f; Bullet_F2.m_VertexList[0].y = 2.463f;
-		Bullet_F2.m_VertexList[1].x = 2.463f; Bullet_F2.m_VertexList[1].y = 2.463f;
-		Bullet_F2.m_VertexList[2].x = 2.463f; Bullet_F2.m_VertexList[2].y = 2.463f;
-		Bullet_F2.m_VertexList[3].x = 2.463f; Bullet_F2.m_VertexList[3].y = 2.463f;
-		Bullet_F2.m_VertexList[4].x = 2.463f; Bullet_F2.m_VertexList[4].y = 2.463f;
-		Bullet_F2.m_VertexList[5].x = 2.463f; Bullet_F2.m_VertexList[5].y = 2.463f;
-		Bullet_F2.m_VertexList[6].x = 2.463f; Bullet_F2.m_VertexList[6].y = 2.463f;
-
-		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
-			vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
-	
+		
 		box_alive_Col_F2 = true;
 	}
-
 	/////////////////////////////////// Bullet_F3과  Box_Alive 충돌
 
-	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Box_Alive.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_F3.m_VertexList[0].x = 4.266f; Bullet_F3.m_VertexList[0].y = 4.266f;
-		Bullet_F3.m_VertexList[1].x = 4.266f; Bullet_F3.m_VertexList[1].y = 4.266f;
-		Bullet_F3.m_VertexList[2].x = 4.266f; Bullet_F3.m_VertexList[2].y = 4.266f;
-		Bullet_F3.m_VertexList[3].x = 4.266f; Bullet_F3.m_VertexList[3].y = 4.266f;
-		Bullet_F3.m_VertexList[4].x = 4.266f; Bullet_F3.m_VertexList[4].y = 4.266f;
-		Bullet_F3.m_VertexList[5].x = 4.266f; Bullet_F3.m_VertexList[5].y = 4.266f;
-		Bullet_F3.m_VertexList[6].x = 4.266f; Bullet_F3.m_VertexList[6].y = 4.266f;
-
-		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
-			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
-	
+		
 		box_alive_Col_F3 = true;
 	}
 
 
 	/////////////////////////////////// Bullet_F4과  Box_Alive 충돌
 
-	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Box_Alive.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_F4.m_VertexList[0].x = 3.771f; Bullet_F4.m_VertexList[0].y = 3.771f;
-		Bullet_F4.m_VertexList[1].x = 3.771f; Bullet_F4.m_VertexList[1].y = 3.771f;
-		Bullet_F4.m_VertexList[2].x = 3.771f; Bullet_F4.m_VertexList[2].y = 3.771f;
-		Bullet_F4.m_VertexList[3].x = 3.771f; Bullet_F4.m_VertexList[3].y = 3.771f;
-		Bullet_F4.m_VertexList[4].x = 3.771f; Bullet_F4.m_VertexList[4].y = 3.771f;
-		Bullet_F4.m_VertexList[5].x = 3.771f; Bullet_F4.m_VertexList[5].y = 3.771f;
-		Bullet_F4.m_VertexList[6].x = 3.771f; Bullet_F4.m_VertexList[6].y = 3.771f;
-
-		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
-
 		box_alive_Col_F4 = true;
 	}
-	
-
-
-
 
 	//////////////// Bullet_C1과  Box_Alive 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Box_Alive.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-
-		Bullet_C1.m_VertexList[0].x = 3.276f; Bullet_C1.m_VertexList[0].y = 3.276f;
-		Bullet_C1.m_VertexList[1].x = 3.276f; Bullet_C1.m_VertexList[1].y = 3.276f;
-		Bullet_C1.m_VertexList[2].x = 3.276f; Bullet_C1.m_VertexList[2].y = 3.276f;
-		Bullet_C1.m_VertexList[3].x = 3.276f; Bullet_C1.m_VertexList[3].y = 3.276f;
-		Bullet_C1.m_VertexList[4].x = 3.276f; Bullet_C1.m_VertexList[4].y = 3.276f;
-		Bullet_C1.m_VertexList[5].x = 3.276f; Bullet_C1.m_VertexList[5].y = 3.276f;
-		Bullet_C1.m_VertexList[6].x = 3.276f; Bullet_C1.m_VertexList[6].y = 3.276f;
-
-		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
 	
 		box_alive_Col_C1 = true;
 	}
 
-
-
-
 	//////////////// Bullet_C2과  Box_Alive 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Box_Alive.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_C2.m_VertexList[0].x = 3.834f; Bullet_C2.m_VertexList[0].y = 3.834f;
-		Bullet_C2.m_VertexList[1].x = 3.834f; Bullet_C2.m_VertexList[1].y = 3.834f;
-		Bullet_C2.m_VertexList[2].x = 3.834f; Bullet_C2.m_VertexList[2].y = 3.834f;
-		Bullet_C2.m_VertexList[3].x = 3.834f; Bullet_C2.m_VertexList[3].y = 3.834f;
-		Bullet_C2.m_VertexList[4].x = 3.834f; Bullet_C2.m_VertexList[4].y = 3.834f;
-		Bullet_C2.m_VertexList[5].x = 3.834f; Bullet_C2.m_VertexList[5].y = 3.834f;
-		Bullet_C2.m_VertexList[6].x = 3.834f; Bullet_C2.m_VertexList[6].y = 3.834f;
-
-		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
 	
 		box_alive_Col_C2 = true;
 	}				   
 
-
-
 	/////////////////////////////////// Bullet_C3과  Box_Alive 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Box_Alive.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_C3.m_VertexList[0].x = 2.636f; Bullet_C3.m_VertexList[0].y = 2.636f;
-		Bullet_C3.m_VertexList[1].x = 2.636f; Bullet_C3.m_VertexList[1].y = 2.636f;
-		Bullet_C3.m_VertexList[2].x = 2.636f; Bullet_C3.m_VertexList[2].y = 2.636f;
-		Bullet_C3.m_VertexList[3].x = 2.636f; Bullet_C3.m_VertexList[3].y = 2.636f;
-		Bullet_C3.m_VertexList[4].x = 2.636f; Bullet_C3.m_VertexList[4].y = 2.636f;
-		Bullet_C3.m_VertexList[5].x = 2.636f; Bullet_C3.m_VertexList[5].y = 2.636f;
-		Bullet_C3.m_VertexList[6].x = 2.636f; Bullet_C3.m_VertexList[6].y = 2.636f;
-
-		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
 	
 		box_alive_Col_C3 = true;
 	}				   
 
-
-
-
 	/////////////////////////////////// Bullet_C4과  Box_Alive 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Box_Alive.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Box_Alive.m_rtCollision))
 	{
-		Bullet_C4.m_VertexList[0].x = 4.7816f; Bullet_C4.m_VertexList[0].y = 4.7816f;
-		Bullet_C4.m_VertexList[1].x = 4.7816f; Bullet_C4.m_VertexList[1].y = 4.7816f;
-		Bullet_C4.m_VertexList[2].x = 4.7816f; Bullet_C4.m_VertexList[2].y = 4.7816f;
-		Bullet_C4.m_VertexList[3].x = 4.7816f; Bullet_C4.m_VertexList[3].y = 4.7816f;
-		Bullet_C4.m_VertexList[4].x = 4.7816f; Bullet_C4.m_VertexList[4].y = 4.7816f;
-		Bullet_C4.m_VertexList[5].x = 4.7816f; Bullet_C4.m_VertexList[5].y = 4.7816f;
-		Bullet_C4.m_VertexList[6].x = 4.7816f; Bullet_C4.m_VertexList[6].y = 4.7816f;
-
-		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
-		}
-		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
 	
 		box_alive_Col_C4 = true;
 	}				   
 
 
-
-
-
 }
 
-
 void TSceneGame::Hero_Ghost_collision()
-{
-
-
-	 
+{	 
 	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{	Hero_Col_G1 = true;	}
 
-	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_2.m_rtCollision))
+	else if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_2.m_rtCollision))
 	{	Hero_Col_G2 = true;	}
 
-	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_3.m_rtCollision))
+	else if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_3.m_rtCollision))
 	{	Hero_Col_G3 = true;	}
 
-	if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_4.m_rtCollision))
+	else if (TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_4.m_rtCollision))
 	{	Hero_Col_G4 = true;}
-	
-
-	
+		
 }
-
-
 
 void TSceneGame::Hero_collision_final_decision()
 {
-
 	Hero_live_or_dead = Hero_Col_G1 + Hero_Col_G2 + Hero_Col_G3 + Hero_Col_G4 + Hero_Col_B1 + Hero_Col_B2 + Hero_Col_B3 + Hero_Col_B4 +	Hero_Col_S1 + Hero_Col_S2 + Hero_Col_S3 + Hero_Col_S4;
-
-
-
-
 
 	if (Hero_live_or_dead == 1)
 	{
@@ -3182,7 +2550,7 @@ void TSceneGame::Hero_collision_final_decision()
 
 	/////////////////////////////////////////////////////////
 
-	if (Hero_live_or_dead == 2)
+	else if (Hero_live_or_dead == 2)
 	{
 		m_Actor_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
 		m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
@@ -3192,7 +2560,7 @@ void TSceneGame::Hero_collision_final_decision()
 
 	///////////////////////////////////////////////////////
 
-	if (Hero_live_or_dead == 3)
+	else if (Hero_live_or_dead == 3)
 	{
 		m_Actor_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
 		m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
@@ -3203,15 +2571,10 @@ void TSceneGame::Hero_collision_final_decision()
 
 	/////////////////////////////////////////////////
 
-	if (Hero_live_or_dead == 4)
+	else if (Hero_live_or_dead == 4)
 	{
-		m_Actor_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
-		m_Actor_life_bar.m_for_update_Rects.x = g_rtClient.right / 3.5;    m_Actor_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 10;
-		m_Actor_life_bar.Window_SetData_factors(200, 10, m_Actor_life_bar.m_for_update_Rects.x, m_Actor_life_bar.m_for_update_Rects.y);
-		m_Actor_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/0_Bar.png");
 		
 		m_bNextSceneStart = true;
-
 		end_decision = 2;
 		sSound->Stop(2);
 		
@@ -3232,1706 +2595,240 @@ void TSceneGame::Hero_collision_final_decision()
 	g_pContext->UpdateSubresource(m_Actor_life_bar.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_HLB, 0, 0);
 }
 
-
 void TSceneGame::Herosword_ghost_collsion()
 {
+
 	if (I_Input.Key('O')  && TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_Ghost_1.m_VertexList[0].x = 2.333f; Bullet_Ghost_1.m_VertexList[0].y = 2.333f;
-		Bullet_Ghost_1.m_VertexList[1].x = 2.333f; Bullet_Ghost_1.m_VertexList[1].y = 2.333f;
-		Bullet_Ghost_1.m_VertexList[2].x = 2.333f; Bullet_Ghost_1.m_VertexList[2].y = 2.333f;
-		Bullet_Ghost_1.m_VertexList[3].x = 2.333f; Bullet_Ghost_1.m_VertexList[3].y = 2.333f;
-		Bullet_Ghost_1.m_VertexList[4].x = 2.333f; Bullet_Ghost_1.m_VertexList[4].y = 2.333f;
-		Bullet_Ghost_1.m_VertexList[5].x = 2.333f; Bullet_Ghost_1.m_VertexList[5].y = 2.333f;
-		Bullet_Ghost_1.m_VertexList[6].x = 2.333f; Bullet_Ghost_1.m_VertexList[6].y = 2.333f;
-	
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}
-
-		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+		
+		ghost1_Col_S1 = 1;
 	}
 
 	/////////////////////////////////////////////////////
 
-	if (I_Input.Key('O')&& TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_2.m_rtCollision))
+	else if (I_Input.Key('O')&& TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_2.m_rtCollision))
 	{
-		Bullet_Ghost_2.m_VertexList[0].x = 2.244f; Bullet_Ghost_2.m_VertexList[0].y = 2.244f;
-		Bullet_Ghost_2.m_VertexList[1].x = 2.244f; Bullet_Ghost_2.m_VertexList[1].y = 2.244f;
-		Bullet_Ghost_2.m_VertexList[2].x = 2.244f; Bullet_Ghost_2.m_VertexList[2].y = 2.244f;
-		Bullet_Ghost_2.m_VertexList[3].x = 2.244f; Bullet_Ghost_2.m_VertexList[3].y = 2.244f;
-		Bullet_Ghost_2.m_VertexList[4].x = 2.244f; Bullet_Ghost_2.m_VertexList[4].y = 2.244f;
-		Bullet_Ghost_2.m_VertexList[5].x = 2.244f; Bullet_Ghost_2.m_VertexList[5].y = 2.244f;
-		Bullet_Ghost_2.m_VertexList[6].x = 2.244f; Bullet_Ghost_2.m_VertexList[6].y = 2.244f;
-
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}
-
-		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		
+		ghost2_Col_S1 = 1;
 	}
 
 	///////////////////////////////////////////////////////////
 
-	if (I_Input.Key('O') && TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_3.m_rtCollision))
+	else if (I_Input.Key('O') && TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_3.m_rtCollision))
 	{
-		Bullet_Ghost_3.m_VertexList[0].x = 2.377f; Bullet_Ghost_3.m_VertexList[0].y = 2.377f;
-		Bullet_Ghost_3.m_VertexList[1].x = 2.377f; Bullet_Ghost_3.m_VertexList[1].y = 2.377f;
-		Bullet_Ghost_3.m_VertexList[2].x = 2.377f; Bullet_Ghost_3.m_VertexList[2].y = 2.377f;
-		Bullet_Ghost_3.m_VertexList[3].x = 2.377f; Bullet_Ghost_3.m_VertexList[3].y = 2.377f;
-		Bullet_Ghost_3.m_VertexList[4].x = 2.377f; Bullet_Ghost_3.m_VertexList[4].y = 2.377f;
-		Bullet_Ghost_3.m_VertexList[5].x = 2.377f; Bullet_Ghost_3.m_VertexList[5].y = 2.377f;
-		Bullet_Ghost_3.m_VertexList[6].x = 2.377f; Bullet_Ghost_3.m_VertexList[6].y = 2.377f;
-
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}
-
-		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+		
+		ghost3_Col_S1 = 1;
 	}
 
 	/////////////////////////////////////////////////////////////
 
-	if (I_Input.Key('O') && TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_4.m_rtCollision))
+	else if (I_Input.Key('O') && TCollision::SphereInSphere(m_Actor.m_rtCollision, Bullet_Ghost_4.m_rtCollision))
 	{
-		Bullet_Ghost_4.m_VertexList[0].x = 2.996f; Bullet_Ghost_4.m_VertexList[0].y = 2.996f;
-		Bullet_Ghost_4.m_VertexList[1].x = 2.996f; Bullet_Ghost_4.m_VertexList[1].y = 2.996f;
-		Bullet_Ghost_4.m_VertexList[2].x = 2.996f; Bullet_Ghost_4.m_VertexList[2].y = 2.996f;
-		Bullet_Ghost_4.m_VertexList[3].x = 2.996f; Bullet_Ghost_4.m_VertexList[3].y = 2.996f;
-		Bullet_Ghost_4.m_VertexList[4].x = 2.996f; Bullet_Ghost_4.m_VertexList[4].y = 2.996f;
-		Bullet_Ghost_4.m_VertexList[5].x = 2.996f; Bullet_Ghost_4.m_VertexList[5].y = 2.996f;
-		Bullet_Ghost_4.m_VertexList[6].x = 2.996f; Bullet_Ghost_4.m_VertexList[6].y = 2.996f;
-
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}
-
-		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+		
+		ghost4_Col_S1 = 1;
 	}
 	/////////////////////////////////////////////////////////////////////
 }
 
-
-
-
-
-
 void TSceneGame::Bullet_Ghost_collision()
 {
 
+
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		ghost_Col_F1 = 1;
+		ghost1_Col_F1 = 1;
 
-		/*Bullet_F1.m_VertexList[0].x = 5.441f; Bullet_F1.m_VertexList[0].y = 5.441f;
-		Bullet_F1.m_VertexList[1].x = 5.441f; Bullet_F1.m_VertexList[1].y = 5.441f;
-		Bullet_F1.m_VertexList[2].x = 5.441f; Bullet_F1.m_VertexList[2].y = 5.441f;
-		Bullet_F1.m_VertexList[3].x = 5.441f; Bullet_F1.m_VertexList[3].y = 5.441f;
-		Bullet_F1.m_VertexList[4].x = 5.441f; Bullet_F1.m_VertexList[4].y = 5.441f;
-		Bullet_F1.m_VertexList[5].x = 5.441f; Bullet_F1.m_VertexList[5].y = 5.441f;
-		Bullet_F1.m_VertexList[6].x = 5.441f; Bullet_F1.m_VertexList[6].y = 5.441f;*/
-
-		Bullet_Ghost_1.m_VertexList[0].x = 5.002f; Bullet_Ghost_1.m_VertexList[0].y = 5.002f;
-		Bullet_Ghost_1.m_VertexList[1].x = 5.002f; Bullet_Ghost_1.m_VertexList[1].y = 5.002f;
-		Bullet_Ghost_1.m_VertexList[2].x = 5.002f; Bullet_Ghost_1.m_VertexList[2].y = 5.002f;
-		Bullet_Ghost_1.m_VertexList[3].x = 5.002f; Bullet_Ghost_1.m_VertexList[3].y = 5.002f;
-		Bullet_Ghost_1.m_VertexList[4].x = 5.002f; Bullet_Ghost_1.m_VertexList[4].y = 5.002f;
-		Bullet_Ghost_1.m_VertexList[5].x = 5.002f; Bullet_Ghost_1.m_VertexList[5].y = 5.002f;
-		Bullet_Ghost_1.m_VertexList[6].x = 5.002f; Bullet_Ghost_1.m_VertexList[6].y = 5.002f;
-
-
-		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
-			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		ghost_Col_F1 = 1;
-		/*Bullet_F1.m_VertexList[0].x = 4.889f; Bullet_F1.m_VertexList[0].y = 4.889f;
-		Bullet_F1.m_VertexList[1].x = 4.889f; Bullet_F1.m_VertexList[1].y = 4.889f;
-		Bullet_F1.m_VertexList[2].x = 4.889f; Bullet_F1.m_VertexList[2].y = 4.889f;
-		Bullet_F1.m_VertexList[3].x = 4.889f; Bullet_F1.m_VertexList[3].y = 4.889f;
-		Bullet_F1.m_VertexList[4].x = 4.889f; Bullet_F1.m_VertexList[4].y = 4.889f;
-		Bullet_F1.m_VertexList[5].x = 4.889f; Bullet_F1.m_VertexList[5].y = 4.889f;
-		Bullet_F1.m_VertexList[6].x = 4.889f; Bullet_F1.m_VertexList[6].y = 4.889f;*/
-
-		Bullet_Ghost_2.m_VertexList[0].x = 3.449f; Bullet_Ghost_2.m_VertexList[0].y = 3.449f;
-		Bullet_Ghost_2.m_VertexList[1].x = 3.449f; Bullet_Ghost_2.m_VertexList[1].y = 3.449f;
-		Bullet_Ghost_2.m_VertexList[2].x = 3.449f; Bullet_Ghost_2.m_VertexList[2].y = 3.449f;
-		Bullet_Ghost_2.m_VertexList[3].x = 3.449f; Bullet_Ghost_2.m_VertexList[3].y = 3.449f;
-		Bullet_Ghost_2.m_VertexList[4].x = 3.449f; Bullet_Ghost_2.m_VertexList[4].y = 3.449f;
-		Bullet_Ghost_2.m_VertexList[5].x = 3.449f; Bullet_Ghost_2.m_VertexList[5].y = 3.449f;
-		Bullet_Ghost_2.m_VertexList[6].x = 3.449f; Bullet_Ghost_2.m_VertexList[6].y = 3.449f;
-
-
-		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
-			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		ghost2_Col_F1 = 1;
+		
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		ghost_Col_F1 = 1;
-	/*	Bullet_F1.m_VertexList[0].x = 3.368f; Bullet_F1.m_VertexList[0].y = 3.368f;
-		Bullet_F1.m_VertexList[1].x = 3.368f; Bullet_F1.m_VertexList[1].y = 3.368f;
-		Bullet_F1.m_VertexList[2].x = 3.368f; Bullet_F1.m_VertexList[2].y = 3.368f;
-		Bullet_F1.m_VertexList[3].x = 3.368f; Bullet_F1.m_VertexList[3].y = 3.368f;
-		Bullet_F1.m_VertexList[4].x = 3.368f; Bullet_F1.m_VertexList[4].y = 3.368f;
-		Bullet_F1.m_VertexList[5].x = 3.368f; Bullet_F1.m_VertexList[5].y = 3.368f;
-		Bullet_F1.m_VertexList[6].x = 3.368f; Bullet_F1.m_VertexList[6].y = 3.368f;*/
-
-		Bullet_Ghost_3.m_VertexList[0].x = 3.241f; Bullet_Ghost_3.m_VertexList[0].y = 3.241f;
-		Bullet_Ghost_3.m_VertexList[1].x = 3.241f; Bullet_Ghost_3.m_VertexList[1].y = 3.241f;
-		Bullet_Ghost_3.m_VertexList[2].x = 3.241f; Bullet_Ghost_3.m_VertexList[2].y = 3.241f;
-		Bullet_Ghost_3.m_VertexList[3].x = 3.241f; Bullet_Ghost_3.m_VertexList[3].y = 3.241f;
-		Bullet_Ghost_3.m_VertexList[4].x = 3.241f; Bullet_Ghost_3.m_VertexList[4].y = 3.241f;
-		Bullet_Ghost_3.m_VertexList[5].x = 3.241f; Bullet_Ghost_3.m_VertexList[5].y = 3.241f;
-		Bullet_Ghost_3.m_VertexList[6].x = 3.241f; Bullet_Ghost_3.m_VertexList[6].y = 3.241f;
-
-
-		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
-			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+		ghost3_Col_F1 = 1;
 
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		ghost_Col_F1 = 1;
-		/*Bullet_F1.m_VertexList[0].x = 3.282f; Bullet_F1.m_VertexList[0].y = 3.282f;
-		Bullet_F1.m_VertexList[1].x = 3.282f; Bullet_F1.m_VertexList[1].y = 3.282f;
-		Bullet_F1.m_VertexList[2].x = 3.282f; Bullet_F1.m_VertexList[2].y = 3.282f;
-		Bullet_F1.m_VertexList[3].x = 3.282f; Bullet_F1.m_VertexList[3].y = 3.282f;
-		Bullet_F1.m_VertexList[4].x = 3.282f; Bullet_F1.m_VertexList[4].y = 3.282f;
-		Bullet_F1.m_VertexList[5].x = 3.282f; Bullet_F1.m_VertexList[5].y = 3.282f;
-		Bullet_F1.m_VertexList[6].x = 3.282f; Bullet_F1.m_VertexList[6].y = 3.282f;*/
-
-		Bullet_Ghost_4.m_VertexList[0].x = 3.299f; Bullet_Ghost_4.m_VertexList[0].y = 3.299f;
-		Bullet_Ghost_4.m_VertexList[1].x = 3.299f; Bullet_Ghost_4.m_VertexList[1].y = 3.299f;
-		Bullet_Ghost_4.m_VertexList[2].x = 3.299f; Bullet_Ghost_4.m_VertexList[2].y = 3.299f;
-		Bullet_Ghost_4.m_VertexList[3].x = 3.299f; Bullet_Ghost_4.m_VertexList[3].y = 3.299f;
-		Bullet_Ghost_4.m_VertexList[4].x = 3.299f; Bullet_Ghost_4.m_VertexList[4].y = 3.299f;
-		Bullet_Ghost_4.m_VertexList[5].x = 3.299f; Bullet_Ghost_4.m_VertexList[5].y = 3.299f;
-		Bullet_Ghost_4.m_VertexList[6].x = 3.299f; Bullet_Ghost_4.m_VertexList[6].y = 3.299f;
-
-
-		memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F1.m_VertexList[iV].x; vertex.y = Bullet_F1.m_VertexList[iV].y;
-			vertex.x -= Bullet_F1.m_vCenter.x;		 vertex.y -= Bullet_F1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F1[iV].x += Bullet_F1.m_vCenter.x;		 N_VertexList_F1[iV].y += Bullet_F1.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F1, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+		ghost4_Col_F1 = 1;
+	
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		ghost_Col_F2 = 1;
-		/*Bullet_F2.m_VertexList[0].x = 3.333f; Bullet_F2.m_VertexList[0].y = 3.333f;
-		Bullet_F2.m_VertexList[1].x = 3.333f; Bullet_F2.m_VertexList[1].y = 3.333f;
-		Bullet_F2.m_VertexList[2].x = 3.333f; Bullet_F2.m_VertexList[2].y = 3.333f;
-		Bullet_F2.m_VertexList[3].x = 3.333f; Bullet_F2.m_VertexList[3].y = 3.333f;
-		Bullet_F2.m_VertexList[4].x = 3.333f; Bullet_F2.m_VertexList[4].y = 3.333f;
-		Bullet_F2.m_VertexList[5].x = 3.333f; Bullet_F2.m_VertexList[5].y = 3.333f;
-		Bullet_F2.m_VertexList[6].x = 3.333f; Bullet_F2.m_VertexList[6].y = 3.333f;*/
-
-		Bullet_Ghost_1.m_VertexList[0].x = 3.538f; Bullet_Ghost_1.m_VertexList[0].y = 3.538f;
-		Bullet_Ghost_1.m_VertexList[1].x = 3.538f; Bullet_Ghost_1.m_VertexList[1].y = 3.538f;
-		Bullet_Ghost_1.m_VertexList[2].x = 3.538f; Bullet_Ghost_1.m_VertexList[2].y = 3.538f;
-		Bullet_Ghost_1.m_VertexList[3].x = 3.538f; Bullet_Ghost_1.m_VertexList[3].y = 3.538f;
-		Bullet_Ghost_1.m_VertexList[4].x = 3.538f; Bullet_Ghost_1.m_VertexList[4].y = 3.538f;
-		Bullet_Ghost_1.m_VertexList[5].x = 3.538f; Bullet_Ghost_1.m_VertexList[5].y = 3.538f;
-		Bullet_Ghost_1.m_VertexList[6].x = 3.338f; Bullet_Ghost_1.m_VertexList[6].y = 3.538f;
-
-
-		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
-			vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+		ghost1_Col_F2 = 1;
+		
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		ghost_Col_F2 = 1;
-	/*	Bullet_F2.m_VertexList[0].x = 3.378f; Bullet_F2.m_VertexList[0].y = 3.378f;
-		Bullet_F2.m_VertexList[1].x = 3.378f; Bullet_F2.m_VertexList[1].y = 3.378f;
-		Bullet_F2.m_VertexList[2].x = 3.378f; Bullet_F2.m_VertexList[2].y = 3.378f;
-		Bullet_F2.m_VertexList[3].x = 3.378f; Bullet_F2.m_VertexList[3].y = 3.378f;
-		Bullet_F2.m_VertexList[4].x = 3.378f; Bullet_F2.m_VertexList[4].y = 3.378f;
-		Bullet_F2.m_VertexList[5].x = 3.378f; Bullet_F2.m_VertexList[5].y = 3.378f;
-		Bullet_F2.m_VertexList[6].x = 3.378f; Bullet_F2.m_VertexList[6].y = 3.378f;
-*/
-		Bullet_Ghost_2.m_VertexList[0].x = 8.772f; Bullet_Ghost_2.m_VertexList[0].y = 8.772f;
-		Bullet_Ghost_2.m_VertexList[1].x = 8.772f; Bullet_Ghost_2.m_VertexList[1].y = 8.772f;
-		Bullet_Ghost_2.m_VertexList[2].x = 8.772f; Bullet_Ghost_2.m_VertexList[2].y = 8.772f;
-		Bullet_Ghost_2.m_VertexList[3].x = 8.772f; Bullet_Ghost_2.m_VertexList[3].y = 8.772f;
-		Bullet_Ghost_2.m_VertexList[4].x = 8.772f; Bullet_Ghost_2.m_VertexList[4].y = 8.772f;
-		Bullet_Ghost_2.m_VertexList[5].x = 8.772f; Bullet_Ghost_2.m_VertexList[5].y = 8.772f;
-		Bullet_Ghost_2.m_VertexList[6].x = 8.772f; Bullet_Ghost_2.m_VertexList[6].y = 8.772f;
-
-
-		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
-			vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		ghost2_Col_F2 = 1;
+	
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		ghost_Col_F2 = 1;
-		/*Bullet_F2.m_VertexList[0].x = 3.426f; Bullet_F2.m_VertexList[0].y = 3.426f;
-		Bullet_F2.m_VertexList[1].x = 3.426f; Bullet_F2.m_VertexList[1].y = 3.426f;
-		Bullet_F2.m_VertexList[2].x = 3.426f; Bullet_F2.m_VertexList[2].y = 3.426f;
-		Bullet_F2.m_VertexList[3].x = 3.426f; Bullet_F2.m_VertexList[3].y = 3.426f;
-		Bullet_F2.m_VertexList[4].x = 3.426f; Bullet_F2.m_VertexList[4].y = 3.426f;
-		Bullet_F2.m_VertexList[5].x = 3.426f; Bullet_F2.m_VertexList[5].y = 3.426f;
-		Bullet_F2.m_VertexList[6].x = 3.426f; Bullet_F2.m_VertexList[6].y = 3.426f;*/
-
-		Bullet_Ghost_3.m_VertexList[0].x = 3.434f; Bullet_Ghost_3.m_VertexList[0].y = 3.434f;
-		Bullet_Ghost_3.m_VertexList[1].x = 3.434f; Bullet_Ghost_3.m_VertexList[1].y = 3.434f;
-		Bullet_Ghost_3.m_VertexList[2].x = 3.434f; Bullet_Ghost_3.m_VertexList[2].y = 3.434f;
-		Bullet_Ghost_3.m_VertexList[3].x = 3.434f; Bullet_Ghost_3.m_VertexList[3].y = 3.434f;
-		Bullet_Ghost_3.m_VertexList[4].x = 3.434f; Bullet_Ghost_3.m_VertexList[4].y = 3.434f;
-		Bullet_Ghost_3.m_VertexList[5].x = 3.434f; Bullet_Ghost_3.m_VertexList[5].y = 3.434f;
-		Bullet_Ghost_3.m_VertexList[6].x = 3.434f; Bullet_Ghost_3.m_VertexList[6].y = 3.434f;
-
-
-		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
-			vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
-
+		ghost3_Col_F2 = 1;
+	
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		ghost_Col_F2 = 1;
-	/*	Bullet_F2.m_VertexList[0].x = 4.2936f; Bullet_F2.m_VertexList[0].y = 4.2936f;
-		Bullet_F2.m_VertexList[1].x = 4.2936f; Bullet_F2.m_VertexList[1].y = 4.2936f;
-		Bullet_F2.m_VertexList[2].x = 4.2936f; Bullet_F2.m_VertexList[2].y = 4.2936f;
-		Bullet_F2.m_VertexList[3].x = 4.2936f; Bullet_F2.m_VertexList[3].y = 4.2936f;
-		Bullet_F2.m_VertexList[4].x = 4.2936f; Bullet_F2.m_VertexList[4].y = 4.2936f;
-		Bullet_F2.m_VertexList[5].x = 4.2936f; Bullet_F2.m_VertexList[5].y = 4.2936f;
-		Bullet_F2.m_VertexList[6].x = 4.2936f; Bullet_F2.m_VertexList[6].y = 4.2936f;*/
-
-		Bullet_Ghost_4.m_VertexList[0].x = 4.741f; Bullet_Ghost_4.m_VertexList[0].y = 4.741f;
-		Bullet_Ghost_4.m_VertexList[1].x = 4.741f; Bullet_Ghost_4.m_VertexList[1].y = 4.741f;
-		Bullet_Ghost_4.m_VertexList[2].x = 4.741f; Bullet_Ghost_4.m_VertexList[2].y = 4.741f;
-		Bullet_Ghost_4.m_VertexList[3].x = 4.741f; Bullet_Ghost_4.m_VertexList[3].y = 4.741f;
-		Bullet_Ghost_4.m_VertexList[4].x = 4.741f; Bullet_Ghost_4.m_VertexList[4].y = 4.741f;
-		Bullet_Ghost_4.m_VertexList[5].x = 4.741f; Bullet_Ghost_4.m_VertexList[5].y = 4.741f;
-		Bullet_Ghost_4.m_VertexList[6].x = 4.741f; Bullet_Ghost_4.m_VertexList[6].y = 4.741f;
-
-
-		memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F2.m_VertexList[iV].x; vertex.y = Bullet_F2.m_VertexList[iV].y;
-			vertex.x -= Bullet_F2.m_vCenter.x;		 vertex.y -= Bullet_F2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F2[iV].x += Bullet_F2.m_vCenter.x;		 N_VertexList_F2[iV].y += Bullet_F2.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F2, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
-
+		ghost4_Col_F2 = 1;
 	}
 
 
-	//
-
-	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		ghost_Col_F3 = 1;
-	/*	Bullet_F3.m_VertexList[0].x = 3.125f; Bullet_F3.m_VertexList[0].y = 3.125f;
-		Bullet_F3.m_VertexList[1].x = 3.125f; Bullet_F3.m_VertexList[1].y = 3.125f;
-		Bullet_F3.m_VertexList[2].x = 3.125f; Bullet_F3.m_VertexList[2].y = 3.125f;
-		Bullet_F3.m_VertexList[3].x = 3.125f; Bullet_F3.m_VertexList[3].y = 3.125f;
-		Bullet_F3.m_VertexList[4].x = 3.125f; Bullet_F3.m_VertexList[4].y = 3.125f;
-		Bullet_F3.m_VertexList[5].x = 3.125f; Bullet_F3.m_VertexList[5].y = 3.125f;
-		Bullet_F3.m_VertexList[6].x = 3.125f; Bullet_F3.m_VertexList[6].y = 3.125f;*/
-
-		Bullet_Ghost_1.m_VertexList[0].x = 4.301f; Bullet_Ghost_1.m_VertexList[0].y = 4.301f;
-		Bullet_Ghost_1.m_VertexList[1].x = 4.301f; Bullet_Ghost_1.m_VertexList[1].y = 4.301f;
-		Bullet_Ghost_1.m_VertexList[2].x = 4.301f; Bullet_Ghost_1.m_VertexList[2].y = 4.301f;
-		Bullet_Ghost_1.m_VertexList[3].x = 4.301f; Bullet_Ghost_1.m_VertexList[3].y = 4.301f;
-		Bullet_Ghost_1.m_VertexList[4].x = 4.301f; Bullet_Ghost_1.m_VertexList[4].y = 4.301f;
-		Bullet_Ghost_1.m_VertexList[5].x = 4.301f; Bullet_Ghost_1.m_VertexList[5].y = 4.301f;
-		Bullet_Ghost_1.m_VertexList[6].x = 4.301f; Bullet_Ghost_1.m_VertexList[6].y = 4.301f;
-
-
-		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
-			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+		ghost1_Col_F3 = 1;
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		ghost_Col_F3 = 1;
-	/*	Bullet_F3.m_VertexList[0].x = 3.713f; Bullet_F3.m_VertexList[0].y = 3.713f;
-		Bullet_F3.m_VertexList[1].x = 3.713f; Bullet_F3.m_VertexList[1].y = 3.713f;
-		Bullet_F3.m_VertexList[2].x = 3.713f; Bullet_F3.m_VertexList[2].y = 3.713f;
-		Bullet_F3.m_VertexList[3].x = 3.713f; Bullet_F3.m_VertexList[3].y = 3.713f;
-		Bullet_F3.m_VertexList[4].x = 3.713f; Bullet_F3.m_VertexList[4].y = 3.713f;
-		Bullet_F3.m_VertexList[5].x = 3.713f; Bullet_F3.m_VertexList[5].y = 3.713f;
-		Bullet_F3.m_VertexList[6].x = 3.713f; Bullet_F3.m_VertexList[6].y = 3.713f;*/
-
-		Bullet_Ghost_2.m_VertexList[0].x = 3.444f; Bullet_Ghost_2.m_VertexList[0].y = 3.444f;
-		Bullet_Ghost_2.m_VertexList[1].x = 3.444f; Bullet_Ghost_2.m_VertexList[1].y = 3.444f;
-		Bullet_Ghost_2.m_VertexList[2].x = 3.444f; Bullet_Ghost_2.m_VertexList[2].y = 3.444f;
-		Bullet_Ghost_2.m_VertexList[3].x = 3.444f; Bullet_Ghost_2.m_VertexList[3].y = 3.444f;
-		Bullet_Ghost_2.m_VertexList[4].x = 3.444f; Bullet_Ghost_2.m_VertexList[4].y = 3.444f;
-		Bullet_Ghost_2.m_VertexList[5].x = 3.444f; Bullet_Ghost_2.m_VertexList[5].y = 3.444f;
-		Bullet_Ghost_2.m_VertexList[6].x = 3.444f; Bullet_Ghost_2.m_VertexList[6].y = 3.444f;
-
-
-		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
-			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		ghost2_Col_F3 = 1;
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		ghost_Col_F3 = 1;
-	/*	Bullet_F3.m_VertexList[0].x = 3.305f; Bullet_F3.m_VertexList[0].y = 3.305f;
-		Bullet_F3.m_VertexList[1].x = 3.305f; Bullet_F3.m_VertexList[1].y = 3.305f;
-		Bullet_F3.m_VertexList[2].x = 3.305f; Bullet_F3.m_VertexList[2].y = 3.305f;
-		Bullet_F3.m_VertexList[3].x = 3.305f; Bullet_F3.m_VertexList[3].y = 3.305f;
-		Bullet_F3.m_VertexList[4].x = 3.305f; Bullet_F3.m_VertexList[4].y = 3.305f;
-		Bullet_F3.m_VertexList[5].x = 3.305f; Bullet_F3.m_VertexList[5].y = 3.305f;
-		Bullet_F3.m_VertexList[6].x = 3.305f; Bullet_F3.m_VertexList[6].y = 3.305f;*/
-
-		Bullet_Ghost_3.m_VertexList[0].x = 3.106f; Bullet_Ghost_3.m_VertexList[0].y = 3.106f;
-		Bullet_Ghost_3.m_VertexList[1].x = 3.106f; Bullet_Ghost_3.m_VertexList[1].y = 3.106f;
-		Bullet_Ghost_3.m_VertexList[2].x = 3.106f; Bullet_Ghost_3.m_VertexList[2].y = 3.106f;
-		Bullet_Ghost_3.m_VertexList[3].x = 3.106f; Bullet_Ghost_3.m_VertexList[3].y = 3.106f;
-		Bullet_Ghost_3.m_VertexList[4].x = 3.106f; Bullet_Ghost_3.m_VertexList[4].y = 3.106f;
-		Bullet_Ghost_3.m_VertexList[5].x = 3.106f; Bullet_Ghost_3.m_VertexList[5].y = 3.106f;
-		Bullet_Ghost_3.m_VertexList[6].x = 3.106f; Bullet_Ghost_3.m_VertexList[6].y = 3.106f;
-
-
-		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
-			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+		ghost3_Col_F3 = 1;
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		ghost_Col_F3 = 1;
-	/*	Bullet_F3.m_VertexList[0].x = 4.467f; Bullet_F3.m_VertexList[0].y = 4.467f;
-		Bullet_F3.m_VertexList[1].x = 4.467f; Bullet_F3.m_VertexList[1].y = 4.467f;
-		Bullet_F3.m_VertexList[2].x = 4.467f; Bullet_F3.m_VertexList[2].y = 4.467f;
-		Bullet_F3.m_VertexList[3].x = 4.467f; Bullet_F3.m_VertexList[3].y = 4.467f;
-		Bullet_F3.m_VertexList[4].x = 4.467f; Bullet_F3.m_VertexList[4].y = 4.467f;
-		Bullet_F3.m_VertexList[5].x = 4.467f; Bullet_F3.m_VertexList[5].y = 4.467f;
-		Bullet_F3.m_VertexList[6].x = 4.467f; Bullet_F3.m_VertexList[6].y = 4.467f;*/
-
-		Bullet_Ghost_4.m_VertexList[0].x = 4.675f; Bullet_Ghost_4.m_VertexList[0].y = 4.675f;
-		Bullet_Ghost_4.m_VertexList[1].x = 4.675f; Bullet_Ghost_4.m_VertexList[1].y = 4.675f;
-		Bullet_Ghost_4.m_VertexList[2].x = 4.675f; Bullet_Ghost_4.m_VertexList[2].y = 4.675f;
-		Bullet_Ghost_4.m_VertexList[3].x = 4.675f; Bullet_Ghost_4.m_VertexList[3].y = 4.675f;
-		Bullet_Ghost_4.m_VertexList[4].x = 4.675f; Bullet_Ghost_4.m_VertexList[4].y = 4.675f;
-		Bullet_Ghost_4.m_VertexList[5].x = 4.675f; Bullet_Ghost_4.m_VertexList[5].y = 4.675f;
-		Bullet_Ghost_4.m_VertexList[6].x = 4.675f; Bullet_Ghost_4.m_VertexList[6].y = 4.675f;
-
-
-		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F3.m_VertexList[iV].x; vertex.y = Bullet_F3.m_VertexList[iV].y;
-			vertex.x -= Bullet_F3.m_vCenter.x;		 vertex.y -= Bullet_F3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F3[iV].x += Bullet_F3.m_vCenter.x;		 N_VertexList_F3[iV].y += Bullet_F3.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F3, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+		ghost4_Col_F3 = 1;
 	}
 
-	//
-
-
-	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		ghost_Col_F4 = 1;
-	/*	Bullet_F4.m_VertexList[0].x = 4.322f; Bullet_F4.m_VertexList[0].y = 4.322f;
-		Bullet_F4.m_VertexList[1].x = 4.322f; Bullet_F4.m_VertexList[1].y = 4.322f;
-		Bullet_F4.m_VertexList[2].x = 4.322f; Bullet_F4.m_VertexList[2].y = 4.322f;
-		Bullet_F4.m_VertexList[3].x = 4.322f; Bullet_F4.m_VertexList[3].y = 4.322f;
-		Bullet_F4.m_VertexList[4].x = 4.322f; Bullet_F4.m_VertexList[4].y = 4.322f;
-		Bullet_F4.m_VertexList[5].x = 4.322f; Bullet_F4.m_VertexList[5].y = 4.322f;
-		Bullet_F4.m_VertexList[6].x = 4.322f; Bullet_F4.m_VertexList[6].y = 4.322f;
-*/
-		Bullet_Ghost_1.m_VertexList[0].x = 3.204f; Bullet_Ghost_1.m_VertexList[0].y = 3.204f;
-		Bullet_Ghost_1.m_VertexList[1].x = 3.204f; Bullet_Ghost_1.m_VertexList[1].y = 3.204f;
-		Bullet_Ghost_1.m_VertexList[2].x = 3.204f; Bullet_Ghost_1.m_VertexList[2].y = 3.204f;
-		Bullet_Ghost_1.m_VertexList[3].x = 3.204f; Bullet_Ghost_1.m_VertexList[3].y = 3.204f;
-		Bullet_Ghost_1.m_VertexList[4].x = 3.204f; Bullet_Ghost_1.m_VertexList[4].y = 3.204f;
-		Bullet_Ghost_1.m_VertexList[5].x = 3.204f; Bullet_Ghost_1.m_VertexList[5].y = 3.204f;
-		Bullet_Ghost_1.m_VertexList[6].x = 3.204f; Bullet_Ghost_1.m_VertexList[6].y = 3.204f;
-
-
-		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+		ghost1_Col_F4 = 1;
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		ghost_Col_F4 = 1;
-	/*	Bullet_F4.m_VertexList[0].x = 3.765f; Bullet_F4.m_VertexList[0].y = 3.765f;
-		Bullet_F4.m_VertexList[1].x = 3.765f; Bullet_F4.m_VertexList[1].y = 3.765f;
-		Bullet_F4.m_VertexList[2].x = 3.765f; Bullet_F4.m_VertexList[2].y = 3.765f;
-		Bullet_F4.m_VertexList[3].x = 3.765f; Bullet_F4.m_VertexList[3].y = 3.765f;
-		Bullet_F4.m_VertexList[4].x = 3.765f; Bullet_F4.m_VertexList[4].y = 3.765f;
-		Bullet_F4.m_VertexList[5].x = 3.765f; Bullet_F4.m_VertexList[5].y = 3.765f;
-		Bullet_F4.m_VertexList[6].x = 3.765f; Bullet_F4.m_VertexList[6].y = 3.765f;*/
-
-		Bullet_Ghost_2.m_VertexList[0].x = 3.1275f; Bullet_Ghost_2.m_VertexList[0].y = 3.1275f;
-		Bullet_Ghost_2.m_VertexList[1].x = 3.1275f; Bullet_Ghost_2.m_VertexList[1].y = 3.1275f;
-		Bullet_Ghost_2.m_VertexList[2].x = 3.1275f; Bullet_Ghost_2.m_VertexList[2].y = 3.1275f;
-		Bullet_Ghost_2.m_VertexList[3].x = 3.1275f; Bullet_Ghost_2.m_VertexList[3].y = 3.1275f;
-		Bullet_Ghost_2.m_VertexList[4].x = 3.1275f; Bullet_Ghost_2.m_VertexList[4].y = 3.1275f;
-		Bullet_Ghost_2.m_VertexList[5].x = 3.1275f; Bullet_Ghost_2.m_VertexList[5].y = 3.1275f;
-		Bullet_Ghost_2.m_VertexList[6].x = 3.1275f; Bullet_Ghost_2.m_VertexList[6].y = 3.1275f;
-
-
-		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		ghost2_Col_F4 = 1;
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		ghost_Col_F4 = 1;
-	/*	Bullet_F4.m_VertexList[0].x = 3.812f; Bullet_F4.m_VertexList[0].y = 3.812f;
-		Bullet_F4.m_VertexList[1].x = 3.812f; Bullet_F4.m_VertexList[1].y = 3.812f;
-		Bullet_F4.m_VertexList[2].x = 3.812f; Bullet_F4.m_VertexList[2].y = 3.812f;
-		Bullet_F4.m_VertexList[3].x = 3.812f; Bullet_F4.m_VertexList[3].y = 3.812f;
-		Bullet_F4.m_VertexList[4].x = 3.812f; Bullet_F4.m_VertexList[4].y = 3.812f;
-		Bullet_F4.m_VertexList[5].x = 3.812f; Bullet_F4.m_VertexList[5].y = 3.812f;
-		Bullet_F4.m_VertexList[6].x = 3.812f; Bullet_F4.m_VertexList[6].y = 3.812f;*/
-
-		Bullet_Ghost_3.m_VertexList[0].x = 2.828f; Bullet_Ghost_3.m_VertexList[0].y = 2.828f;
-		Bullet_Ghost_3.m_VertexList[1].x = 2.828f; Bullet_Ghost_3.m_VertexList[1].y = 2.828f;
-		Bullet_Ghost_3.m_VertexList[2].x = 2.828f; Bullet_Ghost_3.m_VertexList[2].y = 2.828f;
-		Bullet_Ghost_3.m_VertexList[3].x = 2.828f; Bullet_Ghost_3.m_VertexList[3].y = 2.828f;
-		Bullet_Ghost_3.m_VertexList[4].x = 2.828f; Bullet_Ghost_3.m_VertexList[4].y = 2.828f;
-		Bullet_Ghost_3.m_VertexList[5].x = 2.828f; Bullet_Ghost_3.m_VertexList[5].y = 2.828f;
-		Bullet_Ghost_3.m_VertexList[6].x = 2.828f; Bullet_Ghost_3.m_VertexList[6].y = 2.828f;
-
-
-		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+		ghost3_Col_F4 = 1;
+	
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		ghost_Col_F4 = 1;
-		/*Bullet_F4.m_VertexList[0].x = 6.306f; Bullet_F4.m_VertexList[0].y = 6.306f;
-		Bullet_F4.m_VertexList[1].x = 6.306f; Bullet_F4.m_VertexList[1].y = 6.306f;
-		Bullet_F4.m_VertexList[2].x = 6.306f; Bullet_F4.m_VertexList[2].y = 6.306f;
-		Bullet_F4.m_VertexList[3].x = 6.306f; Bullet_F4.m_VertexList[3].y = 6.306f;
-		Bullet_F4.m_VertexList[4].x = 6.306f; Bullet_F4.m_VertexList[4].y = 6.306f;
-		Bullet_F4.m_VertexList[5].x = 6.306f; Bullet_F4.m_VertexList[5].y = 6.306f;
-		Bullet_F4.m_VertexList[6].x = 6.306f; Bullet_F4.m_VertexList[6].y = 6.306f;*/
-
-		Bullet_Ghost_4.m_VertexList[0].x = 3.741f; Bullet_Ghost_4.m_VertexList[0].y = 3.741f;
-		Bullet_Ghost_4.m_VertexList[1].x = 3.741f; Bullet_Ghost_4.m_VertexList[1].y = 3.741f;
-		Bullet_Ghost_4.m_VertexList[2].x = 3.741f; Bullet_Ghost_4.m_VertexList[2].y = 3.741f;
-		Bullet_Ghost_4.m_VertexList[3].x = 3.741f; Bullet_Ghost_4.m_VertexList[3].y = 3.741f;
-		Bullet_Ghost_4.m_VertexList[4].x = 3.741f; Bullet_Ghost_4.m_VertexList[4].y = 3.741f;
-		Bullet_Ghost_4.m_VertexList[5].x = 3.741f; Bullet_Ghost_4.m_VertexList[5].y = 3.741f;
-		Bullet_Ghost_4.m_VertexList[6].x = 3.741f; Bullet_Ghost_4.m_VertexList[6].y = 3.741f;
-
-
-		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_F4.m_VertexList[iV].x; vertex.y = Bullet_F4.m_VertexList[iV].y;
-			vertex.x -= Bullet_F4.m_vCenter.x;		 vertex.y -= Bullet_F4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_F4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_F4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_F4[iV].x += Bullet_F4.m_vCenter.x;		 N_VertexList_F4[iV].y += Bullet_F4.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_F4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_F4, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+		ghost4_Col_F4 = 1;
 	}
 
 
 
-	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		ghost_Col_C1 = 1;
-		//Bullet_C1.m_VertexList[0].x = 4.115f; Bullet_C1.m_VertexList[0].y = 4.115f;
-		//Bullet_C1.m_VertexList[1].x = 4.115f; Bullet_C1.m_VertexList[1].y = 4.115f;
-		//Bullet_C1.m_VertexList[2].x = 4.115f; Bullet_C1.m_VertexList[2].y = 4.115f;
-		//Bullet_C1.m_VertexList[3].x = 4.115f; Bullet_C1.m_VertexList[3].y = 4.115f;
-		//Bullet_C1.m_VertexList[4].x = 4.115f; Bullet_C1.m_VertexList[4].y = 4.115f;
-		//Bullet_C1.m_VertexList[5].x = 4.115f; Bullet_C1.m_VertexList[5].y = 4.115f;
-		//Bullet_C1.m_VertexList[6].x = 4.115f; Bullet_C1.m_VertexList[6].y = 4.115f;
-
-		Bullet_Ghost_1.m_VertexList[0].x = 4.802f; Bullet_Ghost_1.m_VertexList[0].y = 4.802f;
-		Bullet_Ghost_1.m_VertexList[1].x = 4.802f; Bullet_Ghost_1.m_VertexList[1].y = 4.802f;
-		Bullet_Ghost_1.m_VertexList[2].x = 4.802f; Bullet_Ghost_1.m_VertexList[2].y = 4.802f;
-		Bullet_Ghost_1.m_VertexList[3].x = 4.802f; Bullet_Ghost_1.m_VertexList[3].y = 4.802f;
-		Bullet_Ghost_1.m_VertexList[4].x = 4.802f; Bullet_Ghost_1.m_VertexList[4].y = 4.802f;
-		Bullet_Ghost_1.m_VertexList[5].x = 4.802f; Bullet_Ghost_1.m_VertexList[5].y = 4.802f;
-		Bullet_Ghost_1.m_VertexList[6].x = 4.802f; Bullet_Ghost_1.m_VertexList[6].y = 4.802f;
-
-
-		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+		ghost1_Col_C1 = 1;
+	
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		ghost_Col_C1 = 1;
-		Bullet_C1.m_VertexList[0].x = 2.344f; Bullet_C1.m_VertexList[0].y = 2.344f;
-		Bullet_C1.m_VertexList[1].x = 2.344f; Bullet_C1.m_VertexList[1].y = 2.344f;
-		Bullet_C1.m_VertexList[2].x = 2.344f; Bullet_C1.m_VertexList[2].y = 2.344f;
-		Bullet_C1.m_VertexList[3].x = 2.344f; Bullet_C1.m_VertexList[3].y = 2.344f;
-		Bullet_C1.m_VertexList[4].x = 2.344f; Bullet_C1.m_VertexList[4].y = 2.344f;
-		Bullet_C1.m_VertexList[5].x = 2.344f; Bullet_C1.m_VertexList[5].y = 2.344f;
-		Bullet_C1.m_VertexList[6].x = 2.344f; Bullet_C1.m_VertexList[6].y = 2.344f;
-
-		Bullet_Ghost_2.m_VertexList[0].x = 4.101f; Bullet_Ghost_2.m_VertexList[0].y = 4.101f;
-		Bullet_Ghost_2.m_VertexList[1].x = 4.101f; Bullet_Ghost_2.m_VertexList[1].y = 4.101f;
-		Bullet_Ghost_2.m_VertexList[2].x = 4.101f; Bullet_Ghost_2.m_VertexList[2].y = 4.101f;
-		Bullet_Ghost_2.m_VertexList[3].x = 4.101f; Bullet_Ghost_2.m_VertexList[3].y = 4.101f;
-		Bullet_Ghost_2.m_VertexList[4].x = 4.101f; Bullet_Ghost_2.m_VertexList[4].y = 4.101f;
-		Bullet_Ghost_2.m_VertexList[5].x = 4.101f; Bullet_Ghost_2.m_VertexList[5].y = 4.101f;
-		Bullet_Ghost_2.m_VertexList[6].x = 4.101f; Bullet_Ghost_2.m_VertexList[6].y = 4.101f;
-
-
-		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		ghost2_Col_C1 = 1;
+	
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		ghost_Col_C1 = 1;
-		Bullet_C1.m_VertexList[0].x = 4.785f; Bullet_C1.m_VertexList[0].y = 4.785f;
-		Bullet_C1.m_VertexList[1].x = 4.785f; Bullet_C1.m_VertexList[1].y = 4.785f;
-		Bullet_C1.m_VertexList[2].x = 4.785f; Bullet_C1.m_VertexList[2].y = 4.785f;
-		Bullet_C1.m_VertexList[3].x = 4.785f; Bullet_C1.m_VertexList[3].y = 4.785f;
-		Bullet_C1.m_VertexList[4].x = 4.785f; Bullet_C1.m_VertexList[4].y = 4.785f;
-		Bullet_C1.m_VertexList[5].x = 4.785f; Bullet_C1.m_VertexList[5].y = 4.785f;
-		Bullet_C1.m_VertexList[6].x = 4.785f; Bullet_C1.m_VertexList[6].y = 4.785f;
-
-		Bullet_Ghost_3.m_VertexList[0].x = 5.405f; Bullet_Ghost_3.m_VertexList[0].y = 5.405f;
-		Bullet_Ghost_3.m_VertexList[1].x = 5.405f; Bullet_Ghost_3.m_VertexList[1].y = 5.405f;
-		Bullet_Ghost_3.m_VertexList[2].x = 5.405f; Bullet_Ghost_3.m_VertexList[2].y = 5.405f;
-		Bullet_Ghost_3.m_VertexList[3].x = 5.405f; Bullet_Ghost_3.m_VertexList[3].y = 5.405f;
-		Bullet_Ghost_3.m_VertexList[4].x = 5.405f; Bullet_Ghost_3.m_VertexList[4].y = 5.405f;
-		Bullet_Ghost_3.m_VertexList[5].x = 5.405f; Bullet_Ghost_3.m_VertexList[5].y = 5.405f;
-		Bullet_Ghost_3.m_VertexList[6].x = 5.405f; Bullet_Ghost_3.m_VertexList[6].y = 5.405f;
-
-
-		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
-
+		ghost3_Col_C1 = 1;
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		ghost_Col_C1 = 1;
-		Bullet_C1.m_VertexList[0].x = 4.1127f; Bullet_C1.m_VertexList[0].y = 4.1127f;
-		Bullet_C1.m_VertexList[1].x = 4.1127f; Bullet_C1.m_VertexList[1].y = 4.1127f;
-		Bullet_C1.m_VertexList[2].x = 4.1127f; Bullet_C1.m_VertexList[2].y = 4.1127f;
-		Bullet_C1.m_VertexList[3].x = 4.1127f; Bullet_C1.m_VertexList[3].y = 4.1127f;
-		Bullet_C1.m_VertexList[4].x = 4.1127f; Bullet_C1.m_VertexList[4].y = 4.1127f;
-		Bullet_C1.m_VertexList[5].x = 4.1127f; Bullet_C1.m_VertexList[5].y = 4.1127f;
-		Bullet_C1.m_VertexList[6].x = 4.1127f; Bullet_C1.m_VertexList[6].y = 4.1127f;
-
-		Bullet_Ghost_4.m_VertexList[0].x = 4.8074f; Bullet_Ghost_4.m_VertexList[0].y = 4.8074f;
-		Bullet_Ghost_4.m_VertexList[1].x = 4.8074f; Bullet_Ghost_4.m_VertexList[1].y = 4.8074f;
-		Bullet_Ghost_4.m_VertexList[2].x = 4.8074f; Bullet_Ghost_4.m_VertexList[2].y = 4.8074f;
-		Bullet_Ghost_4.m_VertexList[3].x = 4.8074f; Bullet_Ghost_4.m_VertexList[3].y = 4.8074f;
-		Bullet_Ghost_4.m_VertexList[4].x = 4.8074f; Bullet_Ghost_4.m_VertexList[4].y = 4.8074f;
-		Bullet_Ghost_4.m_VertexList[5].x = 4.8074f; Bullet_Ghost_4.m_VertexList[5].y = 4.8074f;
-		Bullet_Ghost_4.m_VertexList[6].x = 4.8074f; Bullet_Ghost_4.m_VertexList[6].y = 4.8074f;
-
-
-		memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C1.m_VertexList[iV].x; vertex.y = Bullet_C1.m_VertexList[iV].y;
-			vertex.x -= Bullet_C1.m_vCenter.x;		 vertex.y -= Bullet_C1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C1[iV].x += Bullet_C1.m_vCenter.x;		 N_VertexList_C1[iV].y += Bullet_C1.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C1, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+		ghost4_Col_C1 = 1;
 	}
 
 
 
-	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		ghost_Col_C2 = 1;
-		Bullet_C2.m_VertexList[0].x = 4.202f; Bullet_C2.m_VertexList[0].y = 4.202f;
-		Bullet_C2.m_VertexList[1].x = 4.202f; Bullet_C2.m_VertexList[1].y = 4.202f;
-		Bullet_C2.m_VertexList[2].x = 4.202f; Bullet_C2.m_VertexList[2].y = 4.202f;
-		Bullet_C2.m_VertexList[3].x = 4.202f; Bullet_C2.m_VertexList[3].y = 4.202f;
-		Bullet_C2.m_VertexList[4].x = 4.202f; Bullet_C2.m_VertexList[4].y = 4.202f;
-		Bullet_C2.m_VertexList[5].x = 4.202f; Bullet_C2.m_VertexList[5].y = 4.202f;
-		Bullet_C2.m_VertexList[6].x = 4.202f; Bullet_C2.m_VertexList[6].y = 4.202f;
-
-		Bullet_Ghost_1.m_VertexList[0].x = 4.712f; Bullet_Ghost_1.m_VertexList[0].y = 4.712f;
-		Bullet_Ghost_1.m_VertexList[1].x = 4.712f; Bullet_Ghost_1.m_VertexList[1].y = 4.712f;
-		Bullet_Ghost_1.m_VertexList[2].x = 4.712f; Bullet_Ghost_1.m_VertexList[2].y = 4.712f;
-		Bullet_Ghost_1.m_VertexList[3].x = 4.712f; Bullet_Ghost_1.m_VertexList[3].y = 4.712f;
-		Bullet_Ghost_1.m_VertexList[4].x = 4.712f; Bullet_Ghost_1.m_VertexList[4].y = 4.712f;
-		Bullet_Ghost_1.m_VertexList[5].x = 4.712f; Bullet_Ghost_1.m_VertexList[5].y = 4.712f;
-		Bullet_Ghost_1.m_VertexList[6].x = 4.712f; Bullet_Ghost_1.m_VertexList[6].y = 4.712f;
-
-
-		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+		ghost1_Col_C2 = 1;
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		ghost_Col_C2 = 1;
-		Bullet_C2.m_VertexList[0].x = 2.335f; Bullet_C2.m_VertexList[0].y = 2.335f;
-		Bullet_C2.m_VertexList[1].x = 2.335f; Bullet_C2.m_VertexList[1].y = 2.335f;
-		Bullet_C2.m_VertexList[2].x = 2.335f; Bullet_C2.m_VertexList[2].y = 2.335f;
-		Bullet_C2.m_VertexList[3].x = 2.335f; Bullet_C2.m_VertexList[3].y = 2.335f;
-		Bullet_C2.m_VertexList[4].x = 2.335f; Bullet_C2.m_VertexList[4].y = 2.335f;
-		Bullet_C2.m_VertexList[5].x = 2.335f; Bullet_C2.m_VertexList[5].y = 2.335f;
-		Bullet_C2.m_VertexList[6].x = 2.335f; Bullet_C2.m_VertexList[6].y = 2.335f;
-
-		Bullet_Ghost_2.m_VertexList[0].x = 5.032f; Bullet_Ghost_2.m_VertexList[0].y =5.032f;
-		Bullet_Ghost_2.m_VertexList[1].x = 5.032f; Bullet_Ghost_2.m_VertexList[1].y =5.032f;
-		Bullet_Ghost_2.m_VertexList[2].x = 5.032f; Bullet_Ghost_2.m_VertexList[2].y =5.032f;
-		Bullet_Ghost_2.m_VertexList[3].x = 5.032f; Bullet_Ghost_2.m_VertexList[3].y =5.032f;
-		Bullet_Ghost_2.m_VertexList[4].x = 5.032f; Bullet_Ghost_2.m_VertexList[4].y =5.032f;
-		Bullet_Ghost_2.m_VertexList[5].x = 5.032f; Bullet_Ghost_2.m_VertexList[5].y =5.032f;
-		Bullet_Ghost_2.m_VertexList[6].x = 5.032f; Bullet_Ghost_2.m_VertexList[6].y =5.032f;
-
-
-		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		ghost2_Col_C2 = 1;
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		ghost_Col_C2 = 1;
-		Bullet_C2.m_VertexList[0].x = 3.833f; Bullet_C2.m_VertexList[0].y = 3.833f;
-		Bullet_C2.m_VertexList[1].x = 3.833f; Bullet_C2.m_VertexList[1].y = 3.833f;
-		Bullet_C2.m_VertexList[2].x = 3.833f; Bullet_C2.m_VertexList[2].y = 3.833f;
-		Bullet_C2.m_VertexList[3].x = 3.833f; Bullet_C2.m_VertexList[3].y = 3.833f;
-		Bullet_C2.m_VertexList[4].x = 3.833f; Bullet_C2.m_VertexList[4].y = 3.833f;
-		Bullet_C2.m_VertexList[5].x = 3.833f; Bullet_C2.m_VertexList[5].y = 3.833f;
-		Bullet_C2.m_VertexList[6].x = 3.833f; Bullet_C2.m_VertexList[6].y = 3.833f;
-
-		Bullet_Ghost_3.m_VertexList[0].x = 4.162f; Bullet_Ghost_3.m_VertexList[0].y = 4.162f;
-		Bullet_Ghost_3.m_VertexList[1].x = 4.162f; Bullet_Ghost_3.m_VertexList[1].y = 4.162f;
-		Bullet_Ghost_3.m_VertexList[2].x = 4.162f; Bullet_Ghost_3.m_VertexList[2].y = 4.162f;
-		Bullet_Ghost_3.m_VertexList[3].x = 4.162f; Bullet_Ghost_3.m_VertexList[3].y = 4.162f;
-		Bullet_Ghost_3.m_VertexList[4].x = 4.162f; Bullet_Ghost_3.m_VertexList[4].y = 4.162f;
-		Bullet_Ghost_3.m_VertexList[5].x = 4.162f; Bullet_Ghost_3.m_VertexList[5].y = 4.162f;
-		Bullet_Ghost_3.m_VertexList[6].x = 4.162f; Bullet_Ghost_3.m_VertexList[6].y = 4.162f;
-
-
-		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+		ghost3_Col_C2 = 1;
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		ghost_Col_C2 = 1;
-		Bullet_C2.m_VertexList[0].x = 3.033f; Bullet_C2.m_VertexList[0].y = 3.033f;
-		Bullet_C2.m_VertexList[1].x = 3.033f; Bullet_C2.m_VertexList[1].y = 3.033f;
-		Bullet_C2.m_VertexList[2].x = 3.033f; Bullet_C2.m_VertexList[2].y = 3.033f;
-		Bullet_C2.m_VertexList[3].x = 3.033f; Bullet_C2.m_VertexList[3].y = 3.033f;
-		Bullet_C2.m_VertexList[4].x = 3.033f; Bullet_C2.m_VertexList[4].y = 3.033f;
-		Bullet_C2.m_VertexList[5].x = 3.033f; Bullet_C2.m_VertexList[5].y = 3.033f;
-		Bullet_C2.m_VertexList[6].x = 3.033f; Bullet_C2.m_VertexList[6].y = 3.033f;
-
-		Bullet_Ghost_4.m_VertexList[0].x = 2.768f; Bullet_Ghost_4.m_VertexList[0].y = 2.768f;
-		Bullet_Ghost_4.m_VertexList[1].x = 2.768f; Bullet_Ghost_4.m_VertexList[1].y = 2.768f;
-		Bullet_Ghost_4.m_VertexList[2].x = 2.768f; Bullet_Ghost_4.m_VertexList[2].y = 2.768f;
-		Bullet_Ghost_4.m_VertexList[3].x = 2.768f; Bullet_Ghost_4.m_VertexList[3].y = 2.768f;
-		Bullet_Ghost_4.m_VertexList[4].x = 2.768f; Bullet_Ghost_4.m_VertexList[4].y = 2.768f;
-		Bullet_Ghost_4.m_VertexList[5].x = 2.768f; Bullet_Ghost_4.m_VertexList[5].y = 2.768f;
-		Bullet_Ghost_4.m_VertexList[6].x = 2.768f; Bullet_Ghost_4.m_VertexList[6].y = 2.768f;
-
-
-		memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C2.m_VertexList[iV].x; vertex.y = Bullet_C2.m_VertexList[iV].y;
-			vertex.x -= Bullet_C2.m_vCenter.x;		 vertex.y -= Bullet_C2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C2[iV].x += Bullet_C2.m_vCenter.x;		 N_VertexList_C2[iV].y += Bullet_C2.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C2, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+		ghost4_Col_C2 = 1;
 	}
 
 
 
 
-	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		ghost_Col_C3 = 1;
-		Bullet_C3.m_VertexList[0].x = 3.609f; Bullet_C3.m_VertexList[0].y = 3.609f;
-		Bullet_C3.m_VertexList[1].x = 3.609f; Bullet_C3.m_VertexList[1].y = 3.609f;
-		Bullet_C3.m_VertexList[2].x = 3.609f; Bullet_C3.m_VertexList[2].y = 3.609f;
-		Bullet_C3.m_VertexList[3].x = 3.609f; Bullet_C3.m_VertexList[3].y = 3.609f;
-		Bullet_C3.m_VertexList[4].x = 3.609f; Bullet_C3.m_VertexList[4].y = 3.609f;
-		Bullet_C3.m_VertexList[5].x = 3.609f; Bullet_C3.m_VertexList[5].y = 3.609f;
-		Bullet_C3.m_VertexList[6].x = 3.609f; Bullet_C3.m_VertexList[6].y = 3.609f;
-
-		Bullet_Ghost_1.m_VertexList[0].x = 3.907f; Bullet_Ghost_1.m_VertexList[0].y = 3.907f;
-		Bullet_Ghost_1.m_VertexList[1].x = 3.907f; Bullet_Ghost_1.m_VertexList[1].y = 3.907f;
-		Bullet_Ghost_1.m_VertexList[2].x = 3.907f; Bullet_Ghost_1.m_VertexList[2].y = 3.907f;
-		Bullet_Ghost_1.m_VertexList[3].x = 3.907f; Bullet_Ghost_1.m_VertexList[3].y = 3.907f;
-		Bullet_Ghost_1.m_VertexList[4].x = 3.907f; Bullet_Ghost_1.m_VertexList[4].y = 3.907f;
-		Bullet_Ghost_1.m_VertexList[5].x = 3.907f; Bullet_Ghost_1.m_VertexList[5].y = 3.907f;
-		Bullet_Ghost_1.m_VertexList[6].x = 3.907f; Bullet_Ghost_1.m_VertexList[6].y = 3.907f;
-
-
-		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+		ghost1_Col_C3 = 1;
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		ghost_Col_C3 = 1;
-		Bullet_C3.m_VertexList[0].x = 4.4005f; Bullet_C3.m_VertexList[0].y = 4.4005f;
-		Bullet_C3.m_VertexList[1].x = 4.4005f; Bullet_C3.m_VertexList[1].y = 4.4005f;
-		Bullet_C3.m_VertexList[2].x = 4.4005f; Bullet_C3.m_VertexList[2].y = 4.4005f;
-		Bullet_C3.m_VertexList[3].x = 4.4005f; Bullet_C3.m_VertexList[3].y = 4.4005f;
-		Bullet_C3.m_VertexList[4].x = 4.4005f; Bullet_C3.m_VertexList[4].y = 4.4005f;
-		Bullet_C3.m_VertexList[5].x = 4.4005f; Bullet_C3.m_VertexList[5].y = 4.4005f;
-		Bullet_C3.m_VertexList[6].x = 4.4005f; Bullet_C3.m_VertexList[6].y = 4.4005f;
-
-		Bullet_Ghost_2.m_VertexList[0].x = 6.1135f; Bullet_Ghost_2.m_VertexList[0].y = 6.1135f;
-		Bullet_Ghost_2.m_VertexList[1].x = 6.1135f; Bullet_Ghost_2.m_VertexList[1].y = 6.1135f;
-		Bullet_Ghost_2.m_VertexList[2].x = 6.1135f; Bullet_Ghost_2.m_VertexList[2].y = 6.1135f;
-		Bullet_Ghost_2.m_VertexList[3].x = 6.1135f; Bullet_Ghost_2.m_VertexList[3].y = 6.1135f;
-		Bullet_Ghost_2.m_VertexList[4].x = 6.1135f; Bullet_Ghost_2.m_VertexList[4].y = 6.1135f;
-		Bullet_Ghost_2.m_VertexList[5].x = 6.1135f; Bullet_Ghost_2.m_VertexList[5].y = 6.1135f;
-		Bullet_Ghost_2.m_VertexList[6].x = 6.1135f; Bullet_Ghost_2.m_VertexList[6].y = 6.1135f;
-
-
-		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		ghost2_Col_C3 = 1;
 	}
 
 	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		ghost_Col_C3 = 1;
-		Bullet_C3.m_VertexList[0].x = 4.922f; Bullet_C3.m_VertexList[0].y = 4.922f;
-		Bullet_C3.m_VertexList[1].x = 4.922f; Bullet_C3.m_VertexList[1].y = 4.922f;
-		Bullet_C3.m_VertexList[2].x = 4.922f; Bullet_C3.m_VertexList[2].y = 4.922f;
-		Bullet_C3.m_VertexList[3].x = 4.922f; Bullet_C3.m_VertexList[3].y = 4.922f;
-		Bullet_C3.m_VertexList[4].x = 4.922f; Bullet_C3.m_VertexList[4].y = 4.922f;
-		Bullet_C3.m_VertexList[5].x = 4.922f; Bullet_C3.m_VertexList[5].y = 4.922f;
-		Bullet_C3.m_VertexList[6].x = 4.922f; Bullet_C3.m_VertexList[6].y = 4.922f;
-
-		Bullet_Ghost_3.m_VertexList[0].x = 4.0063f; Bullet_Ghost_3.m_VertexList[0].y =4.0063f;
-		Bullet_Ghost_3.m_VertexList[1].x = 4.0063f; Bullet_Ghost_3.m_VertexList[1].y =4.0063f;
-		Bullet_Ghost_3.m_VertexList[2].x = 4.0063f; Bullet_Ghost_3.m_VertexList[2].y =4.0063f;
-		Bullet_Ghost_3.m_VertexList[3].x = 4.0063f; Bullet_Ghost_3.m_VertexList[3].y =4.0063f;
-		Bullet_Ghost_3.m_VertexList[4].x = 4.0063f; Bullet_Ghost_3.m_VertexList[4].y =4.0063f;
-		Bullet_Ghost_3.m_VertexList[5].x = 4.0063f; Bullet_Ghost_3.m_VertexList[5].y =4.0063f;
-		Bullet_Ghost_3.m_VertexList[6].x = 4.0063f; Bullet_Ghost_3.m_VertexList[6].y =4.0063f;
-
-
-		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
-
+		ghost3_Col_C3 = 1;
 	}
 
 
 	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		ghost_Col_C3 = 1;
-		Bullet_C3.m_VertexList[0].x = 4.5009f; Bullet_C3.m_VertexList[0].y = 4.5009f;
-		Bullet_C3.m_VertexList[1].x = 4.5009f; Bullet_C3.m_VertexList[1].y = 4.5009f;
-		Bullet_C3.m_VertexList[2].x = 4.5009f; Bullet_C3.m_VertexList[2].y = 4.5009f;
-		Bullet_C3.m_VertexList[3].x = 4.5009f; Bullet_C3.m_VertexList[3].y = 4.5009f;
-		Bullet_C3.m_VertexList[4].x = 4.5009f; Bullet_C3.m_VertexList[4].y = 4.5009f;
-		Bullet_C3.m_VertexList[5].x = 4.5009f; Bullet_C3.m_VertexList[5].y = 4.5009f;
-		Bullet_C3.m_VertexList[6].x = 4.5009f; Bullet_C3.m_VertexList[6].y = 4.5009f;
-
-		Bullet_Ghost_4.m_VertexList[0].x = 4.7112f; Bullet_Ghost_4.m_VertexList[0].y = 4.7112f;
-		Bullet_Ghost_4.m_VertexList[1].x = 4.7112f; Bullet_Ghost_4.m_VertexList[1].y = 4.7112f;
-		Bullet_Ghost_4.m_VertexList[2].x = 4.7112f; Bullet_Ghost_4.m_VertexList[2].y = 4.7112f;
-		Bullet_Ghost_4.m_VertexList[3].x = 4.7112f; Bullet_Ghost_4.m_VertexList[3].y = 4.7112f;
-		Bullet_Ghost_4.m_VertexList[4].x = 4.7112f; Bullet_Ghost_4.m_VertexList[4].y = 4.7112f;
-		Bullet_Ghost_4.m_VertexList[5].x = 4.7112f; Bullet_Ghost_4.m_VertexList[5].y = 4.7112f;
-		Bullet_Ghost_4.m_VertexList[6].x = 4.7112f; Bullet_Ghost_4.m_VertexList[6].y = 4.7112f;
-
-
-		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C3.m_VertexList[iV].x; vertex.y = Bullet_C3.m_VertexList[iV].y;
-			vertex.x -= Bullet_C3.m_vCenter.x;		 vertex.y -= Bullet_C3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C3[iV].x += Bullet_C3.m_vCenter.x;		 N_VertexList_C3[iV].y += Bullet_C3.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C3, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+		ghost4_Col_C3 = 1;
 	}
 
 
-
-
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		ghost_Col_C4 = 1;
-		Bullet_C4.m_VertexList[0].x = 3.257f; Bullet_C4.m_VertexList[0].y = 3.257f;
-		Bullet_C4.m_VertexList[1].x = 3.257f; Bullet_C4.m_VertexList[1].y = 3.257f;
-		Bullet_C4.m_VertexList[2].x = 3.257f; Bullet_C4.m_VertexList[2].y = 3.257f;
-		Bullet_C4.m_VertexList[3].x = 3.257f; Bullet_C4.m_VertexList[3].y = 3.257f;
-		Bullet_C4.m_VertexList[4].x = 3.257f; Bullet_C4.m_VertexList[4].y = 3.257f;
-		Bullet_C4.m_VertexList[5].x = 3.257f; Bullet_C4.m_VertexList[5].y = 3.257f;
-		Bullet_C4.m_VertexList[6].x = 3.257f; Bullet_C4.m_VertexList[6].y = 3.257f;
-
-		Bullet_Ghost_1.m_VertexList[0].x = 3.074f; Bullet_Ghost_1.m_VertexList[0].y = 3.074f;
-		Bullet_Ghost_1.m_VertexList[1].x = 3.074f; Bullet_Ghost_1.m_VertexList[1].y = 3.074f;
-		Bullet_Ghost_1.m_VertexList[2].x = 3.074f; Bullet_Ghost_1.m_VertexList[2].y = 3.074f;
-		Bullet_Ghost_1.m_VertexList[3].x = 3.074f; Bullet_Ghost_1.m_VertexList[3].y = 3.074f;
-		Bullet_Ghost_1.m_VertexList[4].x = 3.074f; Bullet_Ghost_1.m_VertexList[4].y = 3.074f;
-		Bullet_Ghost_1.m_VertexList[5].x = 3.074f; Bullet_Ghost_1.m_VertexList[5].y = 3.074f;
-		Bullet_Ghost_1.m_VertexList[6].x = 3.074f; Bullet_Ghost_1.m_VertexList[6].y = 3.074f;
-
-
-		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_1.m_VertexList[iV].x; vertex.y = Bullet_Ghost_1.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_1.m_vCenter.x;		 vertex.y -= Bullet_Ghost_1.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G1[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G1[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G1[iV].x += Bullet_Ghost_1.m_vCenter.x; N_VertexList_G1[iV].y += Bullet_Ghost_1.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
+		ghost1_Col_C4 = 1;
 	}
 
 
 
 	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		ghost_Col_C4 = 1;
-		Bullet_C4.m_VertexList[0].x = 4.333f; Bullet_C4.m_VertexList[0].y = 4.333f;
-		Bullet_C4.m_VertexList[1].x = 4.333f; Bullet_C4.m_VertexList[1].y = 4.333f;
-		Bullet_C4.m_VertexList[2].x = 4.333f; Bullet_C4.m_VertexList[2].y = 4.333f;
-		Bullet_C4.m_VertexList[3].x = 4.333f; Bullet_C4.m_VertexList[3].y = 4.333f;
-		Bullet_C4.m_VertexList[4].x = 4.333f; Bullet_C4.m_VertexList[4].y = 4.333f;
-		Bullet_C4.m_VertexList[5].x = 4.333f; Bullet_C4.m_VertexList[5].y = 4.333f;
-		Bullet_C4.m_VertexList[6].x = 4.333f; Bullet_C4.m_VertexList[6].y = 4.333f;
-
-		Bullet_Ghost_2.m_VertexList[0].x = 4.1012f; Bullet_Ghost_2.m_VertexList[0].y = 4.1012f;
-		Bullet_Ghost_2.m_VertexList[1].x = 4.1012f; Bullet_Ghost_2.m_VertexList[1].y = 4.1012f;
-		Bullet_Ghost_2.m_VertexList[2].x = 4.1012f; Bullet_Ghost_2.m_VertexList[2].y = 4.1012f;
-		Bullet_Ghost_2.m_VertexList[3].x = 4.1012f; Bullet_Ghost_2.m_VertexList[3].y = 4.1012f;
-		Bullet_Ghost_2.m_VertexList[4].x = 4.1012f; Bullet_Ghost_2.m_VertexList[4].y = 4.1012f;
-		Bullet_Ghost_2.m_VertexList[5].x = 4.1012f; Bullet_Ghost_2.m_VertexList[5].y = 4.1012f;
-		Bullet_Ghost_2.m_VertexList[6].x = 4.1012f; Bullet_Ghost_2.m_VertexList[6].y = 4.1012f;
-
-
-		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G2, Bullet_Ghost_2.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_2.m_VertexList[iV].x; vertex.y = Bullet_Ghost_2.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_2.m_vCenter.x;		 vertex.y -= Bullet_Ghost_2.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G2[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G2[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G2[iV].x += Bullet_Ghost_2.m_vCenter.x; N_VertexList_G2[iV].y += Bullet_Ghost_2.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
+		ghost2_Col_C4 = 1;
 	}
-
-
-
 
 	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		ghost_Col_C4 = 1;
-		Bullet_C4.m_VertexList[0].x = 2.2021f; Bullet_C4.m_VertexList[0].y = 2.2021f;
-		Bullet_C4.m_VertexList[1].x = 2.2021f; Bullet_C4.m_VertexList[1].y = 2.2021f;
-		Bullet_C4.m_VertexList[2].x = 2.2021f; Bullet_C4.m_VertexList[2].y = 2.2021f;
-		Bullet_C4.m_VertexList[3].x = 2.2021f; Bullet_C4.m_VertexList[3].y = 2.2021f;
-		Bullet_C4.m_VertexList[4].x = 2.2021f; Bullet_C4.m_VertexList[4].y = 2.2021f;
-		Bullet_C4.m_VertexList[5].x = 2.2021f; Bullet_C4.m_VertexList[5].y = 2.2021f;
-		Bullet_C4.m_VertexList[6].x = 2.2021f; Bullet_C4.m_VertexList[6].y = 2.2021f;
-
-		Bullet_Ghost_3.m_VertexList[0].x = 2.843f; Bullet_Ghost_3.m_VertexList[0].y = 2.843f;
-		Bullet_Ghost_3.m_VertexList[1].x = 2.843f; Bullet_Ghost_3.m_VertexList[1].y = 2.843f;
-		Bullet_Ghost_3.m_VertexList[2].x = 2.843f; Bullet_Ghost_3.m_VertexList[2].y = 2.843f;
-		Bullet_Ghost_3.m_VertexList[3].x = 2.843f; Bullet_Ghost_3.m_VertexList[3].y = 2.843f;
-		Bullet_Ghost_3.m_VertexList[4].x = 2.843f; Bullet_Ghost_3.m_VertexList[4].y = 2.843f;
-		Bullet_Ghost_3.m_VertexList[5].x = 2.843f; Bullet_Ghost_3.m_VertexList[5].y = 2.843f;
-		Bullet_Ghost_3.m_VertexList[6].x = 2.843f; Bullet_Ghost_3.m_VertexList[6].y = 2.843f;
-
-
-		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G3, Bullet_Ghost_3.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_3.m_VertexList[iV].x; vertex.y = Bullet_Ghost_3.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_3.m_vCenter.x;		 vertex.y -= Bullet_Ghost_3.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G3[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G3[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G3[iV].x += Bullet_Ghost_3.m_vCenter.x; N_VertexList_G3[iV].y += Bullet_Ghost_3.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
+		ghost3_Col_C4 = 1;
 	}
-
-
-
 
 	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		ghost_Col_C4 = 1;
-		Bullet_C4.m_VertexList[0].x = 3.0785f; Bullet_C4.m_VertexList[0].y = 3.0785f;
-		Bullet_C4.m_VertexList[1].x = 3.0785f; Bullet_C4.m_VertexList[1].y = 3.0785f;
-		Bullet_C4.m_VertexList[2].x = 3.0785f; Bullet_C4.m_VertexList[2].y = 3.0785f;
-		Bullet_C4.m_VertexList[3].x = 3.0785f; Bullet_C4.m_VertexList[3].y = 3.0785f;
-		Bullet_C4.m_VertexList[4].x = 3.0785f; Bullet_C4.m_VertexList[4].y = 3.0785f;
-		Bullet_C4.m_VertexList[5].x = 3.0785f; Bullet_C4.m_VertexList[5].y = 3.0785f;
-		Bullet_C4.m_VertexList[6].x = 3.0785f; Bullet_C4.m_VertexList[6].y = 3.0785f;
-
-		Bullet_Ghost_4.m_VertexList[0].x = 4.055f; Bullet_Ghost_4.m_VertexList[0].y = 4.55f;
-		Bullet_Ghost_4.m_VertexList[1].x = 4.055f; Bullet_Ghost_4.m_VertexList[1].y = 4.55f;
-		Bullet_Ghost_4.m_VertexList[2].x = 4.055f; Bullet_Ghost_4.m_VertexList[2].y = 4.55f;
-		Bullet_Ghost_4.m_VertexList[3].x = 4.055f; Bullet_Ghost_4.m_VertexList[3].y = 4.55f;
-		Bullet_Ghost_4.m_VertexList[4].x = 4.055f; Bullet_Ghost_4.m_VertexList[4].y = 4.55f;
-		Bullet_Ghost_4.m_VertexList[5].x = 4.055f; Bullet_Ghost_4.m_VertexList[5].y = 4.55f;
-		Bullet_Ghost_4.m_VertexList[6].x = 4.055f; Bullet_Ghost_4.m_VertexList[6].y = 4.55f;
-
-
-		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
-		memcpy(N_VertexList_G4, Bullet_Ghost_4.m_VertexList, sizeof(SimpleVertex) * 6);
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_C4.m_VertexList[iV].x; vertex.y = Bullet_C4.m_VertexList[iV].y;
-			vertex.x -= Bullet_C4.m_vCenter.x;		 vertex.y -= Bullet_C4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_C4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_C4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_C4[iV].x += Bullet_C4.m_vCenter.x;		 N_VertexList_C4[iV].y += Bullet_C4.m_vCenter.y;
-		}
-
-		for (int iV = 0; iV < 6; iV++)
-		{
-			D3DVECTOR vertex;
-			vertex.x = Bullet_Ghost_4.m_VertexList[iV].x; vertex.y = Bullet_Ghost_4.m_VertexList[iV].y;
-			vertex.x -= Bullet_Ghost_4.m_vCenter.x;		 vertex.y -= Bullet_Ghost_4.m_vCenter.y;
-			float S = sinf(fAngle);	float C = cosf(fAngle);
-			N_VertexList_G4[iV].x = vertex.x * C + vertex.y * S; N_VertexList_G4[iV].y = vertex.x * -S + vertex.y * C;
-			N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x; N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
-		}
-
-
-		g_pContext->UpdateSubresource(Bullet_C4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_C4, 0, 0);
-		g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+		ghost4_Col_C4 = 1;
 	}
-
-
-
 }
+
+
 
 
 
