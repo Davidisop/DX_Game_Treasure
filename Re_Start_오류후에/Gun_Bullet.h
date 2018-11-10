@@ -139,7 +139,7 @@ public:
 				{
 					in_Texture_SetData_sprite_factors(sprite_ptr, 9, 4, 400, 300);
 					Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/bitmap1.png");
-					bullet_step = 0;
+					bullet_step ++;
 
 				}break;
 
