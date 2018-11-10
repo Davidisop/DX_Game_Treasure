@@ -237,6 +237,20 @@ public:
 	bool NPC_Col_F4; bool NPC_Col_C4;
 	bool NPC_Col_S1; bool NPC_Col_S2;
 
+
+
+	bool ghost_Col_F1;		 bool ghost_Col_C1;
+	bool ghost_Col_F2;		 bool ghost_Col_C2;
+	bool ghost_Col_F3;		 bool ghost_Col_C3;
+	bool ghost_Col_F4;		 bool ghost_Col_C4;
+	
+	
+	bool F1_live_or_dead;		bool C1_live_or_dead;
+	bool F2_live_or_dead;		bool C2_live_or_dead;
+	bool F3_live_or_dead;		bool C3_live_or_dead;
+	bool F4_live_or_dead;		bool C4_live_or_dead;
+
+
 public:
 
 	Background				Game_Background;
@@ -258,6 +272,9 @@ public:
 	Box                    UI_Bullet_6;
 	Box                    UI_Bullet_7;
 	Box                    UI_Bullet_8;
+
+
+
 
 	Gun_Bullet            Bullet_F1; SimpleVertex        N_VertexList_F1[6];
 	Gun_Bullet            Bullet_F2; SimpleVertex        N_VertexList_F2[6];
@@ -325,6 +342,7 @@ public:
 	void Box_Alive_collision_final_decision();
 	void Boss_collision_final_decision();
 	void Hero_collision_final_decision();
+	void bullets_collision_final_decision();
 
 	void Treasure_Box_open();
 
@@ -338,9 +356,15 @@ public:
 
 
 TSceneGame::TSceneGame() : fAngle(0.0f), box_alive_Col_S1(false), box_alive_Col_S2(false), box_alive_live_or_dead(0), box_alive_Col_F1(false), box_alive_Col_C1(false), box_alive_Col_F2(false), box_alive_Col_C2(false), box_alive_Col_F3(false), box_alive_Col_C3(false), box_alive_Col_F4(false), box_alive_Col_C4(false), Hero_live_or_dead(0), Hero_Col_G1(false), Hero_Col_G2(false), Hero_Col_G3(false), Hero_Col_G4(false), Hero_Col_B1(false), Hero_Col_B2 (false), Hero_Col_B3(false), Hero_Col_B4(false), Hero_Col_S1(false), Hero_Col_S2(false), Hero_Col_S3(false), Hero_Col_S4(false), Robot_live_or_dead (0), Robot_Col_F1(false), Robot_Col_C1(false), Robot_Col_F2(false), Robot_Col_C2(false), Robot_Col_F3(false), Robot_Col_C3(false), Robot_Col_F4(false), Robot_Col_C4(false), Robot_Col_S1(false), Robot_Col_S2(false), Robot_Col_S3(false), Robot_Col_S4(false), NPC_live_or_dead(0), NPC_Col_F3(false), NPC_Col_C3(false), NPC_Col_F4(false), NPC_Col_C4(false), NPC_Col_S1(false), NPC_Col_S2(false), BOX_ALIVE_FINAL_SWITCH(false), Trasure_Box_FINAL_SWITCH(false)
+, ghost_Col_F1(false), ghost_Col_F2(false), ghost_Col_F3(false), ghost_Col_F4(false), ghost_Col_C1(false), ghost_Col_C2(false), ghost_Col_C3(false), ghost_Col_C4(false)
 {
 	m_iSceneID = GAME_SCENE_PLAY;
 	m_bNextSceneStart = false;
+
+	 F1_live_or_dead=false;		 C1_live_or_dead=false;
+	 F2_live_or_dead=false;		 C2_live_or_dead=false;
+	 F3_live_or_dead=false;		 C3_live_or_dead=false;
+	 F4_live_or_dead=false;		 C4_live_or_dead=false;
 	
 	//fAngle = 0.0f;
 
@@ -353,6 +377,17 @@ TSceneGame::TSceneGame() : fAngle(0.0f), box_alive_Col_S1(false), box_alive_Col_
 	//box_alive_Col_F3 = false;   box_alive_Col_C3 = false;
 	//box_alive_Col_F4 = false;   box_alive_Col_C4 = false;
 	//
+
+
+	//ghost_Col_F1=false;
+	//ghost_Col_F2=false;
+	//ghost_Col_F3=false;
+	//ghost_Col_F4=false;
+	//			
+	//ghost_Col_C1=false;
+	//ghost_Col_C2=false;
+	//ghost_Col_C3=false;
+	//ghost_Col_C4=false;
 
 	//Hero_live_or_dead = 0;
 	//Hero_Col_G1 = false;
@@ -394,8 +429,6 @@ TSceneGame::TSceneGame() : fAngle(0.0f), box_alive_Col_S1(false), box_alive_Col_
 	//Trasure_Box_FINAL_SWITCH = false;
 
 }
-
-
 
 bool   TSceneGame::Init()
 {
@@ -613,6 +646,8 @@ bool    TSceneGame::Frame()
 	{
 		Hero_Actions();
 		Hero_bullets_basic_Action();	
+		bullets_collision_final_decision();
+
 	}
 
 	if (m_Boy_NPC.Enter_flag_1 == false)
@@ -662,9 +697,11 @@ bool    TSceneGame::Frame()
 	}
 
 
+	
 	if (Robot_live_or_dead != 4)
 	{
 		 Hero_collision_final_decision();
+
 	}
 	
 	if (Trasure_Box_FINAL_SWITCH == true)
@@ -672,7 +709,7 @@ bool    TSceneGame::Frame()
 		succees_ending();
 	}
 
-
+	
 
 
 	return true;
@@ -682,29 +719,59 @@ bool   TSceneGame::Render()
 {
 	Game_Background.Render(g_pContext);
 
-	UI_Bullet_1.Render(g_pContext);
-	UI_Bullet_2.Render(g_pContext);
-	UI_Bullet_3.Render(g_pContext);
-	UI_Bullet_4.Render(g_pContext);
-	UI_Bullet_5.Render(g_pContext);
-	UI_Bullet_6.Render(g_pContext);
-	UI_Bullet_7.Render(g_pContext);
-	UI_Bullet_8.Render(g_pContext);
 
-	Bullet_F1.Render(g_pContext);
-	Bullet_F2.Render(g_pContext);
-	Bullet_F3.Render(g_pContext);
-	Bullet_F4.Render(g_pContext);
+	if (F1_live_or_dead==0)
+	{
+		Bullet_F1.Render(g_pContext);
+		UI_Bullet_1.Render(g_pContext);
+	}
+	if (F1_live_or_dead == 0)
+	{
+		UI_Bullet_2.Render(g_pContext);
+		Bullet_F2.Render(g_pContext);
+	}
+	if (F3_live_or_dead == 0)
+	{
+		UI_Bullet_3.Render(g_pContext);
+		Bullet_F3.Render(g_pContext);
+	}
+	if (F4_live_or_dead == 0)
+	{
+		UI_Bullet_4.Render(g_pContext);
+		Bullet_F4.Render(g_pContext);
+	}
+					 						  					   
+	if (C1_live_or_dead == 0) 
+	{
+		Bullet_C1.Render(g_pContext); 
+		UI_Bullet_5.Render(g_pContext);
+	}
+	if (C2_live_or_dead == 0) 
+	{
+		Bullet_C2.Render(g_pContext); 
+		UI_Bullet_6.Render(g_pContext);
+	}
+	if (C3_live_or_dead == 0)
+	{
+		Bullet_C3.Render(g_pContext); 
+		UI_Bullet_7.Render(g_pContext);
+	}
+	if (C4_live_or_dead == 0)
+	{
+		Bullet_C4.Render(g_pContext);	
+		UI_Bullet_8.Render(g_pContext);
+	}
 
-	Bullet_C1.Render(g_pContext);
-	Bullet_C2.Render(g_pContext);
-	Bullet_C3.Render(g_pContext);
-	Bullet_C4.Render(g_pContext);
-
-	Box_Alive.Render(g_pContext);
+	if (BOX_ALIVE_FINAL_SWITCH == false)
+	{
+		Box_Alive.Render(g_pContext);
+		Box_Alive_life_bar.Render(g_pContext);
+	}
+	
 	Treasure_Box.Render(g_pContext);
 
-	Box_Alive_life_bar.Render(g_pContext);
+
+
 	m_Actor_life_bar.Render(g_pContext);
 
 	Bullet_Ghost_1.Render(g_pContext);
@@ -715,13 +782,17 @@ bool   TSceneGame::Render()
 	m_Boy_NPC.Render(g_pContext);
 	m_Actor.Render(g_pContext);
 
-	Robot.Render(g_pContext);
-	Robot_life_bar.Render(g_pContext);
 
-	Bullet_B1.Render(g_pContext);
-	Bullet_B2.Render(g_pContext);
-	Bullet_B3.Render(g_pContext);
-	Bullet_B4.Render(g_pContext);
+	if (Robot_live_or_dead != 4) 
+	{
+		Robot.Render(g_pContext);
+		Robot_life_bar.Render(g_pContext);
+
+		Bullet_B1.Render(g_pContext);
+		Bullet_B2.Render(g_pContext);
+		Bullet_B3.Render(g_pContext);
+		Bullet_B4.Render(g_pContext);
+	}
 	
 	Message.Render(g_pContext);
 
@@ -756,37 +827,55 @@ void TSceneGame::succees_ending()
 
 }
 
+void TSceneGame::bullets_collision_final_decision()
+{
+	
+	F1_live_or_dead = Robot_Col_F1 + box_alive_Col_F1 + ghost_Col_F1 ;
+	F2_live_or_dead = Robot_Col_F2 + box_alive_Col_F2 + ghost_Col_F2 ;
+	F3_live_or_dead = Robot_Col_F3 + box_alive_Col_F3 + ghost_Col_F3 + NPC_Col_F3;
+	F4_live_or_dead = Robot_Col_F4 + box_alive_Col_F4 + ghost_Col_F4 + NPC_Col_F4;
+
+	C1_live_or_dead = Robot_Col_C1 + box_alive_Col_C1 + ghost_Col_C1 ;
+	C2_live_or_dead = Robot_Col_C2 + box_alive_Col_C2 + ghost_Col_C2 ;
+	C3_live_or_dead = Robot_Col_C3 + box_alive_Col_C3 + ghost_Col_C3 + NPC_Col_C3;
+	C4_live_or_dead = Robot_Col_C4 + box_alive_Col_C4 + ghost_Col_C4 + NPC_Col_C4;
+
+}
+
+
+
+
+
 void TSceneGame::Boss_FSM()
 {
 	
 		Robot.distance_direction_between_hero_boss = Robot.m_pos.x - m_Actor.m_pos.x;
+
+
+	if (Robot.state == Detection__0) 
+	{	
 		Robot.basic_frame();
-		Robot.ATTACK_SWORD(); Robot.sword();
-		Robot.ATTACK_SHOT(); Robot.shot();
-	
-	
-	
-	
-	if(Robot.state == Detection__0)
-	{
+		
 		if (Robot.Face_Direction == 2 )
 		{
 			if (Robot.walk_step == 0) { Robot.MoveX(g_fSecPerFrame*0.1f); }
-			if (Robot.walk_step == 1) { Robot.MoveX(g_fSecPerFrame*0.1f); }        if (Robot.walk_step == 2) { Robot.MoveX(g_fSecPerFrame*0.1f); }
-			if (Robot.walk_step == 3) { Robot.MoveX(g_fSecPerFrame*0.1f); }        if (Robot.walk_step == 4) { Robot.MoveX(g_fSecPerFrame*0.1f); }
-			if (Robot.walk_step == 5) { Robot.MoveX(g_fSecPerFrame*0.1f); }		   if (Robot.walk_step == 6) { Robot.MoveX(g_fSecPerFrame*0.1f); }
-			if (Robot.walk_step == 7) { Robot.MoveX(g_fSecPerFrame*0.1f); }
+			else if (Robot.walk_step == 1) { Robot.MoveX(g_fSecPerFrame*0.1f); }         else if (Robot.walk_step == 2) { Robot.MoveX(g_fSecPerFrame*0.1f); }
+			else if (Robot.walk_step == 3) { Robot.MoveX(g_fSecPerFrame*0.1f); }         else if (Robot.walk_step == 4) { Robot.MoveX(g_fSecPerFrame*0.1f); }
+			else if (Robot.walk_step == 5) { Robot.MoveX(g_fSecPerFrame*0.1f); }		 else if (Robot.walk_step == 6) { Robot.MoveX(g_fSecPerFrame*0.1f); }
+			else if (Robot.walk_step == 7) { Robot.MoveX(g_fSecPerFrame*0.1f); }
 		}
 
-		if (Robot.Face_Direction == 1 )
+		else 
 		{
 			if (Robot.walk_step == 0) { Robot.MoveX(-g_fSecPerFrame*0.1f); }
-			if (Robot.walk_step == 1) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }     if (Robot.walk_step == 2) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
-			if (Robot.walk_step == 3) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }     if (Robot.walk_step == 4) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
-			if (Robot.walk_step == 5) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }     if (Robot.walk_step == 6) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
-			if (Robot.walk_step == 7) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
+			else if (Robot.walk_step == 1) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }    else if (Robot.walk_step == 2) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
+			else if (Robot.walk_step == 3) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }    else if (Robot.walk_step == 4) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
+			else if (Robot.walk_step == 5) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }    else if (Robot.walk_step == 6) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
+			else if (Robot.walk_step == 7) { Robot.MoveX(-g_fSecPerFrame * 0.1f); }
 		}
 	}
+	else if (Robot.state == Detection__1_SWORD) { Robot.ATTACK_SWORD(); Robot.sword(); }
+	else if (Robot.state == Detection__1_GUN) { Robot.ATTACK_SHOT(); Robot.shot(); }
 
 	memcpy(N_VertexList_R, Robot.m_VertexList, sizeof(SimpleVertex) * 6);
 	//////////////////////////////////////////////////////////////////////////////////
@@ -828,7 +917,7 @@ void TSceneGame::Boss_FSM()
 		Bullet_B1.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B1.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Robot.Bullet_B1_Bullet_Go == true && Robot.Face_Direction == 2)
+	else if (Robot.Bullet_B1_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
 		sSound->PlayEffect(7);
 		Robot.Bullet_B1_Bullet_Go = false; Bullet_B1.Face_Direction2_flag = true;
@@ -847,11 +936,12 @@ void TSceneGame::Boss_FSM()
 		Bullet_B1.MoveX(-g_fSecPerFrame * 1.0f);
 	}
 
-	if (Bullet_B1.Face_Direction2_flag == true)
+	else if (Bullet_B1.Face_Direction2_flag == true)
 	{
 		Bullet_B1.frame_B_R();
 		Bullet_B1.MoveX(g_fSecPerFrame*1.0f);
 	}
+
 
 	memcpy(N_VertexList_B1, Bullet_B1.m_VertexList, sizeof(SimpleVertex) * 6);
 	for (int iV = 0; iV < 6; iV++)
@@ -880,7 +970,7 @@ void TSceneGame::Boss_FSM()
 		Bullet_B2.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B2.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Robot.Bullet_B2_Bullet_Go == true && Robot.Face_Direction == 2)
+	else if (Robot.Bullet_B2_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
 		sSound->PlayEffect(7);
 		Robot.Bullet_B2_Bullet_Go = false; Bullet_B2.Face_Direction2_flag = true;
@@ -899,7 +989,7 @@ void TSceneGame::Boss_FSM()
 		Bullet_B2.MoveX(-g_fSecPerFrame * 1.0f);
 	}
 
-	if (Bullet_B2.Face_Direction2_flag == true)
+	else if (Bullet_B2.Face_Direction2_flag == true)
 	{
 		Bullet_B2.frame_B_R();
 		Bullet_B2.MoveX(g_fSecPerFrame*1.0f);
@@ -933,7 +1023,7 @@ void TSceneGame::Boss_FSM()
 		Bullet_B3.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B3.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Robot.Bullet_B3_Bullet_Go == true && Robot.Face_Direction == 2)
+	else if (Robot.Bullet_B3_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
 		sSound->PlayEffect(7);
 		Robot.Bullet_B3_Bullet_Go = false; Bullet_B3.Face_Direction2_flag = true;
@@ -952,7 +1042,7 @@ void TSceneGame::Boss_FSM()
 		Bullet_B3.MoveX(-g_fSecPerFrame * 1.0f);
 	}
 
-	if (Bullet_B3.Face_Direction2_flag == true)
+	else if (Bullet_B3.Face_Direction2_flag == true)
 	{
 		Bullet_B3.frame_B_R();
 		Bullet_B3.MoveX(g_fSecPerFrame*1.0f);
@@ -985,7 +1075,7 @@ void TSceneGame::Boss_FSM()
 		Bullet_B4.m_VertexList[6].x = Robot.m_VertexList[6].x - 30 / 900; Bullet_B4.m_VertexList[6].y = Robot.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Robot.Bullet_B4_Bullet_Go == true && Robot.Face_Direction == 2)
+	else if (Robot.Bullet_B4_Bullet_Go == true && Robot.Face_Direction == 2)
 	{
 		sSound->PlayEffect(7);
 		Robot.Bullet_B4_Bullet_Go = false; Bullet_B4.Face_Direction2_flag = true;
@@ -1004,7 +1094,7 @@ void TSceneGame::Boss_FSM()
 		Bullet_B4.MoveX(-g_fSecPerFrame * 1.0f);
 	}
 
-	if (Bullet_B4.Face_Direction2_flag == true)
+	else if (Bullet_B4.Face_Direction2_flag == true)
 	{
 		Bullet_B4.frame_B_R();
 		Bullet_B4.MoveX(g_fSecPerFrame*1.0f);
@@ -1036,7 +1126,7 @@ void TSceneGame::Hero_Actions()
 		m_Actor.MoveX(-g_fSecPerFrame * 0.3f);
 	}
 
-	if (I_Input.Key('D'))
+	else if (I_Input.Key('D'))
 	{
 		m_Actor.Face_Direction = 2;
 		m_Actor.right_walk();
@@ -1045,40 +1135,42 @@ void TSceneGame::Hero_Actions()
 	}
 
 
-	if (I_Input.Key('I'))
+	else if (I_Input.Key('I'))
 	{		m_Actor.slide_step = 1;
 			sSound->PlayEffect(18);
 	}
-	if (m_Actor.Face_Direction == 2 && m_Actor.slide_step != 0)
-	{	if (m_Actor.slide_step == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }     if (m_Actor.slide_step == 2) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
-		if (m_Actor.slide_step == 3) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }        if (m_Actor.slide_step == 4) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
-		if (m_Actor.slide_step == 5) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }	}
-	   
-	if (m_Actor.Face_Direction == 1 && m_Actor.slide_step != 0)
-	{	if (m_Actor.slide_step == 1) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }     if (m_Actor.slide_step == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
-		if (m_Actor.slide_step == 3) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }     if (m_Actor.slide_step == 4) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
-		if (m_Actor.slide_step == 5) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }	}
 
 
-
-
-	memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
-
-
-	if (I_Input.Key('O'))
-	{	m_Actor.sword_step = 1;
+	else if (I_Input.Key('O'))
+	{
+		m_Actor.sword_step = 1;
 		sSound->PlayEffect(5);
 	}
 
-	if (I_Input.Key('K') || I_Input.Key('L'))
+	else if (I_Input.Key('K') || I_Input.Key('L'))
 	{
 		m_Actor.Gun_step = 1;
 		if (m_Actor.Face_Direction == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
 		else if (m_Actor.Face_Direction == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
 	}
-	m_Actor.shot();
-	m_Actor.slide();
-	m_Actor.sword();
+
+
+	if (m_Actor.Face_Direction == 2 && m_Actor.slide_step != 0)
+	{	if (m_Actor.slide_step == 1) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }      else if (m_Actor.slide_step == 2) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
+		else if (m_Actor.slide_step == 3) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }      else if (m_Actor.slide_step == 4) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }
+		else if (m_Actor.slide_step == 5) { m_Actor.MoveX(g_fSecPerFrame*0.3f); }	}
+	   
+	else if (m_Actor.Face_Direction == 1 && m_Actor.slide_step != 0)
+	{	if (m_Actor.slide_step == 1) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }        else if (m_Actor.slide_step == 2) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
+		else if (m_Actor.slide_step == 3) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }   else if (m_Actor.slide_step == 4) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }
+		else if (m_Actor.slide_step == 5) { m_Actor.MoveX(-g_fSecPerFrame * 0.3f); }	}
+
+
+
+	if (m_Actor.Gun_step!=0)m_Actor.shot();
+	else if (m_Actor.slide_step!= 0)m_Actor.slide();
+	else if (m_Actor.sword_step != 0)m_Actor.sword();
+
 	memcpy(N_VertexList, m_Actor.m_VertexList, sizeof(SimpleVertex) * 6);
 
 	for (int iV = 0; iV < 6; iV++)
@@ -1173,11 +1265,11 @@ void TSceneGame::Boy_NPC_Action_including_first_messgae()
 
 		m_Boy_NPC.walk();
 		if (m_Boy_NPC.walk_step == 1) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }        if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
-		if (m_Boy_NPC.walk_step == 10) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 2) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }       else if (m_Boy_NPC.walk_step == 3) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 4) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }       else if (m_Boy_NPC.walk_step == 5) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 6) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }       else if (m_Boy_NPC.walk_step == 7) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 8) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }       else if (m_Boy_NPC.walk_step == 9) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
+		else if (m_Boy_NPC.walk_step == 10) { m_Boy_NPC.MoveX(g_fSecPerFrame*0.05f); }
 	}
 
 
@@ -1212,19 +1304,19 @@ void TSceneGame::Hero_bullets_basic_Action()
 	{
 		static int count_K = 1;
 		if (count_K == 1) { Bullet_F1.Bullet_Go = true; sSound->PlayEffect(3);}
-		if (count_K == 2) { Bullet_F2.Bullet_Go = true; sSound->PlayEffect(3);}
-		if (count_K == 3) { Bullet_F3.Bullet_Go = true; sSound->PlayEffect(3);}
-		if (count_K == 4) { Bullet_F4.Bullet_Go = true; sSound->PlayEffect(3);}
+		else if (count_K == 2) { Bullet_F2.Bullet_Go = true; sSound->PlayEffect(3);}
+		else if (count_K == 3) { Bullet_F3.Bullet_Go = true; sSound->PlayEffect(3);}
+		else if (count_K == 4) { Bullet_F4.Bullet_Go = true; sSound->PlayEffect(3);}
 		count_K++;
 	}
 
-	if (I_Input.Key('L') == KEY_PUSH)
+	else if (I_Input.Key('L') == KEY_PUSH)
 	{
 		static int count_L = 1;
 		if (count_L == 1) { Bullet_C1.Bullet_Go = true; sSound->PlayEffect(4);}
-		if (count_L == 2) { Bullet_C2.Bullet_Go = true; sSound->PlayEffect(4);}
-		if (count_L == 3) { Bullet_C3.Bullet_Go = true; sSound->PlayEffect(4);}
-		if (count_L == 4) { Bullet_C4.Bullet_Go = true; sSound->PlayEffect(4);}
+		else if (count_L == 2) { Bullet_C2.Bullet_Go = true; sSound->PlayEffect(4);}
+		else if (count_L == 3) { Bullet_C3.Bullet_Go = true; sSound->PlayEffect(4);}
+		else if (count_L == 4) { Bullet_C4.Bullet_Go = true; sSound->PlayEffect(4);}
 		count_L++;
 	}
 
@@ -1242,7 +1334,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 		Bullet_F1.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F1.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 2)
+	else if (Bullet_F1.Bullet_Go == true && m_Actor.Face_Direction == 2)
 	{
 		Bullet_F1.Bullet_Go = false; Bullet_F1.Face_Direction2_flag = true;
 		Bullet_F1.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F1.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
@@ -1257,19 +1349,19 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_F1.Face_Direction1_flag == true)
 	{
 		Bullet_F1.frame_F();
-		if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }            else if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(-g_fSecPerFrame * 1.0f); }
 	}
 
-	if (Bullet_F1.Face_Direction2_flag == true)
+	else if (Bullet_F1.Face_Direction2_flag == true)
 	{
 		Bullet_F1.frame_F();
-		if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_F1.bullet_step == 0) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_F1.bullet_step == 1) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F1.bullet_step == 2) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_F1.bullet_step == 3) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F1.bullet_step == 4) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_F1.bullet_step == 5) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F1.bullet_step == 6) { Bullet_F1.MoveX(g_fSecPerFrame*1.0f); }
 	}
 
 	memcpy(N_VertexList_F1, Bullet_F1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -1298,7 +1390,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 		Bullet_F2.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F2.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Bullet_F2.Bullet_Go == true && m_Actor.Face_Direction == 2)
+	else if (Bullet_F2.Bullet_Go == true && m_Actor.Face_Direction == 2)
 	{
 		Bullet_F2.Bullet_Go = false; Bullet_F2.Face_Direction2_flag = true;
 		Bullet_F2.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F2.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
@@ -1313,19 +1405,19 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_F2.Face_Direction1_flag == true)
 	{
 		Bullet_F2.frame_F();
-		if (Bullet_F2.bullet_step == 0) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F2.bullet_step == 1) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F2.bullet_step == 2) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F2.bullet_step == 3) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F2.bullet_step == 4) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F2.bullet_step == 5) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F2.bullet_step == 6) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_F2.bullet_step == 0) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        else if (Bullet_F2.bullet_step == 1) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F2.bullet_step == 2) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        else if (Bullet_F2.bullet_step == 3) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F2.bullet_step == 4) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }        else if (Bullet_F2.bullet_step == 5) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F2.bullet_step == 6) { Bullet_F2.MoveX(-g_fSecPerFrame * 1.0f); }
 	}
 
-	if (Bullet_F2.Face_Direction2_flag == true)
+	else if (Bullet_F2.Face_Direction2_flag == true)
 	{
 		Bullet_F2.frame_F();
-		if (Bullet_F2.bullet_step == 0) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F2.bullet_step == 1) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F2.bullet_step == 2) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F2.bullet_step == 3) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F2.bullet_step == 4) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F2.bullet_step == 5) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F2.bullet_step == 6) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_F2.bullet_step == 0) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_F2.bullet_step == 1) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F2.bullet_step == 2) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_F2.bullet_step == 3) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F2.bullet_step == 4) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_F2.bullet_step == 5) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F2.bullet_step == 6) { Bullet_F2.MoveX(g_fSecPerFrame*1.0f); }
 	}
 
 	memcpy(N_VertexList_F2, Bullet_F2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -1355,7 +1447,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 		Bullet_F3.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F3.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Bullet_F3.Bullet_Go == true && m_Actor.Face_Direction == 2)
+	else if (Bullet_F3.Bullet_Go == true && m_Actor.Face_Direction == 2)
 	{
 		Bullet_F3.Bullet_Go = false; Bullet_F3.Face_Direction2_flag = true;
 		Bullet_F3.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F3.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
@@ -1370,19 +1462,19 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_F3.Face_Direction1_flag == true)
 	{
 		Bullet_F3.frame_F();
-		if (Bullet_F3.bullet_step == 0) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F3.bullet_step == 1) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F3.bullet_step == 2) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F3.bullet_step == 3) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F3.bullet_step == 4) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F3.bullet_step == 5) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F3.bullet_step == 6) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_F3.bullet_step == 0) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_F3.bullet_step == 1) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F3.bullet_step == 2) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_F3.bullet_step == 3) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F3.bullet_step == 4) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_F3.bullet_step == 5) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F3.bullet_step == 6) { Bullet_F3.MoveX(-g_fSecPerFrame * 1.0f); }
 	}
 
-	if (Bullet_F3.Face_Direction2_flag == true)
+	else if (Bullet_F3.Face_Direction2_flag == true)
 	{
 		Bullet_F3.frame_F();
-		if (Bullet_F3.bullet_step == 0) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F3.bullet_step == 1) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F3.bullet_step == 2) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F3.bullet_step == 3) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F3.bullet_step == 4) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F3.bullet_step == 5) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F3.bullet_step == 6) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_F3.bullet_step == 0) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }            else if (Bullet_F3.bullet_step == 1) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F3.bullet_step == 2) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_F3.bullet_step == 3) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F3.bullet_step == 4) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_F3.bullet_step == 5) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F3.bullet_step == 6) { Bullet_F3.MoveX(g_fSecPerFrame*1.0f); }
 	}
 
 	memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -1412,7 +1504,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 		Bullet_F4.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_F4.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Bullet_F4.Bullet_Go == true && m_Actor.Face_Direction == 2)
+	else if (Bullet_F4.Bullet_Go == true && m_Actor.Face_Direction == 2)
 	{
 		Bullet_F4.Bullet_Go = false; Bullet_F4.Face_Direction2_flag = true;
 		Bullet_F4.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_F4.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
@@ -1427,19 +1519,19 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_F4.Face_Direction1_flag == true)
 	{
 		Bullet_F4.frame_F();
-		if (Bullet_F4.bullet_step == 0) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F4.bullet_step == 1) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F4.bullet_step == 2) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F4.bullet_step == 3) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F4.bullet_step == 4) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_F4.bullet_step == 5) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_F4.bullet_step == 6) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_F4.bullet_step == 0) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_F4.bullet_step == 1) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F4.bullet_step == 2) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_F4.bullet_step == 3) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F4.bullet_step == 4) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_F4.bullet_step == 5) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_F4.bullet_step == 6) { Bullet_F4.MoveX(-g_fSecPerFrame * 1.0f); }
 	}
 
-	if (Bullet_F4.Face_Direction2_flag == true)
+	else if (Bullet_F4.Face_Direction2_flag == true)
 	{
 		Bullet_F4.frame_F();
-		if (Bullet_F4.bullet_step == 0) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F4.bullet_step == 1) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F4.bullet_step == 2) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F4.bullet_step == 3) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F4.bullet_step == 4) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_F4.bullet_step == 5) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_F4.bullet_step == 6) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_F4.bullet_step == 0) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_F4.bullet_step == 1) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F4.bullet_step == 2) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_F4.bullet_step == 3) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F4.bullet_step == 4) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_F4.bullet_step == 5) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_F4.bullet_step == 6) { Bullet_F4.MoveX(g_fSecPerFrame*1.0f); }
 	}
 
 	memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -1469,7 +1561,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 		Bullet_C1.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C1.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Bullet_C1.Bullet_Go == true && m_Actor.Face_Direction == 2)
+	else if (Bullet_C1.Bullet_Go == true && m_Actor.Face_Direction == 2)
 	{
 		Bullet_C1.Bullet_Go = false; Bullet_C1.Face_Direction2_flag = true;
 		Bullet_C1.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C1.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
@@ -1484,19 +1576,19 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_C1.Face_Direction1_flag == true)
 	{
 		Bullet_C1.frame_C();
-		if (Bullet_C1.bullet_step == 0) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C1.bullet_step == 1) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C1.bullet_step == 2) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C1.bullet_step == 3) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C1.bullet_step == 4) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C1.bullet_step == 5) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C1.bullet_step == 6) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_C1.bullet_step == 0) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_C1.bullet_step == 1) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C1.bullet_step == 2) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_C1.bullet_step == 3) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C1.bullet_step == 4) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }       else if (Bullet_C1.bullet_step == 5) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C1.bullet_step == 6) { Bullet_C1.MoveX(-g_fSecPerFrame * 1.0f); }
 	}
 
-	if (Bullet_C1.Face_Direction2_flag == true)
+	else if (Bullet_C1.Face_Direction2_flag == true)
 	{
 		Bullet_C1.frame_C();
-		if (Bullet_C1.bullet_step == 0) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C1.bullet_step == 1) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C1.bullet_step == 2) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C1.bullet_step == 3) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C1.bullet_step == 4) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C1.bullet_step == 5) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C1.bullet_step == 6) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_C1.bullet_step == 0) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_C1.bullet_step == 1) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C1.bullet_step == 2) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_C1.bullet_step == 3) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C1.bullet_step == 4) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_C1.bullet_step == 5) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C1.bullet_step == 6) { Bullet_C1.MoveX(g_fSecPerFrame*1.0f); }
 	}
 
 	memcpy(N_VertexList_C1, Bullet_C1.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -1526,7 +1618,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 		Bullet_C2.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C2.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Bullet_C2.Bullet_Go == true && m_Actor.Face_Direction == 2)
+	else if (Bullet_C2.Bullet_Go == true && m_Actor.Face_Direction == 2)
 	{
 		Bullet_C2.Bullet_Go = false; Bullet_C2.Face_Direction2_flag = true;
 		Bullet_C2.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C2.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
@@ -1541,19 +1633,19 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_C2.Face_Direction1_flag == true)
 	{
 		Bullet_C2.frame_C();
-		if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(-g_fSecPerFrame * 1.0f); }
 	}
 
-	if (Bullet_C2.Face_Direction2_flag == true)
+	else if (Bullet_C2.Face_Direction2_flag == true)
 	{
 		Bullet_C2.frame_C();
-		if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_C2.bullet_step == 0) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_C2.bullet_step == 1) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C2.bullet_step == 2) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_C2.bullet_step == 3) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C2.bullet_step == 4) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }      else if (Bullet_C2.bullet_step == 5) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C2.bullet_step == 6) { Bullet_C2.MoveX(g_fSecPerFrame*1.0f); }
 	}
 
 	memcpy(N_VertexList_C2, Bullet_C2.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -1586,7 +1678,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 		Bullet_C3.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C3.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Bullet_C3.Bullet_Go == true && m_Actor.Face_Direction == 2)
+	else if (Bullet_C3.Bullet_Go == true && m_Actor.Face_Direction == 2)
 	{
 		Bullet_C3.Bullet_Go = false; Bullet_C3.Face_Direction2_flag = true;
 		Bullet_C3.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C3.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
@@ -1601,19 +1693,19 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_C3.Face_Direction1_flag == true)
 	{
 		Bullet_C3.frame_C();
-		if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(-g_fSecPerFrame * 1.0f); }
 	}
 
-	if (Bullet_C3.Face_Direction2_flag == true)
+	else if (Bullet_C3.Face_Direction2_flag == true)
 	{
 		Bullet_C3.frame_C();
-		if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_C3.bullet_step == 0) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_C3.bullet_step == 1) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C3.bullet_step == 2) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_C3.bullet_step == 3) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C3.bullet_step == 4) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_C3.bullet_step == 5) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C3.bullet_step == 6) { Bullet_C3.MoveX(g_fSecPerFrame*1.0f); }
 	}
 
 	memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -1643,7 +1735,7 @@ void TSceneGame::Hero_bullets_basic_Action()
 		Bullet_C4.m_VertexList[6].x = m_Actor.m_VertexList[6].x - 30 / 900; Bullet_C4.m_VertexList[6].y = m_Actor.m_VertexList[6].y - 5 / 900;
 	}
 
-	if (Bullet_C4.Bullet_Go == true && m_Actor.Face_Direction == 2)
+	else if (Bullet_C4.Bullet_Go == true && m_Actor.Face_Direction == 2)
 	{
 		Bullet_C4.Bullet_Go = false; Bullet_C4.Face_Direction2_flag = true;
 		Bullet_C4.m_VertexList[0].x = m_Actor.m_VertexList[0].x + 30 / 900; Bullet_C4.m_VertexList[0].y = m_Actor.m_VertexList[0].y + 5 / 900;
@@ -1658,19 +1750,19 @@ void TSceneGame::Hero_bullets_basic_Action()
 	if (Bullet_C4.Face_Direction1_flag == true)
 	{
 		Bullet_C4.frame_C();
-		if (Bullet_C4.bullet_step == 0) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C4.bullet_step == 1) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C4.bullet_step == 2) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C4.bullet_step == 3) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C4.bullet_step == 4) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }        if (Bullet_C4.bullet_step == 5) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
-		if (Bullet_C4.bullet_step == 6) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
+		if (Bullet_C4.bullet_step == 0) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C4.bullet_step == 1) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C4.bullet_step == 2) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C4.bullet_step == 3) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C4.bullet_step == 4) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }      else if (Bullet_C4.bullet_step == 5) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
+		else if (Bullet_C4.bullet_step == 6) { Bullet_C4.MoveX(-g_fSecPerFrame * 1.0f); }
 	}
 
-	if (Bullet_C4.Face_Direction2_flag == true)
+	else if (Bullet_C4.Face_Direction2_flag == true)
 	{
 		Bullet_C4.frame_C();
-		if (Bullet_C4.bullet_step == 0) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C4.bullet_step == 1) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C4.bullet_step == 2) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C4.bullet_step == 3) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C4.bullet_step == 4) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }        if (Bullet_C4.bullet_step == 5) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
-		if (Bullet_C4.bullet_step == 6) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
+		if (Bullet_C4.bullet_step == 0) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_C4.bullet_step == 1) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C4.bullet_step == 2) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_C4.bullet_step == 3) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C4.bullet_step == 4) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }       else if (Bullet_C4.bullet_step == 5) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
+		else if (Bullet_C4.bullet_step == 6) { Bullet_C4.MoveX(g_fSecPerFrame*1.0f); }
 	}
 
 	memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
@@ -1720,6 +1812,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 
 	if (Bullet_Ghost_1.Face_Direction1_flag == true)
 	{Bullet_Ghost_1.MoveX(-g_fSecPerFrame * 1.0f);}
+
 	memcpy(N_VertexList_G1, Bullet_Ghost_1.m_VertexList, sizeof(SimpleVertex) * 6);
 
 	for (int iV = 0; iV < 6; iV++)
@@ -1733,7 +1826,7 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 	}
 	g_pContext->UpdateSubresource(Bullet_Ghost_1.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G1, 0, 0);
 
-
+	 
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1837,8 +1930,8 @@ void TSceneGame::Tresure_Box__m_Actor_Dection_collision_and_ghost_shots()
 		N_VertexList_G4[iV].x += Bullet_Ghost_4.m_vCenter.x;		 N_VertexList_G4[iV].y += Bullet_Ghost_4.m_vCenter.y;
 	}
 	g_pContext->UpdateSubresource(Bullet_Ghost_4.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G4, 0, 0);
+	
 }
-
 
 void TSceneGame::Boss_collision_final_decision()
 {
@@ -1854,7 +1947,7 @@ void TSceneGame::Boss_collision_final_decision()
 		Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/3_4_Bar_B.png");
 	}
 
-	if (Robot_live_or_dead == 2)
+	else if (Robot_live_or_dead == 2)
 	{
 		
 		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
@@ -1863,7 +1956,7 @@ void TSceneGame::Boss_collision_final_decision()
 		Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/2_4_Bar_B.png");
 	}
 
-	if (Robot_live_or_dead == 3)
+	else if (Robot_live_or_dead == 3)
 	{
 		sSound->Play(10);
 		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
@@ -1873,9 +1966,9 @@ void TSceneGame::Boss_collision_final_decision()
 	}
 
 
-	if (Robot_live_or_dead	== 4)
+	else if (Robot_live_or_dead	== 4)
 	{
-		Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
+		/*Robot_life_bar.in_Texture_SetData_factors(0, 0, 299, 76, 299, 76);
 		Robot_life_bar.m_for_update_Rects.x = g_rtClient.right / 30;    Robot_life_bar.m_for_update_Rects.y = g_rtClient.bottom / 30;
 		Robot_life_bar.Window_SetData_factors(1000, 10, Robot_life_bar.m_for_update_Rects.x, Robot_life_bar.m_for_update_Rects.y);
 		Robot_life_bar.Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/0_Bar_B.png");
@@ -1921,7 +2014,7 @@ void TSceneGame::Boss_collision_final_decision()
 			N_VertexList_BA[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA[iV].y = vertex.x * -S + vertex.y * C;
 			N_VertexList_BA[iV].x += Robot.m_vCenter.x;		 N_VertexList_BA[iV].y += Robot.m_vCenter.y;
 		}
-		g_pContext->UpdateSubresource(Robot.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA, 0, 0);
+		g_pContext->UpdateSubresource(Robot.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA, 0, 0);*/
 	}
 }
 
@@ -1934,7 +2027,7 @@ void TSceneGame::Boy_NPC_collision_from_hero_attack()
 		NPC_Col_S1 = true;
 	}
 
-	if (I_Input.Key('O') == KEY_PUSH && TCollision::SphereInSphere(m_Actor.m_rtCollision, m_Boy_NPC.m_rtCollision) && NPC_live_or_dead == 1)
+	else if (I_Input.Key('O') == KEY_PUSH && TCollision::SphereInSphere(m_Actor.m_rtCollision, m_Boy_NPC.m_rtCollision) && NPC_live_or_dead == 1)
 	{
 		NPC_Col_S2 = true; 
 	}
@@ -1943,13 +2036,13 @@ void TSceneGame::Boy_NPC_collision_from_hero_attack()
 
 	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, m_Boy_NPC.m_rtCollision))
 	{
-		Bullet_F3.m_VertexList[0].x = 2.5f; Bullet_F3.m_VertexList[0].y = 2.5f;
-		Bullet_F3.m_VertexList[1].x = 2.5f; Bullet_F3.m_VertexList[1].y = 2.5f;
-		Bullet_F3.m_VertexList[2].x = 2.5f; Bullet_F3.m_VertexList[2].y = 2.5f;
-		Bullet_F3.m_VertexList[3].x = 2.5f; Bullet_F3.m_VertexList[3].y = 2.5f;
-		Bullet_F3.m_VertexList[4].x = 2.5f; Bullet_F3.m_VertexList[4].y = 2.5f;
-		Bullet_F3.m_VertexList[5].x = 2.5f; Bullet_F3.m_VertexList[5].y = 2.5f;
-		Bullet_F3.m_VertexList[6].x = 2.5f; Bullet_F3.m_VertexList[6].y = 2.5f;
+		Bullet_F3.m_VertexList[0].x = 2.1235f; Bullet_F3.m_VertexList[0].y = 2.1235f;
+		Bullet_F3.m_VertexList[1].x = 2.1235f; Bullet_F3.m_VertexList[1].y = 2.1235f;
+		Bullet_F3.m_VertexList[2].x = 2.1235f; Bullet_F3.m_VertexList[2].y = 2.1235f;
+		Bullet_F3.m_VertexList[3].x = 2.1235f; Bullet_F3.m_VertexList[3].y = 2.1235f;
+		Bullet_F3.m_VertexList[4].x = 2.1235f; Bullet_F3.m_VertexList[4].y = 2.1235f;
+		Bullet_F3.m_VertexList[5].x = 2.1235f; Bullet_F3.m_VertexList[5].y = 2.1235f;
+		Bullet_F3.m_VertexList[6].x = 2.1235f; Bullet_F3.m_VertexList[6].y = 2.1235f;
 
 		memcpy(N_VertexList_F3, Bullet_F3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -1970,15 +2063,15 @@ void TSceneGame::Boy_NPC_collision_from_hero_attack()
 
 	/////////////////////////////////// Bullet_F4과  Box_Alive 충돌
 
-	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, m_Boy_NPC.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, m_Boy_NPC.m_rtCollision))
 	{
-		Bullet_F4.m_VertexList[0].x = 2.5f; Bullet_F4.m_VertexList[0].y = 2.5f;
-		Bullet_F4.m_VertexList[1].x = 2.5f; Bullet_F4.m_VertexList[1].y = 2.5f;
-		Bullet_F4.m_VertexList[2].x = 2.5f; Bullet_F4.m_VertexList[2].y = 2.5f;
-		Bullet_F4.m_VertexList[3].x = 2.5f; Bullet_F4.m_VertexList[3].y = 2.5f;
-		Bullet_F4.m_VertexList[4].x = 2.5f; Bullet_F4.m_VertexList[4].y = 2.5f;
-		Bullet_F4.m_VertexList[5].x = 2.5f; Bullet_F4.m_VertexList[5].y = 2.5f;
-		Bullet_F4.m_VertexList[6].x = 2.5f; Bullet_F4.m_VertexList[6].y = 2.5f;
+		Bullet_F4.m_VertexList[0].x = 2.135f; Bullet_F4.m_VertexList[0].y = 2.135f;
+		Bullet_F4.m_VertexList[1].x = 2.135f; Bullet_F4.m_VertexList[1].y = 2.135f;
+		Bullet_F4.m_VertexList[2].x = 2.135f; Bullet_F4.m_VertexList[2].y = 2.135f;
+		Bullet_F4.m_VertexList[3].x = 2.135f; Bullet_F4.m_VertexList[3].y = 2.135f;
+		Bullet_F4.m_VertexList[4].x = 2.135f; Bullet_F4.m_VertexList[4].y = 2.135f;
+		Bullet_F4.m_VertexList[5].x = 2.135f; Bullet_F4.m_VertexList[5].y = 2.135f;
+		Bullet_F4.m_VertexList[6].x = 2.135f; Bullet_F4.m_VertexList[6].y = 2.135f;
 
 		memcpy(N_VertexList_F4, Bullet_F4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2000,15 +2093,15 @@ void TSceneGame::Boy_NPC_collision_from_hero_attack()
 
 	/////////////////////////////////// Bullet_C3과  Boy_NPC 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, m_Boy_NPC.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, m_Boy_NPC.m_rtCollision))
 	{
-		Bullet_C3.m_VertexList[0].x = 2.5f; Bullet_C3.m_VertexList[0].y = 2.5f;
-		Bullet_C3.m_VertexList[1].x = 2.5f; Bullet_C3.m_VertexList[1].y = 2.5f;
-		Bullet_C3.m_VertexList[2].x = 2.5f; Bullet_C3.m_VertexList[2].y = 2.5f;
-		Bullet_C3.m_VertexList[3].x = 2.5f; Bullet_C3.m_VertexList[3].y = 2.5f;
-		Bullet_C3.m_VertexList[4].x = 2.5f; Bullet_C3.m_VertexList[4].y = 2.5f;
-		Bullet_C3.m_VertexList[5].x = 2.5f; Bullet_C3.m_VertexList[5].y = 2.5f;
-		Bullet_C3.m_VertexList[6].x = 2.5f; Bullet_C3.m_VertexList[6].y = 2.5f;
+		Bullet_C3.m_VertexList[0].x = 2.565f; Bullet_C3.m_VertexList[0].y = 2.565f;
+		Bullet_C3.m_VertexList[1].x = 2.565f; Bullet_C3.m_VertexList[1].y = 2.565f;
+		Bullet_C3.m_VertexList[2].x = 2.565f; Bullet_C3.m_VertexList[2].y = 2.565f;
+		Bullet_C3.m_VertexList[3].x = 2.565f; Bullet_C3.m_VertexList[3].y = 2.565f;
+		Bullet_C3.m_VertexList[4].x = 2.565f; Bullet_C3.m_VertexList[4].y = 2.565f;
+		Bullet_C3.m_VertexList[5].x = 2.565f; Bullet_C3.m_VertexList[5].y = 2.565f;
+		Bullet_C3.m_VertexList[6].x = 2.565f; Bullet_C3.m_VertexList[6].y = 2.565f;
 
 		memcpy(N_VertexList_C3, Bullet_C3.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2029,15 +2122,15 @@ void TSceneGame::Boy_NPC_collision_from_hero_attack()
 
 	/////////////////////////////////// Bullet_C4과  Box_Alive 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, m_Boy_NPC.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, m_Boy_NPC.m_rtCollision))
 	{
-		Bullet_C4.m_VertexList[0].x = 2.5f; Bullet_C4.m_VertexList[0].y = 2.5f;
-		Bullet_C4.m_VertexList[1].x = 2.5f; Bullet_C4.m_VertexList[1].y = 2.5f;
-		Bullet_C4.m_VertexList[2].x = 2.5f; Bullet_C4.m_VertexList[2].y = 2.5f;
-		Bullet_C4.m_VertexList[3].x = 2.5f; Bullet_C4.m_VertexList[3].y = 2.5f;
-		Bullet_C4.m_VertexList[4].x = 2.5f; Bullet_C4.m_VertexList[4].y = 2.5f;
-		Bullet_C4.m_VertexList[5].x = 2.5f; Bullet_C4.m_VertexList[5].y = 2.5f;
-		Bullet_C4.m_VertexList[6].x = 2.5f; Bullet_C4.m_VertexList[6].y = 2.5f;
+		Bullet_C4.m_VertexList[0].x = 2.565f; Bullet_C4.m_VertexList[0].y = 2.565f;
+		Bullet_C4.m_VertexList[1].x = 2.565f; Bullet_C4.m_VertexList[1].y = 2.565f;
+		Bullet_C4.m_VertexList[2].x = 2.565f; Bullet_C4.m_VertexList[2].y = 2.565f;
+		Bullet_C4.m_VertexList[3].x = 2.565f; Bullet_C4.m_VertexList[3].y = 2.565f;
+		Bullet_C4.m_VertexList[4].x = 2.565f; Bullet_C4.m_VertexList[4].y = 2.565f;
+		Bullet_C4.m_VertexList[5].x = 2.565f; Bullet_C4.m_VertexList[5].y = 2.565f;
+		Bullet_C4.m_VertexList[6].x = 2.565f; Bullet_C4.m_VertexList[6].y = 2.565f;
 
 		memcpy(N_VertexList_C4, Bullet_C4.m_VertexList, sizeof(SimpleVertex) * 6);
 
@@ -2067,7 +2160,7 @@ void TSceneGame::Herosword_box_alive_collision()
 		box_alive_Col_S1 = true;
 	}
 
-	if (m_Actor.sword_step == 2 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && box_alive_live_or_dead == 1)
+	else if (m_Actor.sword_step == 2 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && box_alive_live_or_dead == 1)
 	{
 		box_alive_Col_S2 = true;
 	}
@@ -2084,17 +2177,17 @@ void TSceneGame::Boss_sword_hero_collsion()
 		Hero_Col_S1 = true; sSound->PlayEffect(8);
 	}
 
-	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 1)
+	else if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 1)
 	{
 		Hero_Col_S2 = true; sSound->PlayEffect(8);
 	}
 
-	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 2)
+	else if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 2)
 	{
 		Hero_Col_S3 = true; sSound->PlayEffect(8);
 	}
 
-	if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 3)
+	else if (Robot.sword_step == 3 && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Hero_live_or_dead == 3)
 	{
 		Hero_Col_S4 = true; sSound->PlayEffect(8);
 	}
@@ -2114,17 +2207,17 @@ void TSceneGame::Herosword_boss_collision()
 		Robot_Col_S1 = true;
 	}
 
-	if (I_Input.Key('O') == KEY_PUSH && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Robot_live_or_dead == 1)
+	else if (I_Input.Key('O') == KEY_PUSH && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Robot_live_or_dead == 1)
 	{
 		Robot_Col_S2 = true;
 	}
 
-	if (I_Input.Key('O') == KEY_PUSH && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Robot_live_or_dead == 2)
+	else if (I_Input.Key('O') == KEY_PUSH && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Robot_live_or_dead == 2)
 	{
 		Robot_Col_S3 = true;
 	}
 
-	if (I_Input.Key('O') == KEY_PUSH && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Robot_live_or_dead == 3)
+	else if (I_Input.Key('O') == KEY_PUSH && TCollision::SphereInSphere(m_Actor.m_rtCollision, Robot.m_rtCollision) && Robot_live_or_dead == 3)
 	{
 		Robot_Col_S4 = true;
 	}
@@ -2164,7 +2257,7 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	//////////////// Bullet_B2과  m_Actor 충돌
 
-	if (TCollision::SphereInSphere(Bullet_B2.m_rtCollision, m_Actor.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_B2.m_rtCollision, m_Actor.m_rtCollision))
 	{
 		Bullet_B2.m_VertexList[0].x = 5.521f; Bullet_B2.m_VertexList[0].y = 5.521f;
 		Bullet_B2.m_VertexList[1].x = 5.521f; Bullet_B2.m_VertexList[1].y = 5.521f;
@@ -2194,7 +2287,7 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	/////////////////////////////////// Bullet_B3과  m_Actor 충돌
 
-	if (TCollision::SphereInSphere(Bullet_B3.m_rtCollision, m_Actor.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_B3.m_rtCollision, m_Actor.m_rtCollision))
 	{
 		Bullet_B3.m_VertexList[0].x = 4.555f; Bullet_B3.m_VertexList[0].y = 4.555f;
 		Bullet_B3.m_VertexList[1].x = 4.555f; Bullet_B3.m_VertexList[1].y = 4.555f;
@@ -2223,7 +2316,7 @@ void TSceneGame::Boss_Canon_hero_collision()
 
 	/////////////////////////////////// Bullet_B4과  m_Actor 충돌
 
-	if (TCollision::SphereInSphere(Bullet_B4.m_rtCollision, m_Actor.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_B4.m_rtCollision, m_Actor.m_rtCollision))
 	{
 		Bullet_B4.m_VertexList[0].x = 6.523f; Bullet_B4.m_VertexList[0].y = 6.523f;
 		Bullet_B4.m_VertexList[1].x = 6.523f; Bullet_B4.m_VertexList[1].y = 6.523f;
@@ -2287,7 +2380,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	//////////////// Bullet_F2과  Robot 충돌
 
-	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Robot.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Robot.m_rtCollision))
 	{
 		Bullet_F2.m_VertexList[0].x = 2.723f; Bullet_F2.m_VertexList[0].y = 2.723f;
 		Bullet_F2.m_VertexList[1].x = 2.723f; Bullet_F2.m_VertexList[1].y = 2.723f;
@@ -2315,7 +2408,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	/////////////////////////////////// Bullet_F3과  Robot 충돌
 
-	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Robot.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Robot.m_rtCollision))
 	{
 		Bullet_F3.m_VertexList[0].x = 4.211f; Bullet_F3.m_VertexList[0].y = 4.211f;
 		Bullet_F3.m_VertexList[1].x = 4.211f; Bullet_F3.m_VertexList[1].y = 4.211f;
@@ -2344,7 +2437,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	/////////////////////////////////// Bullet_F4과  Robot 충돌
 
-	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Robot.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Robot.m_rtCollision))
 	{
 		Bullet_F4.m_VertexList[0].x = 5.044f; Bullet_F4.m_VertexList[0].y = 5.044f;
 		Bullet_F4.m_VertexList[1].x = 5.044f; Bullet_F4.m_VertexList[1].y = 5.044f;
@@ -2374,7 +2467,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	//////////////// Bullet_C1과  Robot 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Robot.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Robot.m_rtCollision))
 	{
 
 		Bullet_C1.m_VertexList[0].x = 5.372f; Bullet_C1.m_VertexList[0].y = 5.372f;
@@ -2404,7 +2497,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	//////////////// Bullet_C2과  Robot 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Robot.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Robot.m_rtCollision))
 	{
 		Bullet_C2.m_VertexList[0].x = 6.231f; Bullet_C2.m_VertexList[0].y = 6.231f;
 		Bullet_C2.m_VertexList[1].x = 6.231f; Bullet_C2.m_VertexList[1].y = 6.231f;
@@ -2434,7 +2527,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	/////////////////////////////////// Bullet_C3과  Robot 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Robot.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Robot.m_rtCollision))
 	{
 		Bullet_C3.m_VertexList[0].x = 5.223f; Bullet_C3.m_VertexList[0].y = 5.223f;
 		Bullet_C3.m_VertexList[1].x = 5.223f; Bullet_C3.m_VertexList[1].y = 5.223f;
@@ -2464,7 +2557,7 @@ void TSceneGame::Bullet_Boss_collision()
 
 	/////////////////////////////////// Bullet_C4과  Robot 충돌
 
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Robot.m_rtCollision))
+	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Robot.m_rtCollision))
 	{
 		Bullet_C4.m_VertexList[0].x = 4.079f; Bullet_C4.m_VertexList[0].y = 4.079f;
 		Bullet_C4.m_VertexList[1].x = 4.079f; Bullet_C4.m_VertexList[1].y = 4.079f;
@@ -2493,8 +2586,10 @@ void TSceneGame::Bullet_Boss_collision()
 
 }
 
+
 void TSceneGame::Treasure_Box_open()
 {
+
 	if (TCollision::SphereInSphere(m_Boy_NPC.m_rtCollision, Treasure_Box.m_rtCollision))
 	{
 		Treasure_Box.in_Texture_SetData_factors(0, 0, 100, 75, 100, 75);
@@ -2510,26 +2605,27 @@ void TSceneGame::Treasure_Box_open()
 	
 		sSound->Play(12);
 
+/*
+	   memcpy(N_VertexList_BA, Box_Alive.m_VertexList, sizeof(SimpleVertex) * 6);
 
-	  memcpy(N_VertexList_BA, Box_Alive.m_VertexList, sizeof(SimpleVertex) * 6);
+		 for (int iV = 0; iV < 6; iV++)
+   		{
+			D3DVECTOR vertex;
+			vertex.x = Box_Alive.m_VertexList[iV].x; vertex.y = Box_Alive.m_VertexList[iV].y;
+			vertex.x -= Box_Alive.m_vCenter.x;		 vertex.y -= Box_Alive.m_vCenter.y;
+			float S = sinf(fAngle);	float C = cosf(fAngle);
+			N_VertexList_BA[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA[iV].y = vertex.x * -S + vertex.y * C;
+			N_VertexList_BA[iV].x += Box_Alive.m_vCenter.x;		 N_VertexList_BA[iV].y += Box_Alive.m_vCenter.y;
+		}
+		   g_pContext->UpdateSubresource(Box_Alive.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA, 0, 0);
 
-	 for (int iV = 0; iV < 6; iV++)
-   	{
-		D3DVECTOR vertex;
-		vertex.x = Box_Alive.m_VertexList[iV].x; vertex.y = Box_Alive.m_VertexList[iV].y;
-		vertex.x -= Box_Alive.m_vCenter.x;		 vertex.y -= Box_Alive.m_vCenter.y;
-		float S = sinf(fAngle);	float C = cosf(fAngle);
-		N_VertexList_BA[iV].x = vertex.x * C + vertex.y * S; N_VertexList_BA[iV].y = vertex.x * -S + vertex.y * C;
-		N_VertexList_BA[iV].x += Box_Alive.m_vCenter.x;		 N_VertexList_BA[iV].y += Box_Alive.m_vCenter.y;
-	}
-	   g_pContext->UpdateSubresource(Box_Alive.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_BA, 0, 0);
-
-
+*/
 
 		Trasure_Box_FINAL_SWITCH = true;
 	}
 
 }
+
 
 
 
@@ -3257,13 +3353,15 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_F1.m_VertexList[0].x = 5.441f; Bullet_F1.m_VertexList[0].y = 5.441f;
+		ghost_Col_F1 = 1;
+
+		/*Bullet_F1.m_VertexList[0].x = 5.441f; Bullet_F1.m_VertexList[0].y = 5.441f;
 		Bullet_F1.m_VertexList[1].x = 5.441f; Bullet_F1.m_VertexList[1].y = 5.441f;
 		Bullet_F1.m_VertexList[2].x = 5.441f; Bullet_F1.m_VertexList[2].y = 5.441f;
 		Bullet_F1.m_VertexList[3].x = 5.441f; Bullet_F1.m_VertexList[3].y = 5.441f;
 		Bullet_F1.m_VertexList[4].x = 5.441f; Bullet_F1.m_VertexList[4].y = 5.441f;
 		Bullet_F1.m_VertexList[5].x = 5.441f; Bullet_F1.m_VertexList[5].y = 5.441f;
-		Bullet_F1.m_VertexList[6].x = 5.441f; Bullet_F1.m_VertexList[6].y = 5.441f;
+		Bullet_F1.m_VertexList[6].x = 5.441f; Bullet_F1.m_VertexList[6].y = 5.441f;*/
 
 		Bullet_Ghost_1.m_VertexList[0].x = 5.002f; Bullet_Ghost_1.m_VertexList[0].y = 5.002f;
 		Bullet_Ghost_1.m_VertexList[1].x = 5.002f; Bullet_Ghost_1.m_VertexList[1].y = 5.002f;
@@ -3303,15 +3401,16 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_F1.m_VertexList[0].x = 4.889f; Bullet_F1.m_VertexList[0].y = 4.889f;
+		ghost_Col_F1 = 1;
+		/*Bullet_F1.m_VertexList[0].x = 4.889f; Bullet_F1.m_VertexList[0].y = 4.889f;
 		Bullet_F1.m_VertexList[1].x = 4.889f; Bullet_F1.m_VertexList[1].y = 4.889f;
 		Bullet_F1.m_VertexList[2].x = 4.889f; Bullet_F1.m_VertexList[2].y = 4.889f;
 		Bullet_F1.m_VertexList[3].x = 4.889f; Bullet_F1.m_VertexList[3].y = 4.889f;
 		Bullet_F1.m_VertexList[4].x = 4.889f; Bullet_F1.m_VertexList[4].y = 4.889f;
 		Bullet_F1.m_VertexList[5].x = 4.889f; Bullet_F1.m_VertexList[5].y = 4.889f;
-		Bullet_F1.m_VertexList[6].x = 4.889f; Bullet_F1.m_VertexList[6].y = 4.889f;
+		Bullet_F1.m_VertexList[6].x = 4.889f; Bullet_F1.m_VertexList[6].y = 4.889f;*/
 
 		Bullet_Ghost_2.m_VertexList[0].x = 3.449f; Bullet_Ghost_2.m_VertexList[0].y = 3.449f;
 		Bullet_Ghost_2.m_VertexList[1].x = 3.449f; Bullet_Ghost_2.m_VertexList[1].y = 3.449f;
@@ -3350,16 +3449,16 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
-	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-
-		Bullet_F1.m_VertexList[0].x = 3.368f; Bullet_F1.m_VertexList[0].y = 3.368f;
+		ghost_Col_F1 = 1;
+	/*	Bullet_F1.m_VertexList[0].x = 3.368f; Bullet_F1.m_VertexList[0].y = 3.368f;
 		Bullet_F1.m_VertexList[1].x = 3.368f; Bullet_F1.m_VertexList[1].y = 3.368f;
 		Bullet_F1.m_VertexList[2].x = 3.368f; Bullet_F1.m_VertexList[2].y = 3.368f;
 		Bullet_F1.m_VertexList[3].x = 3.368f; Bullet_F1.m_VertexList[3].y = 3.368f;
 		Bullet_F1.m_VertexList[4].x = 3.368f; Bullet_F1.m_VertexList[4].y = 3.368f;
 		Bullet_F1.m_VertexList[5].x = 3.368f; Bullet_F1.m_VertexList[5].y = 3.368f;
-		Bullet_F1.m_VertexList[6].x = 3.368f; Bullet_F1.m_VertexList[6].y = 3.368f;
+		Bullet_F1.m_VertexList[6].x = 3.368f; Bullet_F1.m_VertexList[6].y = 3.368f;*/
 
 		Bullet_Ghost_3.m_VertexList[0].x = 3.241f; Bullet_Ghost_3.m_VertexList[0].y = 3.241f;
 		Bullet_Ghost_3.m_VertexList[1].x = 3.241f; Bullet_Ghost_3.m_VertexList[1].y = 3.241f;
@@ -3400,15 +3499,16 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_F1.m_VertexList[0].x = 3.282f; Bullet_F1.m_VertexList[0].y = 3.282f;
+		ghost_Col_F1 = 1;
+		/*Bullet_F1.m_VertexList[0].x = 3.282f; Bullet_F1.m_VertexList[0].y = 3.282f;
 		Bullet_F1.m_VertexList[1].x = 3.282f; Bullet_F1.m_VertexList[1].y = 3.282f;
 		Bullet_F1.m_VertexList[2].x = 3.282f; Bullet_F1.m_VertexList[2].y = 3.282f;
 		Bullet_F1.m_VertexList[3].x = 3.282f; Bullet_F1.m_VertexList[3].y = 3.282f;
 		Bullet_F1.m_VertexList[4].x = 3.282f; Bullet_F1.m_VertexList[4].y = 3.282f;
 		Bullet_F1.m_VertexList[5].x = 3.282f; Bullet_F1.m_VertexList[5].y = 3.282f;
-		Bullet_F1.m_VertexList[6].x = 3.282f; Bullet_F1.m_VertexList[6].y = 3.282f;
+		Bullet_F1.m_VertexList[6].x = 3.282f; Bullet_F1.m_VertexList[6].y = 3.282f;*/
 
 		Bullet_Ghost_4.m_VertexList[0].x = 3.299f; Bullet_Ghost_4.m_VertexList[0].y = 3.299f;
 		Bullet_Ghost_4.m_VertexList[1].x = 3.299f; Bullet_Ghost_4.m_VertexList[1].y = 3.299f;
@@ -3450,13 +3550,14 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_F2.m_VertexList[0].x = 3.333f; Bullet_F2.m_VertexList[0].y = 3.333f;
+		ghost_Col_F2 = 1;
+		/*Bullet_F2.m_VertexList[0].x = 3.333f; Bullet_F2.m_VertexList[0].y = 3.333f;
 		Bullet_F2.m_VertexList[1].x = 3.333f; Bullet_F2.m_VertexList[1].y = 3.333f;
 		Bullet_F2.m_VertexList[2].x = 3.333f; Bullet_F2.m_VertexList[2].y = 3.333f;
 		Bullet_F2.m_VertexList[3].x = 3.333f; Bullet_F2.m_VertexList[3].y = 3.333f;
 		Bullet_F2.m_VertexList[4].x = 3.333f; Bullet_F2.m_VertexList[4].y = 3.333f;
 		Bullet_F2.m_VertexList[5].x = 3.333f; Bullet_F2.m_VertexList[5].y = 3.333f;
-		Bullet_F2.m_VertexList[6].x = 3.333f; Bullet_F2.m_VertexList[6].y = 3.333f;
+		Bullet_F2.m_VertexList[6].x = 3.333f; Bullet_F2.m_VertexList[6].y = 3.333f;*/
 
 		Bullet_Ghost_1.m_VertexList[0].x = 3.538f; Bullet_Ghost_1.m_VertexList[0].y = 3.538f;
 		Bullet_Ghost_1.m_VertexList[1].x = 3.538f; Bullet_Ghost_1.m_VertexList[1].y = 3.538f;
@@ -3496,16 +3597,17 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_F2.m_VertexList[0].x = 3.378f; Bullet_F2.m_VertexList[0].y = 3.378f;
+		ghost_Col_F2 = 1;
+	/*	Bullet_F2.m_VertexList[0].x = 3.378f; Bullet_F2.m_VertexList[0].y = 3.378f;
 		Bullet_F2.m_VertexList[1].x = 3.378f; Bullet_F2.m_VertexList[1].y = 3.378f;
 		Bullet_F2.m_VertexList[2].x = 3.378f; Bullet_F2.m_VertexList[2].y = 3.378f;
 		Bullet_F2.m_VertexList[3].x = 3.378f; Bullet_F2.m_VertexList[3].y = 3.378f;
 		Bullet_F2.m_VertexList[4].x = 3.378f; Bullet_F2.m_VertexList[4].y = 3.378f;
 		Bullet_F2.m_VertexList[5].x = 3.378f; Bullet_F2.m_VertexList[5].y = 3.378f;
 		Bullet_F2.m_VertexList[6].x = 3.378f; Bullet_F2.m_VertexList[6].y = 3.378f;
-
+*/
 		Bullet_Ghost_2.m_VertexList[0].x = 8.772f; Bullet_Ghost_2.m_VertexList[0].y = 8.772f;
 		Bullet_Ghost_2.m_VertexList[1].x = 8.772f; Bullet_Ghost_2.m_VertexList[1].y = 8.772f;
 		Bullet_Ghost_2.m_VertexList[2].x = 8.772f; Bullet_Ghost_2.m_VertexList[2].y = 8.772f;
@@ -3543,16 +3645,16 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
-	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-
-		Bullet_F2.m_VertexList[0].x = 3.426f; Bullet_F2.m_VertexList[0].y = 3.426f;
+		ghost_Col_F2 = 1;
+		/*Bullet_F2.m_VertexList[0].x = 3.426f; Bullet_F2.m_VertexList[0].y = 3.426f;
 		Bullet_F2.m_VertexList[1].x = 3.426f; Bullet_F2.m_VertexList[1].y = 3.426f;
 		Bullet_F2.m_VertexList[2].x = 3.426f; Bullet_F2.m_VertexList[2].y = 3.426f;
 		Bullet_F2.m_VertexList[3].x = 3.426f; Bullet_F2.m_VertexList[3].y = 3.426f;
 		Bullet_F2.m_VertexList[4].x = 3.426f; Bullet_F2.m_VertexList[4].y = 3.426f;
 		Bullet_F2.m_VertexList[5].x = 3.426f; Bullet_F2.m_VertexList[5].y = 3.426f;
-		Bullet_F2.m_VertexList[6].x = 3.426f; Bullet_F2.m_VertexList[6].y = 3.426f;
+		Bullet_F2.m_VertexList[6].x = 3.426f; Bullet_F2.m_VertexList[6].y = 3.426f;*/
 
 		Bullet_Ghost_3.m_VertexList[0].x = 3.434f; Bullet_Ghost_3.m_VertexList[0].y = 3.434f;
 		Bullet_Ghost_3.m_VertexList[1].x = 3.434f; Bullet_Ghost_3.m_VertexList[1].y = 3.434f;
@@ -3592,15 +3694,16 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	}
 
-	if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_F2.m_VertexList[0].x = 4.2936f; Bullet_F2.m_VertexList[0].y = 4.2936f;
+		ghost_Col_F2 = 1;
+	/*	Bullet_F2.m_VertexList[0].x = 4.2936f; Bullet_F2.m_VertexList[0].y = 4.2936f;
 		Bullet_F2.m_VertexList[1].x = 4.2936f; Bullet_F2.m_VertexList[1].y = 4.2936f;
 		Bullet_F2.m_VertexList[2].x = 4.2936f; Bullet_F2.m_VertexList[2].y = 4.2936f;
 		Bullet_F2.m_VertexList[3].x = 4.2936f; Bullet_F2.m_VertexList[3].y = 4.2936f;
 		Bullet_F2.m_VertexList[4].x = 4.2936f; Bullet_F2.m_VertexList[4].y = 4.2936f;
 		Bullet_F2.m_VertexList[5].x = 4.2936f; Bullet_F2.m_VertexList[5].y = 4.2936f;
-		Bullet_F2.m_VertexList[6].x = 4.2936f; Bullet_F2.m_VertexList[6].y = 4.2936f;
+		Bullet_F2.m_VertexList[6].x = 4.2936f; Bullet_F2.m_VertexList[6].y = 4.2936f;*/
 
 		Bullet_Ghost_4.m_VertexList[0].x = 4.741f; Bullet_Ghost_4.m_VertexList[0].y = 4.741f;
 		Bullet_Ghost_4.m_VertexList[1].x = 4.741f; Bullet_Ghost_4.m_VertexList[1].y = 4.741f;
@@ -3645,13 +3748,14 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_F3.m_VertexList[0].x = 3.125f; Bullet_F3.m_VertexList[0].y = 3.125f;
+		ghost_Col_F3 = 1;
+	/*	Bullet_F3.m_VertexList[0].x = 3.125f; Bullet_F3.m_VertexList[0].y = 3.125f;
 		Bullet_F3.m_VertexList[1].x = 3.125f; Bullet_F3.m_VertexList[1].y = 3.125f;
 		Bullet_F3.m_VertexList[2].x = 3.125f; Bullet_F3.m_VertexList[2].y = 3.125f;
 		Bullet_F3.m_VertexList[3].x = 3.125f; Bullet_F3.m_VertexList[3].y = 3.125f;
 		Bullet_F3.m_VertexList[4].x = 3.125f; Bullet_F3.m_VertexList[4].y = 3.125f;
 		Bullet_F3.m_VertexList[5].x = 3.125f; Bullet_F3.m_VertexList[5].y = 3.125f;
-		Bullet_F3.m_VertexList[6].x = 3.125f; Bullet_F3.m_VertexList[6].y = 3.125f;
+		Bullet_F3.m_VertexList[6].x = 3.125f; Bullet_F3.m_VertexList[6].y = 3.125f;*/
 
 		Bullet_Ghost_1.m_VertexList[0].x = 4.301f; Bullet_Ghost_1.m_VertexList[0].y = 4.301f;
 		Bullet_Ghost_1.m_VertexList[1].x = 4.301f; Bullet_Ghost_1.m_VertexList[1].y = 4.301f;
@@ -3691,15 +3795,16 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_F3.m_VertexList[0].x = 3.713f; Bullet_F3.m_VertexList[0].y = 3.713f;
+		ghost_Col_F3 = 1;
+	/*	Bullet_F3.m_VertexList[0].x = 3.713f; Bullet_F3.m_VertexList[0].y = 3.713f;
 		Bullet_F3.m_VertexList[1].x = 3.713f; Bullet_F3.m_VertexList[1].y = 3.713f;
 		Bullet_F3.m_VertexList[2].x = 3.713f; Bullet_F3.m_VertexList[2].y = 3.713f;
 		Bullet_F3.m_VertexList[3].x = 3.713f; Bullet_F3.m_VertexList[3].y = 3.713f;
 		Bullet_F3.m_VertexList[4].x = 3.713f; Bullet_F3.m_VertexList[4].y = 3.713f;
 		Bullet_F3.m_VertexList[5].x = 3.713f; Bullet_F3.m_VertexList[5].y = 3.713f;
-		Bullet_F3.m_VertexList[6].x = 3.713f; Bullet_F3.m_VertexList[6].y = 3.713f;
+		Bullet_F3.m_VertexList[6].x = 3.713f; Bullet_F3.m_VertexList[6].y = 3.713f;*/
 
 		Bullet_Ghost_2.m_VertexList[0].x = 3.444f; Bullet_Ghost_2.m_VertexList[0].y = 3.444f;
 		Bullet_Ghost_2.m_VertexList[1].x = 3.444f; Bullet_Ghost_2.m_VertexList[1].y = 3.444f;
@@ -3738,15 +3843,16 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
-	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_F3.m_VertexList[0].x = 3.305f; Bullet_F3.m_VertexList[0].y = 3.305f;
+		ghost_Col_F3 = 1;
+	/*	Bullet_F3.m_VertexList[0].x = 3.305f; Bullet_F3.m_VertexList[0].y = 3.305f;
 		Bullet_F3.m_VertexList[1].x = 3.305f; Bullet_F3.m_VertexList[1].y = 3.305f;
 		Bullet_F3.m_VertexList[2].x = 3.305f; Bullet_F3.m_VertexList[2].y = 3.305f;
 		Bullet_F3.m_VertexList[3].x = 3.305f; Bullet_F3.m_VertexList[3].y = 3.305f;
 		Bullet_F3.m_VertexList[4].x = 3.305f; Bullet_F3.m_VertexList[4].y = 3.305f;
 		Bullet_F3.m_VertexList[5].x = 3.305f; Bullet_F3.m_VertexList[5].y = 3.305f;
-		Bullet_F3.m_VertexList[6].x = 3.305f; Bullet_F3.m_VertexList[6].y = 3.305f;
+		Bullet_F3.m_VertexList[6].x = 3.305f; Bullet_F3.m_VertexList[6].y = 3.305f;*/
 
 		Bullet_Ghost_3.m_VertexList[0].x = 3.106f; Bullet_Ghost_3.m_VertexList[0].y = 3.106f;
 		Bullet_Ghost_3.m_VertexList[1].x = 3.106f; Bullet_Ghost_3.m_VertexList[1].y = 3.106f;
@@ -3785,15 +3891,16 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
 	}
 
-	if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_F3.m_VertexList[0].x = 4.467f; Bullet_F3.m_VertexList[0].y = 4.467f;
+		ghost_Col_F3 = 1;
+	/*	Bullet_F3.m_VertexList[0].x = 4.467f; Bullet_F3.m_VertexList[0].y = 4.467f;
 		Bullet_F3.m_VertexList[1].x = 4.467f; Bullet_F3.m_VertexList[1].y = 4.467f;
 		Bullet_F3.m_VertexList[2].x = 4.467f; Bullet_F3.m_VertexList[2].y = 4.467f;
 		Bullet_F3.m_VertexList[3].x = 4.467f; Bullet_F3.m_VertexList[3].y = 4.467f;
 		Bullet_F3.m_VertexList[4].x = 4.467f; Bullet_F3.m_VertexList[4].y = 4.467f;
 		Bullet_F3.m_VertexList[5].x = 4.467f; Bullet_F3.m_VertexList[5].y = 4.467f;
-		Bullet_F3.m_VertexList[6].x = 4.467f; Bullet_F3.m_VertexList[6].y = 4.467f;
+		Bullet_F3.m_VertexList[6].x = 4.467f; Bullet_F3.m_VertexList[6].y = 4.467f;*/
 
 		Bullet_Ghost_4.m_VertexList[0].x = 4.675f; Bullet_Ghost_4.m_VertexList[0].y = 4.675f;
 		Bullet_Ghost_4.m_VertexList[1].x = 4.675f; Bullet_Ghost_4.m_VertexList[1].y = 4.675f;
@@ -3837,14 +3944,15 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-		Bullet_F4.m_VertexList[0].x = 4.322f; Bullet_F4.m_VertexList[0].y = 4.322f;
+		ghost_Col_F4 = 1;
+	/*	Bullet_F4.m_VertexList[0].x = 4.322f; Bullet_F4.m_VertexList[0].y = 4.322f;
 		Bullet_F4.m_VertexList[1].x = 4.322f; Bullet_F4.m_VertexList[1].y = 4.322f;
 		Bullet_F4.m_VertexList[2].x = 4.322f; Bullet_F4.m_VertexList[2].y = 4.322f;
 		Bullet_F4.m_VertexList[3].x = 4.322f; Bullet_F4.m_VertexList[3].y = 4.322f;
 		Bullet_F4.m_VertexList[4].x = 4.322f; Bullet_F4.m_VertexList[4].y = 4.322f;
 		Bullet_F4.m_VertexList[5].x = 4.322f; Bullet_F4.m_VertexList[5].y = 4.322f;
 		Bullet_F4.m_VertexList[6].x = 4.322f; Bullet_F4.m_VertexList[6].y = 4.322f;
-
+*/
 		Bullet_Ghost_1.m_VertexList[0].x = 3.204f; Bullet_Ghost_1.m_VertexList[0].y = 3.204f;
 		Bullet_Ghost_1.m_VertexList[1].x = 3.204f; Bullet_Ghost_1.m_VertexList[1].y = 3.204f;
 		Bullet_Ghost_1.m_VertexList[2].x = 3.204f; Bullet_Ghost_1.m_VertexList[2].y = 3.204f;
@@ -3883,15 +3991,16 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
-		Bullet_F4.m_VertexList[0].x = 3.765f; Bullet_F4.m_VertexList[0].y = 3.765f;
+		ghost_Col_F4 = 1;
+	/*	Bullet_F4.m_VertexList[0].x = 3.765f; Bullet_F4.m_VertexList[0].y = 3.765f;
 		Bullet_F4.m_VertexList[1].x = 3.765f; Bullet_F4.m_VertexList[1].y = 3.765f;
 		Bullet_F4.m_VertexList[2].x = 3.765f; Bullet_F4.m_VertexList[2].y = 3.765f;
 		Bullet_F4.m_VertexList[3].x = 3.765f; Bullet_F4.m_VertexList[3].y = 3.765f;
 		Bullet_F4.m_VertexList[4].x = 3.765f; Bullet_F4.m_VertexList[4].y = 3.765f;
 		Bullet_F4.m_VertexList[5].x = 3.765f; Bullet_F4.m_VertexList[5].y = 3.765f;
-		Bullet_F4.m_VertexList[6].x = 3.765f; Bullet_F4.m_VertexList[6].y = 3.765f;
+		Bullet_F4.m_VertexList[6].x = 3.765f; Bullet_F4.m_VertexList[6].y = 3.765f;*/
 
 		Bullet_Ghost_2.m_VertexList[0].x = 3.1275f; Bullet_Ghost_2.m_VertexList[0].y = 3.1275f;
 		Bullet_Ghost_2.m_VertexList[1].x = 3.1275f; Bullet_Ghost_2.m_VertexList[1].y = 3.1275f;
@@ -3930,15 +4039,16 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
-	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-		Bullet_F4.m_VertexList[0].x = 3.812f; Bullet_F4.m_VertexList[0].y = 3.812f;
+		ghost_Col_F4 = 1;
+	/*	Bullet_F4.m_VertexList[0].x = 3.812f; Bullet_F4.m_VertexList[0].y = 3.812f;
 		Bullet_F4.m_VertexList[1].x = 3.812f; Bullet_F4.m_VertexList[1].y = 3.812f;
 		Bullet_F4.m_VertexList[2].x = 3.812f; Bullet_F4.m_VertexList[2].y = 3.812f;
 		Bullet_F4.m_VertexList[3].x = 3.812f; Bullet_F4.m_VertexList[3].y = 3.812f;
 		Bullet_F4.m_VertexList[4].x = 3.812f; Bullet_F4.m_VertexList[4].y = 3.812f;
 		Bullet_F4.m_VertexList[5].x = 3.812f; Bullet_F4.m_VertexList[5].y = 3.812f;
-		Bullet_F4.m_VertexList[6].x = 3.812f; Bullet_F4.m_VertexList[6].y = 3.812f;
+		Bullet_F4.m_VertexList[6].x = 3.812f; Bullet_F4.m_VertexList[6].y = 3.812f;*/
 
 		Bullet_Ghost_3.m_VertexList[0].x = 2.828f; Bullet_Ghost_3.m_VertexList[0].y = 2.828f;
 		Bullet_Ghost_3.m_VertexList[1].x = 2.828f; Bullet_Ghost_3.m_VertexList[1].y = 2.828f;
@@ -3977,15 +4087,16 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_3.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G3, 0, 0);
 	}
 
-	if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_F4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
-		Bullet_F4.m_VertexList[0].x = 6.306f; Bullet_F4.m_VertexList[0].y = 6.306f;
+		ghost_Col_F4 = 1;
+		/*Bullet_F4.m_VertexList[0].x = 6.306f; Bullet_F4.m_VertexList[0].y = 6.306f;
 		Bullet_F4.m_VertexList[1].x = 6.306f; Bullet_F4.m_VertexList[1].y = 6.306f;
 		Bullet_F4.m_VertexList[2].x = 6.306f; Bullet_F4.m_VertexList[2].y = 6.306f;
 		Bullet_F4.m_VertexList[3].x = 6.306f; Bullet_F4.m_VertexList[3].y = 6.306f;
 		Bullet_F4.m_VertexList[4].x = 6.306f; Bullet_F4.m_VertexList[4].y = 6.306f;
 		Bullet_F4.m_VertexList[5].x = 6.306f; Bullet_F4.m_VertexList[5].y = 6.306f;
-		Bullet_F4.m_VertexList[6].x = 6.306f; Bullet_F4.m_VertexList[6].y = 6.306f;
+		Bullet_F4.m_VertexList[6].x = 6.306f; Bullet_F4.m_VertexList[6].y = 6.306f;*/
 
 		Bullet_Ghost_4.m_VertexList[0].x = 3.741f; Bullet_Ghost_4.m_VertexList[0].y = 3.741f;
 		Bullet_Ghost_4.m_VertexList[1].x = 3.741f; Bullet_Ghost_4.m_VertexList[1].y = 3.741f;
@@ -4028,14 +4139,14 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-
-		Bullet_C1.m_VertexList[0].x = 4.115f; Bullet_C1.m_VertexList[0].y = 4.115f;
-		Bullet_C1.m_VertexList[1].x = 4.115f; Bullet_C1.m_VertexList[1].y = 4.115f;
-		Bullet_C1.m_VertexList[2].x = 4.115f; Bullet_C1.m_VertexList[2].y = 4.115f;
-		Bullet_C1.m_VertexList[3].x = 4.115f; Bullet_C1.m_VertexList[3].y = 4.115f;
-		Bullet_C1.m_VertexList[4].x = 4.115f; Bullet_C1.m_VertexList[4].y = 4.115f;
-		Bullet_C1.m_VertexList[5].x = 4.115f; Bullet_C1.m_VertexList[5].y = 4.115f;
-		Bullet_C1.m_VertexList[6].x = 4.115f; Bullet_C1.m_VertexList[6].y = 4.115f;
+		ghost_Col_C1 = 1;
+		//Bullet_C1.m_VertexList[0].x = 4.115f; Bullet_C1.m_VertexList[0].y = 4.115f;
+		//Bullet_C1.m_VertexList[1].x = 4.115f; Bullet_C1.m_VertexList[1].y = 4.115f;
+		//Bullet_C1.m_VertexList[2].x = 4.115f; Bullet_C1.m_VertexList[2].y = 4.115f;
+		//Bullet_C1.m_VertexList[3].x = 4.115f; Bullet_C1.m_VertexList[3].y = 4.115f;
+		//Bullet_C1.m_VertexList[4].x = 4.115f; Bullet_C1.m_VertexList[4].y = 4.115f;
+		//Bullet_C1.m_VertexList[5].x = 4.115f; Bullet_C1.m_VertexList[5].y = 4.115f;
+		//Bullet_C1.m_VertexList[6].x = 4.115f; Bullet_C1.m_VertexList[6].y = 4.115f;
 
 		Bullet_Ghost_1.m_VertexList[0].x = 4.802f; Bullet_Ghost_1.m_VertexList[0].y = 4.802f;
 		Bullet_Ghost_1.m_VertexList[1].x = 4.802f; Bullet_Ghost_1.m_VertexList[1].y = 4.802f;
@@ -4075,8 +4186,9 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
+		ghost_Col_C1 = 1;
 		Bullet_C1.m_VertexList[0].x = 2.344f; Bullet_C1.m_VertexList[0].y = 2.344f;
 		Bullet_C1.m_VertexList[1].x = 2.344f; Bullet_C1.m_VertexList[1].y = 2.344f;
 		Bullet_C1.m_VertexList[2].x = 2.344f; Bullet_C1.m_VertexList[2].y = 2.344f;
@@ -4122,9 +4234,9 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
-	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-
+		ghost_Col_C1 = 1;
 		Bullet_C1.m_VertexList[0].x = 4.785f; Bullet_C1.m_VertexList[0].y = 4.785f;
 		Bullet_C1.m_VertexList[1].x = 4.785f; Bullet_C1.m_VertexList[1].y = 4.785f;
 		Bullet_C1.m_VertexList[2].x = 4.785f; Bullet_C1.m_VertexList[2].y = 4.785f;
@@ -4172,8 +4284,9 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C1.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
+		ghost_Col_C1 = 1;
 		Bullet_C1.m_VertexList[0].x = 4.1127f; Bullet_C1.m_VertexList[0].y = 4.1127f;
 		Bullet_C1.m_VertexList[1].x = 4.1127f; Bullet_C1.m_VertexList[1].y = 4.1127f;
 		Bullet_C1.m_VertexList[2].x = 4.1127f; Bullet_C1.m_VertexList[2].y = 4.1127f;
@@ -4223,7 +4336,7 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-
+		ghost_Col_C2 = 1;
 		Bullet_C2.m_VertexList[0].x = 4.202f; Bullet_C2.m_VertexList[0].y = 4.202f;
 		Bullet_C2.m_VertexList[1].x = 4.202f; Bullet_C2.m_VertexList[1].y = 4.202f;
 		Bullet_C2.m_VertexList[2].x = 4.202f; Bullet_C2.m_VertexList[2].y = 4.202f;
@@ -4270,8 +4383,9 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
+		ghost_Col_C2 = 1;
 		Bullet_C2.m_VertexList[0].x = 2.335f; Bullet_C2.m_VertexList[0].y = 2.335f;
 		Bullet_C2.m_VertexList[1].x = 2.335f; Bullet_C2.m_VertexList[1].y = 2.335f;
 		Bullet_C2.m_VertexList[2].x = 2.335f; Bullet_C2.m_VertexList[2].y = 2.335f;
@@ -4317,9 +4431,9 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
-	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-
+		ghost_Col_C2 = 1;
 		Bullet_C2.m_VertexList[0].x = 3.833f; Bullet_C2.m_VertexList[0].y = 3.833f;
 		Bullet_C2.m_VertexList[1].x = 3.833f; Bullet_C2.m_VertexList[1].y = 3.833f;
 		Bullet_C2.m_VertexList[2].x = 3.833f; Bullet_C2.m_VertexList[2].y = 3.833f;
@@ -4366,8 +4480,9 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C2.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
+		ghost_Col_C2 = 1;
 		Bullet_C2.m_VertexList[0].x = 3.033f; Bullet_C2.m_VertexList[0].y = 3.033f;
 		Bullet_C2.m_VertexList[1].x = 3.033f; Bullet_C2.m_VertexList[1].y = 3.033f;
 		Bullet_C2.m_VertexList[2].x = 3.033f; Bullet_C2.m_VertexList[2].y = 3.033f;
@@ -4418,7 +4533,7 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-
+		ghost_Col_C3 = 1;
 		Bullet_C3.m_VertexList[0].x = 3.609f; Bullet_C3.m_VertexList[0].y = 3.609f;
 		Bullet_C3.m_VertexList[1].x = 3.609f; Bullet_C3.m_VertexList[1].y = 3.609f;
 		Bullet_C3.m_VertexList[2].x = 3.609f; Bullet_C3.m_VertexList[2].y = 3.609f;
@@ -4465,8 +4580,9 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
+		ghost_Col_C3 = 1;
 		Bullet_C3.m_VertexList[0].x = 4.4005f; Bullet_C3.m_VertexList[0].y = 4.4005f;
 		Bullet_C3.m_VertexList[1].x = 4.4005f; Bullet_C3.m_VertexList[1].y = 4.4005f;
 		Bullet_C3.m_VertexList[2].x = 4.4005f; Bullet_C3.m_VertexList[2].y = 4.4005f;
@@ -4512,9 +4628,9 @@ void TSceneGame::Bullet_Ghost_collision()
 		g_pContext->UpdateSubresource(Bullet_Ghost_2.PipeLineSetup.m_pVertextBuffer, 0, NULL, N_VertexList_G2, 0, 0);
 	}
 
-	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
-
+		ghost_Col_C3 = 1;
 		Bullet_C3.m_VertexList[0].x = 4.922f; Bullet_C3.m_VertexList[0].y = 4.922f;
 		Bullet_C3.m_VertexList[1].x = 4.922f; Bullet_C3.m_VertexList[1].y = 4.922f;
 		Bullet_C3.m_VertexList[2].x = 4.922f; Bullet_C3.m_VertexList[2].y = 4.922f;
@@ -4562,8 +4678,9 @@ void TSceneGame::Bullet_Ghost_collision()
 	}
 
 
-	if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C3.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
+		ghost_Col_C3 = 1;
 		Bullet_C3.m_VertexList[0].x = 4.5009f; Bullet_C3.m_VertexList[0].y = 4.5009f;
 		Bullet_C3.m_VertexList[1].x = 4.5009f; Bullet_C3.m_VertexList[1].y = 4.5009f;
 		Bullet_C3.m_VertexList[2].x = 4.5009f; Bullet_C3.m_VertexList[2].y = 4.5009f;
@@ -4614,7 +4731,7 @@ void TSceneGame::Bullet_Ghost_collision()
 
 	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_1.m_rtCollision))
 	{
-
+		ghost_Col_C4 = 1;
 		Bullet_C4.m_VertexList[0].x = 3.257f; Bullet_C4.m_VertexList[0].y = 3.257f;
 		Bullet_C4.m_VertexList[1].x = 3.257f; Bullet_C4.m_VertexList[1].y = 3.257f;
 		Bullet_C4.m_VertexList[2].x = 3.257f; Bullet_C4.m_VertexList[2].y = 3.257f;
@@ -4662,8 +4779,9 @@ void TSceneGame::Bullet_Ghost_collision()
 
 
 
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_2.m_rtDetection))
 	{
+		ghost_Col_C4 = 1;
 		Bullet_C4.m_VertexList[0].x = 4.333f; Bullet_C4.m_VertexList[0].y = 4.333f;
 		Bullet_C4.m_VertexList[1].x = 4.333f; Bullet_C4.m_VertexList[1].y = 4.333f;
 		Bullet_C4.m_VertexList[2].x = 4.333f; Bullet_C4.m_VertexList[2].y = 4.333f;
@@ -4712,8 +4830,9 @@ void TSceneGame::Bullet_Ghost_collision()
 
 
 
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_3.m_rtDetection))
 	{
+		ghost_Col_C4 = 1;
 		Bullet_C4.m_VertexList[0].x = 2.2021f; Bullet_C4.m_VertexList[0].y = 2.2021f;
 		Bullet_C4.m_VertexList[1].x = 2.2021f; Bullet_C4.m_VertexList[1].y = 2.2021f;
 		Bullet_C4.m_VertexList[2].x = 2.2021f; Bullet_C4.m_VertexList[2].y = 2.2021f;
@@ -4762,8 +4881,9 @@ void TSceneGame::Bullet_Ghost_collision()
 
 
 
-	if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
+	else if (TCollision::SphereInSphere(Bullet_C4.m_rtCollision, Bullet_Ghost_4.m_rtDetection))
 	{
+		ghost_Col_C4 = 1;
 		Bullet_C4.m_VertexList[0].x = 3.0785f; Bullet_C4.m_VertexList[0].y = 3.0785f;
 		Bullet_C4.m_VertexList[1].x = 3.0785f; Bullet_C4.m_VertexList[1].y = 3.0785f;
 		Bullet_C4.m_VertexList[2].x = 3.0785f; Bullet_C4.m_VertexList[2].y = 3.0785f;

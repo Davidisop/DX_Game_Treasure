@@ -228,21 +228,25 @@ bool TDevice::Release()
 	if (m_pSwapChain)			m_pSwapChain->Release();
 	if (m_pd3dDevice)			m_pd3dDevice->Release();
 	if (m_pContext)				m_pContext->Release();
+	if(m_pDXGIFactory)			m_pDXGIFactory->Release();
 
 	m_pRenderTargetView = NULL;
 	m_pSwapChain = NULL;
 	m_pd3dDevice = NULL;
 	m_pContext = NULL;
+	m_pDXGIFactory = NULL;
+
 
 	return true;
 }
 
-TDevice::TDevice()
+TDevice::TDevice() : m_pDXGIFactory(NULL), m_pRenderTargetView(NULL), m_pSwapChain(NULL), m_pd3dDevice(NULL), m_pContext(NULL)
 {
+	/*m_pDXGIFactory = NULL;
 	m_pRenderTargetView = NULL;
 	m_pSwapChain = NULL;
 	m_pd3dDevice = NULL;
-	m_pContext = NULL;
+	m_pContext = NULL;*/
 }
 
 

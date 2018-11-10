@@ -17,7 +17,7 @@ public:
 	{
 		static float fAddTime = 0.0f;
 		fAddTime += g_fSecPerFrame;
-		if (fAddTime >= 0.05f)
+		if (fAddTime >= 0.07f)
 		{
 			switch (bullet_step)
 			{
@@ -85,9 +85,9 @@ public:
 
 		}
 
-		if (fAddTime >= 0.05f)
+		if (fAddTime >= 0.07f)
 		{
-			fAddTime -= 0.05f;
+			fAddTime = 0;
 		}
 		return true;
 	}
@@ -97,7 +97,7 @@ public:
 	{
 		static float fAddTime = 0.0f;
 		fAddTime += g_fSecPerFrame;
-		if (fAddTime >= 0.05f)
+		if (fAddTime >= 0.07f)
 		{
 			switch (bullet_step)
 			{
@@ -147,9 +147,9 @@ public:
 
 		}
 
-		if (fAddTime >= 0.05f)
+		if (fAddTime >= 0.07f)
 		{
-			fAddTime -= 0.05f;
+			fAddTime = 0;
 		}
 
 		return true;

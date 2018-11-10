@@ -143,17 +143,9 @@ public:
 
 		if (fAddTime >= 0.1f)
 		{
-		fAddTime -= 0.1f;
+			fAddTime = 0;
 
 		}
-
-/*
-
-		if (m_Collision_number == 3)
-		{
-			in_Texture_SetData_sprite_factors(sprite_ptr, 7, 0, 753, 532);
-			Create(g_pd3dDevice, L"HLSL.vsh", L"HLSL.psh", L"../../data/AD_Boy_B.png");
-		}*/
 
 		return true;
 
@@ -165,21 +157,22 @@ public:
 
 void Boy_NPC::hurt()
 {
-	static DWORD dwEventTime = 400; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
 
 
-	if (hurt_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+	static float fAddTime = 0.0f;
+	fAddTime += g_fSecPerFrame;
+
+	if (hurt_step == 1 && fAddTime > 0.3f)
 	{
-		hurt_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 400;
+		hurt_step = 2; fAddTime = 0;
 	}
 
-	if (hurt_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+	else if (hurt_step == 2 && fAddTime > 0.3f)
 	{
-		hurt_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 400;
+		hurt_step = 3; fAddTime = 0;
 	}
 
+	
 	
 	switch (hurt_step)
 	{
@@ -220,35 +213,35 @@ void Boy_NPC::hurt()
 
 void Boy_NPC::dead()
 {
-	static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-	static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-	DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
 
 
-	if (dead_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+	static float fAddTime = 0.0f;
+	fAddTime += g_fSecPerFrame;
+
+	if (dead_step == 1 && fAddTime > 0.3f)
 	{
-		dead_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+		dead_step = 2; fAddTime = 0;
 	}
 
-	if (dead_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+	else if (dead_step == 2 && fAddTime > 0.3f)
 	{
-		dead_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+		dead_step = 3; fAddTime = 0;
 	}
 
-	if (dead_step == 3 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+	else if (dead_step == 3 && fAddTime > 0.3f)
 	{
-		dead_step = 4;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+		dead_step = 4; fAddTime = 0;
 	}
 
-	if (dead_step == 4 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
+	else if (dead_step == 4 && fAddTime > 0.3f)
 	{
-		dead_step = 5;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
+		dead_step = 5; fAddTime = 0;
+	}
+	else if (dead_step == 5&& fAddTime > 0.3f)
+	{
+		dead_step = 6; fAddTime = 0;
 	}
 
-	if (dead_step == 5 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-	{
-		dead_step = 6;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-	}
 
 
 			switch (dead_step)

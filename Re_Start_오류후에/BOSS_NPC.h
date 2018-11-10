@@ -64,27 +64,31 @@ public:
 
 	{
 
-		if (state == Detection__1_GUN)
-		{
 			
 			if (shoot_flag == 1) { Bullet_B1_Bullet_Go = true; shot(); }  // 씬에서 이거와 연동되서, 고스트 나간다.
-			if (shoot_flag == 2) { Bullet_B2_Bullet_Go = true; shot(); }
-			if (shoot_flag == 3) { Bullet_B3_Bullet_Go = true; shot(); }
-			if (shoot_flag == 4) { Bullet_B4_Bullet_Go = true; shot(); }
+			else if (shoot_flag == 2) { Bullet_B2_Bullet_Go = true; shot(); }
+			else if (shoot_flag == 3) { Bullet_B3_Bullet_Go = true; shot(); }
+			else if (shoot_flag == 4) { Bullet_B4_Bullet_Go = true; shot(); }
 			
 
-			static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-			static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-			DWORD dw_AutoUpdate_CurTime = GetTickCount(); //현재 시간을 얻습니다.
+			static float fAddTime = 0.0f;
+			fAddTime += g_fSecPerFrame;
 
-			if (Gun_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-			{	Gun_step = 2; dw_NoUpdate_Time = dw_AutoUpdate_CurTime; dwEventTime = 200;	}
+			if (Gun_step == 1 && fAddTime > 0.3f)
+			{
+				Gun_step = 2; fAddTime = 0;
+			}
 
-			if (Gun_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-			   {Gun_step = 3; dw_NoUpdate_Time = dw_AutoUpdate_CurTime; dwEventTime = 200; }
+			else if (Gun_step == 2 && fAddTime > 0.3f)
+			{
+				Gun_step = 3; fAddTime = 0;
+			}
 
+			else if (Gun_step == 3 && fAddTime > 0.3f)
+			{
+				Gun_step = 4; fAddTime = 0;
+			}
 
-		}
 
 	}
 
@@ -92,44 +96,42 @@ public:
 
 	void ATTACK_SWORD()  // 이걸 씬에 빼놔야.
 	{	
-		if (state == Detection__1_SWORD)
-		{
 			 	
-				static DWORD dwEventTime = 300; // 이벤트 발생 간격 을 얻습니다. < GetTickCount로는 1/1000초 단위로 할수 있기 때문에 2초입니다.
-				static DWORD dw_NoUpdate_Time = GetTickCount();// 기준 시간을 얻습니다.
-				DWORD dw_AutoUpdate_CurTime = GetTickCount();	//현재 시간을 얻습니다.
+			static float fAddTime = 0.0f;
+			fAddTime += g_fSecPerFrame;
+
+			if (sword_step == 1 && fAddTime > 0.3f)
+			{
+				sword_step = 2; fAddTime = 0;
+			}
+
+			else if (sword_step == 2 && fAddTime > 0.3f)
+			{
+				sword_step = 3; fAddTime = 0;
+			}
+
+			else if (sword_step == 3 && fAddTime > 0.3f)
+			{
+				sword_step = 4; fAddTime = 0;
+			}
+
+			else if (sword_step == 4 && fAddTime > 0.3f)
+			{
+				sword_step = 5; fAddTime = 0;
+			}
+
+			else if (sword_step == 5 && fAddTime > 0.3f)
+			{
+				sword_step = 6; fAddTime = 0;
+			}
+
+			else if (sword_step == 6 && fAddTime > 0.3f)
+			{
+				sword_step = 7; fAddTime = 0;
+			}
 
 
-				if (sword_step == 1 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-				{
-					sword_step = 2;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-				}
-
-				if (sword_step == 2 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-				{
-					sword_step = 3;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-				}
-
-				if (sword_step == 3 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-				{
-					sword_step = 4;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-				}
-
-				if (sword_step == 4 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-				{
-					sword_step = 5;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-				}
-
-				if (sword_step == 5 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-				{
-					sword_step = 6;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-				}
-
-				if (sword_step == 6 && dw_NoUpdate_Time + dwEventTime <= dw_AutoUpdate_CurTime) // 설정한 시간이 지나가면 if문을 실행합니다.
-				{
-					sword_step = 7;	dw_NoUpdate_Time = dw_AutoUpdate_CurTime;	dwEventTime = 200;
-				}	
-		}
+		
 	}
 
 	void Detction_FULL()
@@ -143,7 +145,7 @@ public:
 				ATTACK_SWORD();
 			}
 
-			if (abs(distance_direction_between_hero_boss) >= 150)
+			else 
 			{
 				state = Detection__1_GUN;
 				shoot_flag++;
@@ -173,8 +175,6 @@ public:
 	void basic_frame()
 	{
 			
-		if(state== Detection__0)
-		{
 			walk_T();
 
 			detection_time += g_fSecPerFrame;
@@ -184,7 +184,7 @@ public:
 				detection_time = 0;
 				Detction_FULL();
 			}
-		}
+		
 	}
 
 
@@ -198,8 +198,8 @@ void BOSS_NPC::left_walk()
 {
 	static float fAddTime = 0.0f;
 	fAddTime += g_fSecPerFrame;
-	{
-		if (fAddTime >= 0.1f)
+	
+	if (fAddTime >= 0.1f)
 		{
 			switch (walk_step)
 			{
@@ -255,12 +255,12 @@ void BOSS_NPC::left_walk()
 				}break;
 
 			}
-		}
+		
 	}
 
 	if (fAddTime >= 0.1f)
 	{
-		fAddTime -= 0.1f;
+		fAddTime = 0;
 	}
 
 }
@@ -270,9 +270,9 @@ void BOSS_NPC::right_walk()
 {
 	static float fAddTime = 0.0f;
 	fAddTime += g_fSecPerFrame;
+	
+	if (fAddTime >= 0.1f)
 	{
-		if (fAddTime >= 0.1f)
-		{
 
 			switch (walk_step)
 			{
@@ -328,11 +328,11 @@ void BOSS_NPC::right_walk()
 				}break;
 
 			}
-		}
 	}
+	
 	if (fAddTime >= 0.1f)
 	{
-		fAddTime -= 0.1f;
+		fAddTime = 0;
 	}
 }
 
@@ -384,7 +384,7 @@ void BOSS_NPC::shot()
 		}
 	}
 
-	else if (Face_Direction == 1)
+	else 
 	{
 		switch (Gun_step)
 		{
@@ -515,7 +515,7 @@ void BOSS_NPC::sword()
 		}
 	}
 
-	else if (Face_Direction == 1)
+	else 
 	{
 
 
